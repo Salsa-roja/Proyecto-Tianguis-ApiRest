@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("apellido_paterno")->default(1);
             $table->string("apellido_materno")->default(1);
             $table->string("email")->default(1);
+            $table->string("contrasena", 255);
             $table->string("telefono")->default(1);
             $table->string("direccion", 255);
             $table->string("colonia", 255);

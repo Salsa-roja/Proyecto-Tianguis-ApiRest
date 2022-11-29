@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('vacante', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger("empleador_id");
             $table->string("titulo", 255);
             $table->string("descripcion", 255);
-            $table->string("categorías_especiales", 255);
+            $table->string("categorías_especiales", 255);       
             $table->string("días_laborales")->default(1);
             $table->string("turnos_laborales", 255);
             $table->string("nivel_educativo", 255);
@@ -34,6 +35,9 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
 
             $table->timestamps();
+
+            $table->foreign('empleador_id')->references('id')->on('empleador');
+
         });
     }
 
