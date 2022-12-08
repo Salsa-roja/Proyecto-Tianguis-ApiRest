@@ -13,7 +13,7 @@ abstract class VacanteService
     public static function getvacante()
     {
         try {
-            $vacantedb = Vacantes::with('contestaciones.pregunta')->where('activo', '1')->get();
+            $vacantedb = Vacantes::with('empleador')->where('activo', '1')->get();
             $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
             return $vacante;
         } catch (\Exception $ex) {

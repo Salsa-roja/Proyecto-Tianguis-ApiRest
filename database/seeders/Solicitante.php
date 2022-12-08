@@ -15,7 +15,7 @@ class Solicitante extends Seeder
     public function run()
     {
         DB::table('solicitante')->insert([
-            [  
+            [   'idUsuario' => '1',
                 'nombre' => 'Jesus ',
                 'apellido_paterno' => 'Ibarra ',
                 'apellido_materno' => 'Larios',

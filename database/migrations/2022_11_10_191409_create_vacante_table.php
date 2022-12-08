@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('vacante', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger("idUsuario");
+            $table->integer('empleador_id');
             $table->string("titulo", 255);
             $table->string("descripcion", 255);
             $table->string("categorías_especiales", 255);       
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string("Industria", 255);
             $table->string("tipo_de_puesto", 255);
             $table->string("habilidades_requeridas", 255);
+            $table->boolean("activo")->default(1);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
 

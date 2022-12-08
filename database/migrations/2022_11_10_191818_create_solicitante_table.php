@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('solicitante', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger("empleador_id"); 
+            $table->unsignedInteger("idUsuario"); 
             $table->string("nombre")->default(1);
             $table->string("apellido_paterno")->default(1);
             $table->string("apellido_materno")->default(1);

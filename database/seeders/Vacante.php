@@ -16,7 +16,7 @@ class Vacante extends Seeder
     {
         DB::table('vacante')->insert([
             [  
-                'empleador_id' => 1,
+                'empleador_id' => '1',
                 'titulo' => 'Vendedora de piso ',
                 'descripcion' => 'se solicita vendedora para tienda departamental ',
                 'categorías_especiales' => '',
@@ -31,10 +31,11 @@ class Vacante extends Seeder
                 'area' => 'ventas',
                 'Industria' => 'Mercado Corona',
                 'tipo_de_puesto' => '',
-                'habilidades_requeridas' => 'proactividad'              
+                'habilidades_requeridas' => 'proactividad'
+                ,'activo'=>1               
             ],
             [   
-                'empleador_id' => 1,
+                'empleador_id' => '1',
                 'titulo' => 'Mercado Corona',
                 'descripcion' => 'cosinero de tacos',
                 'categorías_especiales' => '',
@@ -50,9 +51,10 @@ class Vacante extends Seeder
                 'Industria' => 'Mercado Corona',
                 'tipo_de_puesto' => 'fijo',
                 'habilidades_requeridas' => 'ninguna'  
+                ,'activo'=>1 
             ],
             [   
-                'empleador_id' => 1,
+                'empleador_id' => '1',
                 'titulo' => 'programador',
                 'descripcion' => 'Programdor web (Angular)',
                 'categorías_especiales' => 'null',
@@ -67,7 +69,8 @@ class Vacante extends Seeder
                 'area' => 'Innovacion',
                 'Industria' => 'Gobierno',
                 'tipo_de_puesto' => 'temporal',
-                'habilidades_requeridas' => 'experto en programacion'    
+                'habilidades_requeridas' => 'experto en programacion'   
+                ,'activo'=>1 
             ],
         ]);
     }
