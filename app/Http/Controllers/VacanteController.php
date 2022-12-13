@@ -32,11 +32,22 @@ class VacanteController extends Controller
         }
     }
 
+
     public function searchId($id)
     {
         try {
-            $ip = VacanteService::SearchId($id);
+            $ip = VacanteService::searchId($id);
             return response()->json($ip, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function searchName($name)
+    {
+        try {
+            $names = VacanteService::searchName($name);
+            return response()->json($names, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }

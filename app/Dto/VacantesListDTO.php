@@ -31,7 +31,6 @@ class VacantesListDTO
         $this->id = $obj->id;
         $this->titulo = $obj->titulo;
         $this->nombre_de_empresa = $obj->empleador->nombre;
-        $this->titulo = $obj->titulo;
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
         $this->días_laborales = $obj->días_laborales;
