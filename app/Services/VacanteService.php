@@ -24,7 +24,7 @@ abstract class VacanteService
     public static function searchId($id)
     {
         try {
-            $vacantedb = Vacantes::where('id', $id)->first();
+            $vacantedb = Vacantes::with(['empleador'])->where('id', $id)->where('activo', '1')->first();
             if ($vacantedb) {
                 $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
             } else {
@@ -35,6 +35,20 @@ abstract class VacanteService
             throw new \Exception($ex->getMessage(), 500);
         }
     }
+
+    public static function searchName($name)
+    {
+        try {
+            if ($name != '') {
+                $vacantedb = Vacantes::with(['empleador'])->where('titulo', 'LIKE', '%' . $name . '%')->where('activo', '1')->get();
+                $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
+                return $vacante;
+            }
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage(), 500);
+        }
+    }
+
 
     private static function getAddress($address)
     {
