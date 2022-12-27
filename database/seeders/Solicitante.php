@@ -15,25 +15,34 @@ class Solicitante extends Seeder
     public function run()
     {
         DB::table('solicitante')->insert([
-            [   'idUsuario' => '1',
+            [   
                 'nombre' => 'Jesus ',
-                'apellido_paterno' => 'Ibarra ',
-                'apellido_materno' => 'Larios',
+                'ap_paterno' => 'Ibarra ',
+                'ap_materno' => 'Larios',
+                'edad' => 30,
+                'curp' => 'ASDF722HDHW',
                 'email' => 'Jesus@gmail.com',
-                "contrasena" => password_hash('123456789', PASSWORD_BCRYPT),
+                "pass" => password_hash('123456789', PASSWORD_BCRYPT),
                 'telefono' => '3333591556',
-                'direccion' => 'pedro de ceballos #1234',
-                'colonia' => 'Buenos Aires',
-                'código_postal' => '31234',
+                'c_numero' => 'pedro de ceballos #1234',
+                'c_postal' => '31234',
+                'id_colonia' => '1',
                 'ciudad' => 'Guadalajara',
-                'descripcion_profesional' => '',
-                'área_desempeñarte' => 'Guadalajara',
-                'que_posicion_buscas' => 'Patron',  
-                'que_industria_interesan' => 'Google',
-                'que_habilidad_posees' => 'Experto en todo',
-                'experiencia_profesional' => 'Jefe de facebook',
+                'descr_profesional' => '',
+                'sueldo_deseado' => 1000,
+                'area_desempeno' => 'Guadalajara',
+                'posicion_interes' => 'Patron',  
+                'industria_interes' => 'Google',
+                'habilidades' => 'Experto en todo',
+                'exp_profesional' => 'Jefe de facebook',
                 'formacion_educativa' => 'Universitario',
-                'currículum' => 'si'              
+                'disc_lenguaje' => 0,
+                'disc_motriz' => 0,
+                'disc_visual' => 0,
+                'disc_mental' => 0,
+                'disc_auditiva' => 0,
+                'lugar_atencion' => "Web",
+                'curriculum' => 'si'            
             ]
         ]);
     }

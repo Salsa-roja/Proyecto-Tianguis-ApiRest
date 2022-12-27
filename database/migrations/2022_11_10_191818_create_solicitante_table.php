@@ -14,26 +14,35 @@ return new class extends Migration
     public function up()
     {
         Schema::create('solicitante', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger("idUsuario"); 
-            $table->string("nombre")->default(1);
-            $table->string("apellido_paterno")->default(1);
-            $table->string("apellido_materno")->default(1);
-            $table->string("email")->default(1);
-            $table->string("contrasena", 255);
-            $table->string("telefono")->default(1);
-            $table->string("direccion", 255);
-            $table->string("colonia", 255);
-            $table->string("código_postal", 255);
+            $table->integerIncrements("id"); 
+            $table->string("nombre");
+            $table->string("ap_paterno");
+            $table->string("ap_materno");
+            $table->integer("edad");
+            $table->string("curp");
+            $table->string("email", 255);
+            $table->string("pass", 255);
+            $table->string("telefono");
+            $table->string("c_numero", 255);
+            $table->string("c_postal", 255);
+            $table->unsignedInteger("id_colonia");
             $table->string("ciudad", 255);
-            $table->string("descripcion_profesional", 255);
-            $table->string("área_desempeñarte", 255);
-            $table->string("que_posicion_buscas", 255);
-            $table->string("que_industria_interesan", 255);
-            $table->string("que_habilidad_posees", 255);
-            $table->string("experiencia_profesional", 255);
+            $table->string("descr_profesional", 255);
+            $table->integer("sueldo_deseado");
+            $table->string("area_desempeno", 255);
+            $table->string("posicion_interes", 255);
+            $table->string("industria_interes", 255);
+            $table->string("habilidades", 255);
+            $table->string("exp_profesional", 255);
             $table->string("formacion_educativa", 255);
-            $table->string("currículum", 255);
+            $table->boolean("disc_lenguaje")->default(0);
+            $table->boolean("disc_motriz")->default(0);
+            $table->boolean("disc_visual")->default(0);
+            $table->boolean("disc_mental")->default(0);
+            $table->boolean("disc_auditiva")->default(0);
+            $table->enum('lugar_atencion',["Web","Dependencia","Feria"]);
+            $table->string("curriculum", 255);
+            $table->foreign('id_colonia')->references('id')->on('cat_c_postal_colonias')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('empleador', function (Blueprint $table) {
             $table->id();
             $table->string("nombre")->default(1);
-            $table->string("apellido_paterno")->default(1);
-            $table->string("apellido_materno")->default(1);
+            $table->string("ap_paterno")->default(1);
+            $table->string("ap_materno")->default(1);
             $table->string("email")->default(1);
             $table->string("contrasena", 255);
             $table->string("telefono")->default(1);

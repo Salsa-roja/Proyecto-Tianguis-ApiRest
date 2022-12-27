@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
 
 $app->withEloquent();
 
@@ -81,6 +81,8 @@ $app->routeMiddleware([
     'cors' => \App\Http\Middleware\CorsMiddleware::class,
     'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class
 ]);
+
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
