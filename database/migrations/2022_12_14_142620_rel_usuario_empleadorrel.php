@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('relUsuarioEmpleador', function (Blueprint $table) {
             $table->id();
                             
-            $table->integer('idUsuario')->unsigned();
+            $table->unsignedInteger('idUsuario');
             $table->foreign('idUsuario')->references('id')->on('usuarios')
                 ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->integer('idEmpleador')->unsigned();
+            $table->unsignedInteger('idEmpleador');
             $table->foreign('idEmpleador')->references('id')->on('empleador')
                 ->onDelete('cascade')->onUpdate('cascade');
 

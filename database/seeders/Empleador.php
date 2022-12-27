@@ -17,8 +17,8 @@ class Empleador extends Seeder
         DB::table('empleador')->insert([
             [  
                 'nombre' => 'Antonio ',
-                'apellido_paterno' => 'Ibarra ',
-                'apellido_materno' => 'Larios',
+                'ap_paterno' => 'Ibarra ',
+                'ap_materno' => 'Larios',
                 'email' => 'Antonio@gmail.com',
                 "contrasena" => password_hash('123456789', PASSWORD_BCRYPT),
                 'telefono' => '3333591556',

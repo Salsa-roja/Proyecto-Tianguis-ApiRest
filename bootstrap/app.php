@@ -82,6 +82,8 @@ $app->routeMiddleware([
     'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class
 ]);
 
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

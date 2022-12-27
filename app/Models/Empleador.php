@@ -15,8 +15,8 @@ class Empleador extends Model
     protected $primarykey = 'id';
     protected $fillable = [
         'nombre',
-        'apellido_paterno',
-        'apellido_materno',
+        'ap_paterno',
+        'ap_materno',
         'email',
         'contrasena',
         'telefono',

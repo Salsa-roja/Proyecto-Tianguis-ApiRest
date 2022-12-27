@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Preguntas;
-
 
 class Solicitante extends Model
 {
@@ -15,22 +13,31 @@ class Solicitante extends Model
     protected $primarykey = 'id';
     protected $fillable = [
         'nombre',
-        'apellido_paterno',
-        'apellido_materno',
-        'email',
-        'contrasena',
+        'ap_paterno',
+        'ap_materno',
+        'edad',
+        'curp',
         'telefono',
-        'direccion',
-        'colonia',
-        'código_postal',
+        'email',
+        'pass',
+        'c_numero',
+        'c_postal',
+        'id_colonia',
         'ciudad',
-        'descripcion_profesional',
-        'área_desempeñarte',
-        'que_posicion_buscas',
-        'que_industria_interesan',
-        'que_habilidad_posees',
+        'descr_prof',
+        'sueldo_deseado',
+        'area_desempeno',
+        'posicion_interes',
+        'industria_interes',
+        'habilidades',
         'experiencia_profesional',
         'formacion_educativa',
-        'currículum' 
+        'disc_lenguaje',
+        'disc_motriz',
+        'disc_visual',
+        'disc_mental',
+        'disc_auditiva',
+        'lugar_atencion',
+        'curriculum'
     ];
 }

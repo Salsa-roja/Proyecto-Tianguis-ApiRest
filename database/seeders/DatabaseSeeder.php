@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(Empleador::class);
         $this->call(Vacante::class);
         $this->call(RolesSeeder::class);
+        $this->call(EntidadesSeeder::class);
+        $this->call(MunicipiosSeeder::class);
+        $this->call(CPostalColoniasSeeder::class);
         $this->call(Solicitante::class);
         $this->call(UsuariosSeeder::class);
         $this->call(Rel_vacante_solicitantes::class);
