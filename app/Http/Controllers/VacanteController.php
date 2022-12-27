@@ -16,7 +16,7 @@ class VacanteController extends Controller
     {
         try {
             $datos = VacanteService::getVacante();
-            return response()->json(['reporte' => $datos], 200);
+            return response()->json( $datos, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
@@ -48,6 +48,16 @@ class VacanteController extends Controller
         try {
             $names = VacanteService::searchName($name);
             return response()->json($names, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function filtro($id1,$id2)
+    {
+        try {
+            $ip = VacanteService::filtro($id1,$id2);
+            return response()->json($ip, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
