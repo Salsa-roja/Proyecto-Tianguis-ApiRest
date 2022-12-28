@@ -5,15 +5,18 @@ namespace App\Services;
 use App\Models\Vacantes;
 use App\Dto\ParseDTO;
 use App\Dto\VacantesListDTO;
+use Faker\Core\Number;
+use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
+use Mockery\Undefined;
 
 abstract class VacanteService
 {
     public static function getvacante()
     {
         try {
-            $vacantedb = Vacantes::with('empleador')->where('activo', '1')->get();
+            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('activo', '1')->get();
             $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
             return $vacante;
         } catch (\Exception $ex) {
@@ -24,7 +27,7 @@ abstract class VacanteService
     public static function searchId($id)
     {
         try {
-            $vacantedb = Vacantes::with(['empleador'])->where('id', $id)->where('activo', '1')->first();
+            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('id', $id)->where('activo', '1')->first();
             if ($vacantedb) {
                 $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
             } else {
@@ -40,7 +43,8 @@ abstract class VacanteService
     {
         try {
             if ($name != '') {
-                $vacantedb = Vacantes::with(['empleador'])->where('titulo', 'LIKE', '%' . $name . '%')->where('activo', '1')->get();
+                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])
+                ->whereRaw("REPLACE(UPPER(titulo),' ','') like ?",str_replace(' ', '', strtoupper('%' . $name . '%')))->where('activo', '1')->get();
                 $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
                 return $vacante;
             }
@@ -48,10 +52,35 @@ abstract class VacanteService
             throw new \Exception($ex->getMessage(), 500);
         }
     }
+    public static function filtro($request)
+    {  
+        try {
+            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo']);
 
+            if($request['idTurno']!='null'){
+                $vacantedb = $vacantedb->where('id_turnos_laborales', $request['idTurno']);
+            }
+            if($request['idTitulo']!='null'){
+                $vacantedb = $vacantedb->where('id_nivel_educativo',$request['idTitulo']);
+            } 
+             if($request['Search']!='null'){
+                $vacantedb = $vacantedb ->whereRaw("REPLACE(UPPER(titulo),' ','') like ?",str_replace(' ', '', strtoupper('%' .$request['Search']. '%')));
+            }           
+         
+           $vacantedb = $vacantedb->where('activo', '1')->get();
+            if ($vacantedb) {
+                $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
+            } else {
+                $vacante = null;
+            }
+            return $vacante;
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage(), 500);
+        }
+    }
 
-    private static function getAddress($address)
-    {
+        private static function getAddress($address)
+        {
         $latLng = explode(',', $address);
         if (count($latLng) == 2) {
             $lat = $latLng[0];
@@ -62,7 +91,7 @@ abstract class VacanteService
         return ['lat' => null, 'lng' => null, 'domicilio' => $address];
     }
 
-   
+
     public static function inhabilitar($id)
     {
         try {

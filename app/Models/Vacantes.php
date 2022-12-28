@@ -18,8 +18,8 @@ class Vacantes extends Model
         'descripcion',
         'categorías_especiales',
         'días_laborales',
-        'turnos_laborales',
-        'nivel_educativo',
+        'id_turnos_laborales',
+        'id_nivel_educativo',
         'direccion',
         'colonia',
         'código_postal',
@@ -30,9 +30,17 @@ class Vacantes extends Model
         'tipo_de_puesto',
         'habilidades_requeridas',
     ];
-
+    public function tabla_turnos_laborales()
+    {
+        return $this->belongsTo(Turnos_laborales::class, 'id_turnos_laborales');
+    }
     public function empleador()
     {
         return $this->belongsTo(Empleador::class, 'empleador_id');
+    }
+
+    public function tabla_nivel_educativo()
+    {
+        return $this->belongsTo(Nivel_educativo::class, 'id_nivel_educativo');
     }
 }

@@ -1,22 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Services\VacanteService;
 
+namespace App\Http\Controllers;
+
+use App\Services\VacanteService;
+use Illuminate\Http\Request;
 //use PDF;
 
 class VacanteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     public function getVacante()
     {
         try {
             $datos = VacanteService::getVacante();
-            return response()->json(['reporte' => $datos], 200);
+            return response()->json( $datos, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
@@ -48,6 +53,16 @@ class VacanteController extends Controller
         try {
             $names = VacanteService::searchName($name);
             return response()->json($names, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function filtro()
+    {
+        try {
+            $filtro = VacanteService::filtro($this->request->all());
+            return response()->json($filtro, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
