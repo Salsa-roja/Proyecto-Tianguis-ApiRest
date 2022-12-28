@@ -17,7 +17,7 @@ abstract class SolicitanteService
       }
    }
 
-   public static function guardar($params){
+   public static function guardar($params,$fieldArchivo){
       try {
 
          $itemDB = new Solicitante();
@@ -47,7 +47,7 @@ abstract class SolicitanteService
          $itemDB->disc_mental = $params['disc_mental'];
          $itemDB->disc_auditiva = $params['disc_auditiva'];
          $itemDB->lugar_atencion = $params['lugar_atencion'];
-         $itemDB->curriculum = $params['curriculum'];
+         $itemDB->curriculum = $fieldArchivo;
          $itemDB->save();
          return $itemDB;
       } catch (\Exception $e) {
