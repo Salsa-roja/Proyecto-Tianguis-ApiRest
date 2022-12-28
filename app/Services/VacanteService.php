@@ -43,7 +43,8 @@ abstract class VacanteService
     {
         try {
             if ($name != '') {
-                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->whereRaw("REPLACE(UPPER(titulo),' ','') like ?",str_replace(' ', '', strtoupper('%' . $name . '%')))->where('activo', '1')->get();
+                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])
+                ->whereRaw("REPLACE(UPPER(titulo),' ','') like ?",str_replace(' ', '', strtoupper('%' . $name . '%')))->where('activo', '1')->get();
                 $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
                 return $vacante;
             }
@@ -51,19 +52,22 @@ abstract class VacanteService
             throw new \Exception($ex->getMessage(), 500);
         }
     }
-    public static function filtro($id1,$id2)
-    {
+    public static function filtro($request)
+    {  
         try {
-            // return $id2;
-            if( is_numeric($id1) && is_numeric($id2) ){
-                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('id_turnos_laborales', $id1)->where('id_nivel_educativo', $id2)->where('activo', '1')->get();
-            }if(is_numeric($id1) && $id2==='null'){
-                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('id_turnos_laborales', $id1)->where('activo', '1')->get();
-            }if(is_numeric($id2) && $id1==='null'){
-                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('id_nivel_educativo', $id2)->where('activo', '1')->get();
-            }if($id1==='null' && $id2==='null'){
-                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('activo', '1')->get();
+            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo']);
+
+            if($request['idTurno']!='null'){
+                $vacantedb = $vacantedb->where('id_turnos_laborales', $request['idTurno']);
             }
+            if($request['idTitulo']!='null'){
+                $vacantedb = $vacantedb->where('id_nivel_educativo',$request['idTitulo']);
+            } 
+             if($request['Search']!='null'){
+                $vacantedb = $vacantedb ->whereRaw("REPLACE(UPPER(titulo),' ','') like ?",str_replace(' ', '', strtoupper('%' .$request['Search']. '%')));
+            }           
+         
+           $vacantedb = $vacantedb->where('activo', '1')->get();
             if ($vacantedb) {
                 $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
             } else {

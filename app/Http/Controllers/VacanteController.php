@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Services\VacanteService;
 
+namespace App\Http\Controllers;
+
+use App\Services\VacanteService;
+use Illuminate\Http\Request;
 //use PDF;
 
 class VacanteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     public function getVacante()
     {
         try {
@@ -53,11 +58,11 @@ class VacanteController extends Controller
         }
     }
 
-    public function filtro($id1,$id2)
+    public function filtro()
     {
         try {
-            $ip = VacanteService::filtro($id1,$id2);
-            return response()->json($ip, 200);
+            $filtro = VacanteService::filtro($this->request->all());
+            return response()->json($filtro, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
