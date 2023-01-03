@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('solicitante', function (Blueprint $table) {
+        Schema::create('solicitantes', function (Blueprint $table) {
             $table->integerIncrements("id"); 
             $table->string("nombre");
             $table->string("ap_paterno");
@@ -55,6 +55,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('solicitante');
+        Schema::dropIfExists('solicitantes');
     }
 };

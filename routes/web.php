@@ -25,19 +25,22 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/login', 'AuthController@authenticate');
     });
 
-    $router->get('/c_postales', 'SolicitanteController@getCPs');
-    $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
-
+    
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listado', 'VacanteController@getVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/detalle/{id}', 'VacanteController@searchId');
     });
-
+    
+    $router->get('/c_postales', 'SolicitanteController@getCPs');
+    $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
     $router->group(['prefix' => 'registro-solicitante'], function () use ($router) {
         $router->post('/guardar','SolicitanteController@guardar');
     });
 
+    $router->group(['prefix' => 'registro-empresa'], function () use ($router) {
+        $router->post('/guardar','EmpresaController@guardar');
+    });
 
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listado', 'VacanteController@getVacante');
