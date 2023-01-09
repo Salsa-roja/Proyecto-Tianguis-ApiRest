@@ -22,6 +22,13 @@ class UsuariosSeeder extends Seeder
                 'ape_materno' => '',
                 'correo' => 'admin@admin.com',
                 "contrasena" => password_hash('123456789', PASSWORD_BCRYPT)
+            ],
+            [
+                'nombres' => 'Administrador2',
+                'ape_paterno' => '',
+                'ape_materno' => '',
+                'correo' => 'admin2@admin.com',
+                "contrasena" => password_hash('123456789', PASSWORD_BCRYPT)
             ]
         ];
         foreach ($usuarios as $key => $obj) {

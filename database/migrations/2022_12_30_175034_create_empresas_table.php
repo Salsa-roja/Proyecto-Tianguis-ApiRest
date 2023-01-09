@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('constancia_sit_fiscal');
             $table->string('licencia_municipal');
             $table->string('alta_patronal');
-            $table->boolean('')->default(0);
-            $table->boolean('')->default(0);
-            $table->boolean('')->default(0);
+            $table->boolean('contr_discapacitados')->default(0);
+            $table->boolean('contr_antecedentes')->default(0);
+            $table->boolean('contr_adultos')->default(0);
             $table->string('nombre_rh');
             $table->string('correo_rh');
             $table->string('telefono_rh');

@@ -51,6 +51,12 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
         $router->post('/filtro', 'VacanteController@filtro');
     });
+
+    $router->group(['prefix' => 'correo'], function () use ($router) {
+        $router->get('/detalle/{correo_id}','CorreoController@correoById');
+        $router->post('/enviar','CorreoController@enviar');
+    });
+
 });
 
 

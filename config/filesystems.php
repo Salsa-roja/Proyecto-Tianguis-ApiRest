@@ -31,9 +31,13 @@ return [
    'disks' => [
 
       'local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-            'throw' => false,
+         'driver' => 'local',
+         'root' => storage_path('app'),
+         'throw' => false,
+      ],
+      'cache' => [
+         'driver' => 'local',
+         'root' => storage_path('framework/cache/data'),
       ],
       'public' => [
          'driver' => 'local',
