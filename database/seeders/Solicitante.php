@@ -14,7 +14,7 @@ class Solicitante extends Seeder
      */
     public function run()
     {
-        DB::table('solicitante')->insert([
+        DB::table('solicitantes')->insert([
             [   
                 'nombre' => 'Jesus ',
                 'ap_paterno' => 'Ibarra ',

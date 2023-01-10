@@ -9,6 +9,9 @@
         "firebase/php-jwt": "^6.3",
         "flipbox/lumen-generator": "^9.1",
         "illuminate/filesystem": "9.36.3",
+        "illuminate/log": "^9.46",
+        "illuminate/notifications": "^9.46",
+        "illuminate/view": "^9.46",
         "laravel/lumen-framework": "^9.0",
         "league/flysystem": "^3.12"
     },

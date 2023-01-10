@@ -31,9 +31,13 @@ return [
    'disks' => [
 
       'local' => [
-            'driver' => 'local',
-            'root' => storage_path('app'),
-            'throw' => false,
+         'driver' => 'local',
+         'root' => storage_path('app'),
+         'throw' => false,
+      ],
+      'cache' => [
+         'driver' => 'local',
+         'root' => storage_path('framework/cache/data'),
       ],
       'public' => [
          'driver' => 'local',
@@ -47,6 +51,11 @@ return [
          'root' => storage_path('app/solicitantes'),
          'throw' => false,
      ],
+     'empresas' => [
+         'driver' => 'local',
+         'root' => storage_path('app/empresas'),
+         'throw' => false,
+      ],
       's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
