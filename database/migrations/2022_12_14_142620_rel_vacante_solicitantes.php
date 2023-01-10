@@ -21,7 +21,7 @@ return new class extends Migration
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->integer('idSolicitante')->unsigned();
-            $table->foreign('idSolicitante')->references('id')->on('solicitante')
+            $table->foreign('idSolicitante')->references('id')->on('solicitantes')
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->engine = 'InnoDB';

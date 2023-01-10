@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\SolicitanteService;
-
+use App\Services\ArchivosService;
 class SolicitanteController extends Controller
 {
     public function __construct()
@@ -50,12 +50,21 @@ class SolicitanteController extends Controller
                 'disc_mental',
                 'disc_auditiva',
                 'lugar_atencion' => 'required',
-                'curriculum'
+                'curriculum' => 'required'
             ]);
             $params = $request->all();
             $params["request"] = $request;
-            $items = SolicitanteService::guardar($params);
+            
+            if($request->hasFile('curriculum')){
 
+                $fieldArchivo = ArchivosService::subirArchivo($request->file('curriculum'),
+                                                                'solicitantes',
+                                                                'CV_'.$params['curp'],
+                                                                'path' 
+                );
+            }
+
+            $items = SolicitanteService::guardar($params,$fieldArchivo);
             return response()->json($items, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);

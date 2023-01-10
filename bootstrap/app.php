@@ -58,9 +58,25 @@ $app->singleton(
 | the default version. You may register other files below as needed.
 |
 */
+//$viewFinder = $app['view.finder'];
 
+// Set the view paths
+/* $app['config'] = [
+    'view.finder' => $viewFinder->setPaths([
+        __DIR__.'/../resources/views',
+    ])
+]; */
 $app->configure('app');
+$app->configure('mail');
+/* $app->configure('cache'); */
+/* $app->configure('view'); */
 
+/* $app->alias('mail.manager', Illuminate\Mail\MailManager::class);
+$app->alias('mail.manager', Illuminate\Contracts\Mail\Factory::class);
+
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class); */
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -82,7 +98,7 @@ $app->routeMiddleware([
     'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class
 ]);
 
-$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +110,10 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 | totally optional, so you are not required to uncomment this line.
 |
 */
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+//$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+//$app->register(Illuminate\View\ViewServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
