@@ -27,4 +27,9 @@ class Empresa extends Model
         'correo_rh',
         'telefono_rh'
     ];
+
+    public function usuario_empresa()
+    {
+        return $this->hasOne(UsuariosEmpresa::class);
+    }
 }

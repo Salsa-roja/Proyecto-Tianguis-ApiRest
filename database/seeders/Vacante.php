@@ -16,7 +16,7 @@ class Vacante extends Seeder
     {
         DB::table('vacante')->insert([
             [  
-                'empleador_id' => '1',
+                'id_empresa' => '1',
                 'titulo' => 'Vendedora de piso ',
                 'descripcion' => 'se solicita vendedora para tienda departamental ',
                 'categorías_especiales' => '',
@@ -36,7 +36,7 @@ class Vacante extends Seeder
                 ,'activo'=>1               
             ],
             [   
-                'empleador_id' => '1',
+                'id_empresa' => '1',
                 'titulo' => 'Mercado Corona',
                 'descripcion' => 'cosinero de tacos',
                 'categorías_especiales' => '',
@@ -56,7 +56,7 @@ class Vacante extends Seeder
                 ,'activo'=>1 
             ],
             [   
-                'empleador_id' => '1',
+                'id_empresa' => '1',
                 'titulo' => 'programador',
                 'descripcion' => 'Programdor web (Angular)',
                 'categorías_especiales' => 'null',
@@ -76,7 +76,7 @@ class Vacante extends Seeder
                 ,'activo'=>1 
             ],
             [   
-                'empleador_id' => '1',
+                'id_empresa' => '1',
                 'titulo' => 'barrendero',
                 'descripcion' => 'barrendero de las plazas',
                 'categorías_especiales' => 'null',

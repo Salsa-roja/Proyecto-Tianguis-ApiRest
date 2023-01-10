@@ -38,6 +38,7 @@ class EmpresaController extends Controller
                 'contr_adultos',
                 'nombre_rh' => 'required',
                 'correo_rh' => 'required',
+                'contrasena' => 'required',
                 'telefono_rh' => 'required'
             ]);
             $params = $request->all();

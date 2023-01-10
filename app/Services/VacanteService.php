@@ -16,7 +16,7 @@ abstract class VacanteService
     public static function getvacante()
     {
         try {
-            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('activo', '1')->get();
+            $vacantedb = Vacantes::with(['empresa','tabla_turnos_laborales','tabla_nivel_educativo'])->where('activo', '1')->get();
             $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
             return $vacante;
         } catch (\Exception $ex) {
@@ -27,7 +27,7 @@ abstract class VacanteService
     public static function searchId($id)
     {
         try {
-            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])->where('id', $id)->where('activo', '1')->first();
+            $vacantedb = Vacantes::with(['empresa','tabla_turnos_laborales','tabla_nivel_educativo'])->where('id', $id)->where('activo', '1')->first();
             if ($vacantedb) {
                 $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
             } else {
@@ -43,7 +43,7 @@ abstract class VacanteService
     {
         try {
             if ($name != '') {
-                $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo'])
+                $vacantedb = Vacantes::with(['empresa','tabla_turnos_laborales','tabla_nivel_educativo'])
                 ->whereRaw("REPLACE(UPPER(titulo),' ','') like ?",str_replace(' ', '', strtoupper('%' . $name . '%')))->where('activo', '1')->get();
                 $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
                 return $vacante;
@@ -55,7 +55,7 @@ abstract class VacanteService
     public static function filtro($request)
     {  
         try {
-            $vacantedb = Vacantes::with(['empleador','tabla_turnos_laborales','tabla_nivel_educativo']);
+            $vacantedb = Vacantes::with(['empresa','tabla_turnos_laborales','tabla_nivel_educativo']);
 
             if($request['idTurno']!='null'){
                 $vacantedb = $vacantedb->where('id_turnos_laborales', $request['idTurno']);

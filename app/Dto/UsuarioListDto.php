@@ -9,8 +9,8 @@ class UsuarioListDto
     public $id;
     public $nombreCompleto;
     public $nombres;
-    public $ap_paterno;
-    public $ap_materno;
+    public $ape_paterno;
+    public $ape_materno;
     public $correo;
     public $idRol;
     public $rol;
@@ -21,8 +21,8 @@ class UsuarioListDto
 
         $this->id = $obj->id;
         $this->nombres = $obj->nombres;
-        $this->ap_paterno = $obj->ape_paterno;
-        $this->ap_materno = $obj->ape_materno;
+        $this->ape_paterno = $obj->ape_paterno;
+        $this->ape_materno = $obj->ape_materno;
         $this->nombreCompleto = $obj->nombre_completo;
         $this->correo = $obj->correo;
         $this->idRol=$obj->rol->id;

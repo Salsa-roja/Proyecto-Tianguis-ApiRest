@@ -14,14 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('solicitantes', function (Blueprint $table) {
-            $table->integerIncrements("id"); 
-            $table->string("nombre");
-            $table->string("ap_paterno");
-            $table->string("ap_materno");
+            $table->integerIncrements("id");
+            $table->unsignedInteger("id_usuario");
             $table->integer("edad");
             $table->string("curp");
-            $table->string("email", 255);
-            $table->string("pass", 255);
             $table->string("telefono");
             $table->string("c_numero", 255);
             $table->string("c_postal", 255);
@@ -42,6 +38,8 @@ return new class extends Migration
             $table->boolean("disc_auditiva")->default(0);
             $table->enum('lugar_atencion',["Web","Dependencia","Feria"]);
             $table->string("curriculum", 255);
+
+            $table->foreign('id_usuario')->references('id')->on('usuarios')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('id_colonia')->references('id')->on('cat_c_postal_colonias')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();

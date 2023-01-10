@@ -5,7 +5,9 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Empresa;
-
+use App\Models\Usuarios;
+use App\Models\UsuariosEmpresas;
+use App\Models\Rol;
 abstract class EmpresaService
 {
 
@@ -20,26 +22,45 @@ abstract class EmpresaService
    public static function guardar($params,$fieldsArchivo){
       try {
 
-         $itemDB = new Empresa();
-         $itemDB->nombre_comercial = $params['nombre_comercial'];
-         $itemDB->razon_social = $params['razon_social'];
-         $itemDB->rfc = $params['rfc'];
-         $itemDB->descripcion = $params['descripcion'];
-         $itemDB->numero_empleados = $params['numero_empleados'];
+         # guardar usuario
+         $Usuario = new Usuarios();
+         $Usuario->nombres = $params['nombre_rh'];
+         $Usuario->ape_paterno = '';
+         $Usuario->ape_materno = '';
+         $Usuario->correo = $params['correo_rh'];
+         $Usuario->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
+         $Usuario->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
+         $Usuario->save();
 
-         $itemDB->constancia_sit_fiscal = $fieldsArchivo['constancia_sit_fiscal'];
-         $itemDB->licencia_municipal = $fieldsArchivo['licencia_municipal'];
-         $itemDB->alta_patronal = $fieldsArchivo['alta_patronal'];
+         # guardar empresa
+         $Empresa = new Empresa();
+         $Empresa->id_usuario = $Usuario->id; 
+         $Empresa->nombre_comercial = $params['nombre_comercial'];
+         $Empresa->razon_social = $params['razon_social'];
+         $Empresa->rfc = $params['rfc'];
+         $Empresa->descripcion = $params['descripcion'];
+         $Empresa->numero_empleados = $params['numero_empleados'];
+
+         $Empresa->constancia_sit_fiscal = $fieldsArchivo['constancia_sit_fiscal'];
+         $Empresa->licencia_municipal = $fieldsArchivo['licencia_municipal'];
+         $Empresa->alta_patronal = $fieldsArchivo['alta_patronal'];
          
-         $itemDB->contr_discapacitados = $params['contr_discapacitados'];
-         $itemDB->contr_antecedentes = $params['contr_antecedentes'];
-         $itemDB->contr_adultos = $params['contr_adultos'];
+         $Empresa->contr_discapacitados = $params['contr_discapacitados'];
+         $Empresa->contr_antecedentes = $params['contr_antecedentes'];
+         $Empresa->contr_adultos = $params['contr_adultos'];
          
-         $itemDB->nombre_rh = $params['nombre_rh'];
-         $itemDB->correo_rh = $params['correo_rh'];
-         $itemDB->telefono_rh = $params['telefono_rh'];
-         $itemDB->save();
-         return $itemDB;
+         $Empresa->nombre_rh = $params['nombre_rh'];
+         $Empresa->correo_rh = $params['correo_rh'];
+         $Empresa->telefono_rh = $params['telefono_rh'];
+         $Empresa->save();
+
+         # guardar relacion
+         $UsrEmp = new UsuariosEmpresas();
+         $UsrEmp->id_usuario = $Usuario->id;
+         $UsrEmp->id_empresa = $Empresa->id;
+         $UsrEmp->save();
+
+         return [$Usuario,$Empresa];
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
