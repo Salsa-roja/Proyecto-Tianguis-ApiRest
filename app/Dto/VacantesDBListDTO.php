@@ -4,11 +4,11 @@ namespace App\Dto;
 
 use App\Models\Vacantes;
 
-class VacantesListDTO
+class VacantesDBListDTO
 {
     public $id;
     public $nombre_de_empresa;
-    public $titulo;
+    public $vacante;
     public $descripcion;
     public $categorías_especiales;
     public $días_laborales;
@@ -21,20 +21,21 @@ class VacantesListDTO
     public $ciudad;
     public $número_de_puestos_disponibles;
     public $area;
-    public $Industria;
+    public $industria;
     public $tipo_de_puesto;
     public $habilidades_requeridas;
+    public $metros;
 
     public function __construct(Vacantes $obj)
     {
         $this->id = $obj->id;
-        $this->titulo = $obj->titulo;
-        $this->nombre_de_empresa = $obj->empleador->nombre;
+        $this->vacante = $obj->vacante;
+        $this->nombre_de_empresa = $obj->nombre;
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
         $this->días_laborales = $obj->días_laborales;
-        $this->id_turnos_laborales = $obj->tabla_turnos_laborales->turnos;
-        $this->id_nivel_educativo = $obj->tabla_nivel_educativo->titulo;
+        $this->id_turnos_laborales = $obj->turnos;
+        $this->id_nivel_educativo = $obj->titulo;
         $this->sueldo = $obj->sueldo;
         $this->direccion = $obj->direccion;
         $this->colonia = $obj->colonia;
@@ -42,8 +43,10 @@ class VacantesListDTO
         $this->ciudad = $obj->ciudad;
         $this->número_de_puestos_disponibles = $obj->número_de_puestos_disponibles;
         $this->area = $obj->area;
-        $this->Industria = $obj->Industria;
+        $this->industria = $obj->industria;
         $this->tipo_de_puesto = $obj->tipo_de_puesto;
         $this->habilidades_requeridas = $obj->habilidades_requeridas;
+        $this->metros = $obj->metros;
+
     }
 }
