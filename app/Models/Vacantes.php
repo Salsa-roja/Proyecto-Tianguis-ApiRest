@@ -14,7 +14,7 @@ class Vacantes extends Model
     protected $primarykey = 'id';
     protected $fillable = [
         'empleador_id',
-        'titulo',
+        'vacante',
         'descripcion',
         'categorías_especiales',
         'días_laborales',

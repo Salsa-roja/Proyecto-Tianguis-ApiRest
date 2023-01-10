@@ -17,7 +17,7 @@ class Vacante extends Seeder
         DB::table('vacante')->insert([
             [  
                 'empleador_id' => '1',
-                'titulo' => 'Vendedora de piso ',
+                'vacante' => 'Vendedora de piso ',
                 'descripcion' => 'se solicita vendedora para tienda departamental ',
                 'categorías_especiales' => '',
                 'días_laborales' => 'de L a V ',
@@ -30,14 +30,16 @@ class Vacante extends Seeder
                 'ciudad' => 'Guadalajara',
                 'número_de_puestos_disponibles' => '1',  
                 'area' => 'ventas',
-                'Industria' => 'Mercado Corona',
+                'industria' => 'Mercado Corona',
                 'tipo_de_puesto' => '',
-                'habilidades_requeridas' => 'proactividad'
-                ,'activo'=>1               
+                'habilidades_requeridas' => 'proactividad',
+                'lat' => '20.629821',
+                'lng' => '-103.3567714',
+                'activo'=>1               
             ],
             [   
                 'empleador_id' => '1',
-                'titulo' => 'Mercado Corona',
+                'vacante' => 'Mercado Corona',
                 'descripcion' => 'cosinero de tacos',
                 'categorías_especiales' => '',
                 'días_laborales' => 'de L a V ',
@@ -50,14 +52,16 @@ class Vacante extends Seeder
                 'ciudad' => 'guadalajara',
                 'número_de_puestos_disponibles' => '2',  
                 'area' => 'taqueros',
-                'Industria' => 'Mercado Corona',
+                'industria' => 'Mercado Corona',
                 'tipo_de_puesto' => 'fijo',
-                'habilidades_requeridas' => 'ninguna'  
-                ,'activo'=>1 
+                'habilidades_requeridas' => 'ninguna',
+                'lat' => '20.6578444',
+                'lng' => '-103.2759891',
+                'activo'=>1 
             ],
             [   
                 'empleador_id' => '1',
-                'titulo' => 'programador',
+                'vacante' => 'programador',
                 'descripcion' => 'Programdor web (Angular)',
                 'categorías_especiales' => 'null',
                 'días_laborales' => 'L a V',
@@ -70,14 +74,16 @@ class Vacante extends Seeder
                 'ciudad' => 'guadalajara',
                 'número_de_puestos_disponibles' => '4',  
                 'area' => 'Innovacion',
-                'Industria' => 'Gobierno',
+                'industria' => 'Gobierno',
                 'tipo_de_puesto' => 'temporal',
-                'habilidades_requeridas' => 'experto en programacion'   
-                ,'activo'=>1 
+                'habilidades_requeridas' => 'experto en programacion',
+                'lat' => '20.6317184',
+                'lng' => '-103.4007079',
+                'activo'=>1 
             ],
             [   
                 'empleador_id' => '1',
-                'titulo' => 'barrendero',
+                'vacante' => 'barrendero',
                 'descripcion' => 'barrendero de las plazas',
                 'categorías_especiales' => 'null',
                 'días_laborales' => 'L a V',
@@ -90,10 +96,12 @@ class Vacante extends Seeder
                 'ciudad' => 'guadalajara',
                 'número_de_puestos_disponibles' => '4',  
                 'area' => 'Innovacion',
-                'Industria' => 'Gobierno',
+                'industria' => 'Gobierno',
                 'tipo_de_puesto' => 'temporal',
-                'habilidades_requeridas' => 'experto en programacion'   
-                ,'activo'=>1 
+                'habilidades_requeridas' => 'experto en programacion', 
+                'lat' => '20.6074913',
+                'lng' => '-103.370952',
+                'activo'=>1 
             ],
         ]);
     }
