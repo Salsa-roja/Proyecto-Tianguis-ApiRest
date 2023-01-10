@@ -105,7 +105,6 @@ abstract class VacanteService
                         LIMIT 10");
 
 
-                // print_r($query);
                 return ($query);
             } else {
                 $vacantedb = Vacantes::with(['empleador', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
