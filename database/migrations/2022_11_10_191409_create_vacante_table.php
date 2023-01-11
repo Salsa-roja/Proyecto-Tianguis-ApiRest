@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('vacante', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_empresa');
+            $table->unsignedInteger('id_empresa');
             $table->string("vacante", 255);
             $table->string("descripcion", 255);
             $table->string("categorías_especiales", 255);       
@@ -42,7 +42,7 @@ return new class extends Migration
 
             $table->foreign('id_turnos_laborales')->references('id')->on('turnos_laborales');
             $table->foreign('id_nivel_educativo')->references('id')->on('nivel_educativo');
-            $table->foreign('id_empresa')->references('id')->on('empresa');
+            $table->foreign('id_empresa')->references('id')->on('empresas');
 
         });
     }

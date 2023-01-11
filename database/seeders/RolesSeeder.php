@@ -42,7 +42,7 @@ class RolesSeeder extends Seeder
                 'nombre' => 'Empresa',
                 'permisos' => [
                     [
-                        'nombre' => 'Formulario de Registro de solicitante',
+                        'nombre' => 'Formulario de Registro de empresa',
                         'permiso' => 'EmpresaForm'
                     ]
                 ]
