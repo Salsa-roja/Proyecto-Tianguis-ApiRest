@@ -8,7 +8,7 @@ class VacantesListDTO
 {
     public $id;
     public $nombre_de_empresa;
-    public $titulo;
+    public $vacante;
     public $descripcion;
     public $categorías_especiales;
     public $días_laborales;
@@ -21,15 +21,15 @@ class VacantesListDTO
     public $ciudad;
     public $número_de_puestos_disponibles;
     public $area;
-    public $Industria;
+    public $industria;
     public $tipo_de_puesto;
     public $habilidades_requeridas;
 
     public function __construct(Vacantes $obj)
     {
         $this->id = $obj->id;
-        $this->titulo = $obj->titulo;
         $this->nombre_de_empresa = $obj->empresa->nombre;
+        $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
         $this->días_laborales = $obj->días_laborales;
@@ -42,7 +42,7 @@ class VacantesListDTO
         $this->ciudad = $obj->ciudad;
         $this->número_de_puestos_disponibles = $obj->número_de_puestos_disponibles;
         $this->area = $obj->area;
-        $this->Industria = $obj->Industria;
+        $this->industria = $obj->industria;
         $this->tipo_de_puesto = $obj->tipo_de_puesto;
         $this->habilidades_requeridas = $obj->habilidades_requeridas;
     }

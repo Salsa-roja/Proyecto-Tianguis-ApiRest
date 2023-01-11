@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('vacante', function (Blueprint $table) {
             $table->id();
             $table->integer('id_empresa');
-            $table->string("titulo", 255);
+            $table->string("vacante", 255);
             $table->string("descripcion", 255);
             $table->string("categorías_especiales", 255);       
             $table->string("días_laborales")->default(1);
@@ -29,9 +29,11 @@ return new class extends Migration
             $table->string("ciudad", 255);
             $table->string("número_de_puestos_disponibles", 255);
             $table->string("area", 255);
-            $table->string("Industria", 255);
+            $table->string("industria", 255);
             $table->string("tipo_de_puesto", 255);
             $table->string("habilidades_requeridas", 255);
+            $table->decimal("lat", 23,14);
+            $table->decimal("lng", 23,14);
             $table->boolean("activo")->default(1);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

@@ -67,4 +67,4 @@ class VacanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
-}
+}           
