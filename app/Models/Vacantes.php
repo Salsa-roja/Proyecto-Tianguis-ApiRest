@@ -14,7 +14,7 @@ class Vacantes extends Model
     protected $primarykey = 'id';
     protected $fillable = [
         'id_empresa',
-        'vacante',
+        'vacantes',
         'descripcion',
         'categorías_especiales',
         'días_laborales',
@@ -36,7 +36,7 @@ class Vacantes extends Model
     }
     public function empresa()
     {
-        return $this->belongsTo(Empleador::class, 'id_empresa');
+        return $this->belongsTo(Empresa::class, 'id_empresa');
     }
 
     public function tabla_nivel_educativo()
