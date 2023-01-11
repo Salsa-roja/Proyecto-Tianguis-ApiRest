@@ -92,7 +92,7 @@ abstract class VacanteService
                 //     ->join('empleador', 'vacante.empleador_id', '=', 'empleador.id')
                 //     ->join('nivel_educativo', 'vacante.id_nivel_educativo', '=', 'nivel_educativo.id');
  
-
+ 
                 $query = DB::select("SELECT ST_Distance(
                    ST_Transform( CONCAT('SRID=4326;POINT(" . $request['lng'] . " " . $request['lat'] . " )')::geometry, 2163),
                     ST_Transform( CONCAT('SRID=4326;POINT(' ,vacante.lng,' ',vacante.lat,')')::geometry, 2163)
