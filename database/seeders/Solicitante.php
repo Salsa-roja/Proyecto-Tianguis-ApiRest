@@ -16,13 +16,9 @@ class Solicitante extends Seeder
     {
         DB::table('solicitantes')->insert([
             [   
-                'nombre' => 'Jesus ',
-                'ap_paterno' => 'Ibarra ',
-                'ap_materno' => 'Larios',
+                'id_usuario' => 2,
                 'edad' => 30,
                 'curp' => 'ASDF722HDHW',
-                'email' => 'Jesus@gmail.com',
-                "pass" => password_hash('123456789', PASSWORD_BCRYPT),
                 'telefono' => '3333591556',
                 'c_numero' => 'pedro de ceballos #1234',
                 'c_postal' => '31234',

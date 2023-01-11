@@ -28,8 +28,8 @@ class VacantesListDTO
     public function __construct(Vacantes $obj)
     {
         $this->id = $obj->id;
+        $this->nombre_de_empresa = $obj->empresa->nombre;
         $this->vacante = $obj->vacante;
-        $this->nombre_de_empresa = $obj->empleador->nombre;
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
         $this->días_laborales = $obj->días_laborales;

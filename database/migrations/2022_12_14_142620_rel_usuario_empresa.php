@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up() 
     {
-        Schema::create('relUsuarioEmpleador', function (Blueprint $table) {
+        Schema::create('relUsuarioEmpresa', function (Blueprint $table) {
             $table->id();
                             
-            $table->unsignedInteger('idUsuario');
-            $table->foreign('idUsuario')->references('id')->on('usuarios')
+            $table->unsignedInteger('id_usuario');
+            $table->foreign('id_usuario')->references('id')->on('usuarios')
                 ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->unsignedInteger('idEmpleador');
-            $table->foreign('idEmpleador')->references('id')->on('empleador')
+            $table->unsignedInteger('id_empresa');
+            $table->foreign('id_empresa')->references('id')->on('empresas')
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->engine = 'InnoDB';
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('relVacanteSolicitante');
+        Schema::dropIfExists('relUsuarioEmpresa');
     }
 };

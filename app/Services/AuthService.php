@@ -24,7 +24,7 @@ abstract class AuthService
         if (!$user) {
             return [
                 'status' => 400,
-                'data' => '',
+                'token' => '',
                 'message' => 'El usuario no existe'
             ];
         }
@@ -33,14 +33,15 @@ abstract class AuthService
         if (Hash::check($password, $user->contrasena)) {
             return [
                 'status' => 200,
-                'data' => self::jwt($user),
+                'token' => self::jwt($user),
+                'rol_id' => $user->rol_id,
                 'message' => 'Autorizado'
             ];
         }
         // Bad Request response
         return [
             'status' => 400,
-            'data' => '',
+            'token' => '',
             'message' => 'Usuario o contraseña incorrectos'
         ];
     }

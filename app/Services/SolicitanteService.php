@@ -5,6 +5,9 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Solicitante;
+use App\Models\Usuarios;
+use App\Models\Rol;
+
 
 abstract class SolicitanteService
 {
@@ -20,15 +23,22 @@ abstract class SolicitanteService
    public static function guardar($params,$fieldArchivo){
       try {
 
+         # guardar usuario
+         $itemUs = new Usuarios();
+         $itemUs->nombres = $params['nombre'];
+         $itemUs->ape_paterno = $params['ape_paterno'];
+         $itemUs->ape_materno = $params['ape_materno'];
+         $itemUs->correo = $params['correo'];
+         $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
+         $itemUs->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
+         $itemUs->save();
+
+         # guardar solicitante
          $itemDB = new Solicitante();
-         $itemDB->nombre = $params['nombre'];
-         $itemDB->ap_paterno = $params['ap_paterno'];
-         $itemDB->ap_materno = $params['ap_materno'];
+         $itemDB->id_usuario = $itemUs->id; 
          $itemDB->edad = $params['edad'];
          $itemDB->curp = $params['curp'];
          $itemDB->telefono = $params['telefono'];
-         $itemDB->email = $params['email'];
-         $itemDB->pass = password_hash($params['pass'], PASSWORD_BCRYPT);
          $itemDB->c_numero = $params['c_numero'];
          $itemDB->c_postal = $params['c_postal'];
          $itemDB->id_colonia = $params['id_colonia'];
@@ -49,6 +59,7 @@ abstract class SolicitanteService
          $itemDB->lugar_atencion = $params['lugar_atencion'];
          $itemDB->curriculum = $fieldArchivo;
          $itemDB->save();
+
          return $itemDB;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());

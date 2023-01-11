@@ -25,13 +25,13 @@ class SolicitanteController extends Controller
         try{
             $this->validate($request, [
                 'nombre' => 'required',
-                'ap_paterno' => 'required',
-                'ap_materno' => 'required',
+                'ape_paterno' => 'required',
+                'ape_materno' => 'required',
                 'edad' => 'required',
                 'curp' => 'required',
                 'telefono' => 'required',
-                'email' => 'required',
-                'pass' => 'required',
+                'correo' => 'required',
+                'contrasena' => 'required',
                 'c_numero' => 'required',
                 'c_postal' => 'required',
                 'id_colonia' => 'required',

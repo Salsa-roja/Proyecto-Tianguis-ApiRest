@@ -20,24 +20,30 @@ class RolesSeeder extends Seeder
                 'nombre' => 'Administrador',
                 'permisos' => [
                     [
-                        'nombre' => 'Configuración de horarios ',
-                        'permiso' => 'HorariosList'
-                    ],
-                    [
-                        'nombre' => 'Listado de citas',
-                        'permiso' => 'CitasList'
-                    ],
-                    [
-                        'nombre' => 'Listado de trámites',
-                        'permiso' => 'TrámitesList'
-                    ],
-                    [
                         'nombre' => 'Listado de usuarios',
                         'permiso' => 'UsuariosList'
                     ],
                     [
                         'nombre' => 'Listado de roles',
                         'permiso' => 'RolesList'
+                    ]
+                ]
+            ],
+            [
+                'nombre' => 'Solicitante',
+                'permisos' => [
+                    [
+                        'nombre' => 'Formulario de Registro de solicitante',
+                        'permiso' => 'SolicitanteForm'
+                    ]
+                ]
+            ],
+            [
+                'nombre' => 'Empresa',
+                'permisos' => [
+                    [
+                        'nombre' => 'Formulario de Registro de solicitante',
+                        'permiso' => 'EmpresaForm'
                     ]
                 ]
             ]

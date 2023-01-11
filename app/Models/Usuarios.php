@@ -36,4 +36,14 @@ class Usuarios extends Model{
     {
         return $this->belongsTo(Rol::class);
     }
+
+    public function usuario_empresa(){
+        return $this->belongsToMany(    Empresa::class,
+                                        'relUsuarioEmpresa',
+                                        'usuario_id',
+                                        'empresa_id',
+                                        'id',//usuario.id
+                                        'id'//empresa.id
+                                    )->where('relUsuarioEmpresa.activo',true);
+    }
 }
