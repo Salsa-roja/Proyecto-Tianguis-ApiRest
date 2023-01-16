@@ -44,8 +44,6 @@
                padding-top: 10px;
                padding-bottom: 0px;
             }
-            #td_img_footer{
-            }
             #footer_img{
                width: 150px;
                margin-top: 15px;

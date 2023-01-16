@@ -12,14 +12,9 @@
             </center>
             <center>
                 <div id="footer">
-
+                    <img id="footer_img" src="{{env('APP_URL')}}/assets/img/mail/LogoGobCdqueQuiero_final.svg">
                     <table>
                         <tbody>
-                            <tr>
-                                <td id="td_img_footer">
-                                   <img id="footer_img" src="{{env('APP_URL')}}/assets/img/mail/LogoGobCdqueQuiero_final.svg">
-                                </td>
-                             </tr>
                             <tr>
                                 <td>
                                     <p class="p-footer" style="margin:16px 0 0;font-weight:bold;">
