@@ -36,6 +36,20 @@
                 line-height:1.6;
                 text-align:center;
             }
+            #footer{
+               background: url('{{env("APP_URL")}}/assets/img/mail/pleca_gris_final.svg') no-repeat 0 0;
+               background-position: center;
+               height: 250px;
+               margin-top: 15px;
+               padding-top: 10px;
+               padding-bottom: 0px;
+            }
+            #td_img_footer{
+            }
+            #footer_img{
+               width: 150px;
+               margin-top: 15px;
+            }
         </style>
     </head>
     <body>
