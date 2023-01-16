@@ -43,4 +43,9 @@ class Vacantes extends Model
     {
         return $this->belongsTo(Nivel_educativo::class, 'id_nivel_educativo');
     }
+
+    public function rel_vacante_solicitante()
+    {
+        return $this->hasMany(VacanteSolicitante::class);
+    }
 }

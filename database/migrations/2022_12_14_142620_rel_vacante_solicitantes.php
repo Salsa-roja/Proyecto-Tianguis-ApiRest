@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('relVacanteSolicitante', function (Blueprint $table) {
             $table->id();
            
-            $table->integer('idVacante')->unsigned();
-            $table->foreign('idVacante')->references('id')->on('vacante')
+            $table->integer('id_vacante')->unsigned();
+            $table->foreign('id_vacante')->references('id')->on('vacante')
                 ->onDelete('cascade')->onUpdate('cascade');
 
-            $table->integer('idSolicitante')->unsigned();
-            $table->foreign('idSolicitante')->references('id')->on('solicitantes')
+            $table->integer('id_solicitante')->unsigned();
+            $table->foreign('id_solicitante')->references('id')->on('solicitantes')
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->engine = 'InnoDB';

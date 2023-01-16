@@ -23,9 +23,8 @@ class CorreosService
         }
     }
 
-    public static function guardarYEnviar($params){
+    public static function guardar($params){
         try {
-            /* 
             # Guardar en bd respaldo del correo
             $itemDB = new Correo();
             $itemDB->remitente = $params['remitente'];
@@ -33,16 +32,34 @@ class CorreosService
             $itemDB->asunto = $params['asunto'];
             $itemDB->cuerpo = $params['cuerpo'];
 
-            $itemDB->save(); */
+            $itemDB->save();
+            return $itemDB;
+        } catch (\Exception $e) {
+            return response()->json([   'error' => $e->getMessage(),
+                                        'funcion' => 'guardarYEnviar'
+                                    ], 500);
+        }
+      
+    }
 
-            $remitente = Usuarios::find($params['remitente']);
+    /**
+     * Enviar notificacion por correo electronico
+     *
+     * @param  array ['remitente','destinatario','asunto','cuerpo','titulo','template'] - All required
+     * @return []
+    */
+    public static function guardarYEnviar($params){
+        try {
+            //CorreosService::guardar($params);
+            $remitente = !is_null($params['remitente']) ? Usuarios::find($params['remitente']):[];
             $destinatario = Usuarios::find($params['destinatario']);
+            $template = isset($params['template']) ? $params['template'] : '/mail/mail';
 
             $data['remitente'] = $remitente;
             $data['destinatario'] = $destinatario;
             $data['params'] = $params;
 
-            return Mail::send('/mail/mail',
+            return Mail::send($template,
                                 compact('data'),
                                 function($message) use($params,$remitente,$destinatario) { 
                                     $message->to($destinatario->correo, $destinatario->nombres.' '.$destinatario->ape_paterno)

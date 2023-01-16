@@ -67,4 +67,18 @@ class VacanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+
+    public function vincular(Request $request){
+        try {
+            $this->validate($request, [
+                'id_vacante' => 'required'
+            ]);
+            $params = $request->all();
+            $params["request"] = $request;
+            $response = VacanteService::vincular($params);
+            return response()->json($response, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
 }           

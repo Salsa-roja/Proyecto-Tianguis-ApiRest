@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Seeders\Rel_vacante_solicitantes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -40,4 +41,14 @@ class Solicitante extends Model
         'lugar_atencion',
         'curriculum'
     ];
+
+    public function rel_vacante_solicitante(){
+        return $this->belongsToMany(VacanteSolicitante::class,
+                    'relVacanteSolicitante',
+                    'id_solicitante',
+                    'id_vacante',
+                    'id',//solicitante.id
+                    'id'//vacante.id
+    )->where('relVacanteSolicitante.activo',true);
+    }
 }
