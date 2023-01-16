@@ -57,8 +57,8 @@ abstract class VacanteService
     {
         try {
             $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
-
-            if ($request['lat'] != 'null' && $request['distancia']===0) {
+                
+            if ($request['lat'] != 'null' && $request['lng'] != 'null' && $request['distancia']!=0) {
                 $vacantedb = $vacantedb->whereRaw(" 
                 ST_Distance(
                 ST_Transform( CONCAT('SRID=4326;POINT(" . $request['lng'] . " " . $request['lat'] . " )')::geometry, 2163),
