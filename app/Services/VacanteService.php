@@ -104,7 +104,9 @@ abstract class VacanteService
             if ($id > 0) {
                 $vacante = Vacantes::where('id', $id)->first();
                 if ($vacante) {
-                    DB::table('vacantes')->where('id', $id)->update(['activo' => '0']);
+                    $vacante->activo=0;
+                    $vacante->save();
+                    //DB::table('vacantes')->where('id', $id)->update(['activo' => '0']);
                 }
             } else {
                 $vacante = [];

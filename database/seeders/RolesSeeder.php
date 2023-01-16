@@ -43,7 +43,19 @@ class RolesSeeder extends Seeder
                 'permisos' => [
                     [
                         'nombre' => 'Formulario de Registro de empresa',
-                        'permiso' => 'EmpresaForm'
+                        'permiso' => 'EmpresasForm'
+                    ],
+                    [
+                        'nombre' => 'Ocion de menu vacantes',
+                        'permiso' => 'VacantesModule'
+                    ],
+                    [
+                        'nombre' => 'Formulario de Registro de vacantes',
+                        'permiso' => 'VacantesForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'VacantesList'
                     ]
                 ]
             ]
