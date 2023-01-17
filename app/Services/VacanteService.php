@@ -6,6 +6,7 @@ use App\Models\Vacantes;
 use App\Dto\ParseDTO;
 use App\Dto\VacantesListDTO;
 use App\Dto\VacantesDBListDTO;
+use App\Models\VacanteSolicitante;
 use Faker\Core\Number;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
@@ -106,14 +107,66 @@ abstract class VacanteService
                 if ($vacante) {
                     $vacante->activo=0;
                     $vacante->save();
-                    //DB::table('vacantes')->where('id', $id)->update(['activo' => '0']);
                 }
             } else {
                 $vacante = [];
             }
-            return response()->json($vacante, Response::HTTP_CREATED);
+            return $vacante;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al eliminar el vacante', $ex->getMessage()], 400);
         }
+    }
+    /** 
+     * Vincular vacante con solicitante
+    */
+    public static function vincular($params){
+        try {
+
+            #datos del solicitante
+            $solicitante = SolicitanteService::searchByIdUser($params['request']->auth->id);
+
+            #buscar vacante
+            $vacante = VacanteService::searchId($params['id_vacante']);
+            if(isset($vacante->id)){            
+                #buscar vinculacion previa
+                $yaVinculado = VacanteService::yaVinculado($vacante->id,$solicitante->id);
+
+                if($yaVinculado){
+                    throw new \Exception('Ya vinculado!');
+                }else{
+                    #guardar vinculacion
+                    $rel = new VacanteSolicitante();
+                    $rel->id_vacante = $vacante->id;
+                    $rel->id_solicitante = $solicitante->id;
+                    $rel->save();
+
+                    #Enviar correo al solicitante
+                    $data=array(
+                        'remitente'=>null,
+                        'destinatario'=>$params['request']->auth->id,
+                        'asunto'=>'¡Recibimos tu solicitud!',
+                        'cuerpo'=>"Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente",
+                        'titulo'=>'');
+                    CorreosService::guardarYEnviar($data);
+                }
+            }else{
+                throw new \Exception('No existe la vacante');
+            }
+            return [$yaVinculado,$vacante,$solicitante];
+        } catch (\Exception $ex) {
+            return response()->json(['mensaje' => 'Hubo un error al vincular con la vacante', $ex->getMessage()], 400);
+        }        
+    }//...vincular
+
+    /**
+     * Buscar vinculacion previa 
+    */
+    public static function yaVinculado($id_vacante,$id_solicitante){
+        try {
+            $exists = DB::table('relVacanteSolicitante')->where(['id_vacante'=>$id_vacante,'id_solicitante'=>$id_solicitante])->first();
+            return isset($exists->id);
+        } catch (\Exception $ex) {
+            return response()->json(['mensaje' => 'Hubo un error al buscar la vinculacion', $ex->getMessage()], 400);
+        }     
     }
 }

@@ -50,5 +50,15 @@ class CorreoController extends Controller
                                     ], 500);
         }
 
+    }//...enviar
+
+    public function get_hosts(){
+        if (dns_get_mx("hotmail.com", $mxhosts, $mxweights)) {
+            for ($i=0; $i<count($mxhosts); $i++) {
+                echo "Host: ".$mxhosts[$i]." - Peso: ".$mxweights[$i]."<br>";
+            }
+        } else {
+            echo "No se encontraron registros MX para el dominio especificado.";
+        }
     }
 }

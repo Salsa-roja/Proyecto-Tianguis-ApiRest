@@ -19,6 +19,18 @@ abstract class SolicitanteService
          throw new \Exception($e->getMessage());
       }
    }
+   /**
+    * Buscar solicitante por id usuario
+    **/
+   public static function searchByIdUser($id){
+      try {
+         $itemDB = Solicitante::where('id_usuario', $id)->first();
+         
+         return $itemDB;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
 
    public static function guardar($params,$fieldArchivo){
       try {
@@ -77,7 +89,7 @@ abstract class SolicitanteService
       }
 
    /**
-    * Lista codigos postales  
+    * Lista colonias 
     * */
    public static function getColonias($cpostal){
       try {

@@ -16,12 +16,12 @@ class Rel_vacante_solicitantes extends Seeder
     {
         DB::table('relVacanteSolicitante')->insert([
             [  
-                'idVacante' => 1,
-                'idSolicitante' => 1,
+                'id_vacante' => 1,
+                'id_solicitante' => 1,
             ],
             [  
-                'idVacante' => 2,
-                'idSolicitante' => 1,
+                'id_vacante' => 2,
+                'id_solicitante' => 1,
             ]
         ]);
     }

@@ -9,11 +9,12 @@ $router->get('/', function () use ($router) {
 
 
 
-# Rutas para sistema admin
+# Rutas para sistema admin (valida autenticacion de uuario)
 $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->delete('/eliminar/{id}', 'VacanteController@inhabilitar');
+        $router->post('/vincular','VacanteController@vincular');
     });
 
 }); 
@@ -47,7 +48,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/listado', 'VacanteController@getVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/detalle/{id}', 'VacanteController@searchId');
-        $router->get('/eliminar/{id}', 'VacanteController@inhabilitar');
+        // funcion eliminar agregada en rutas admin arriba
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
         $router->post('/filtro', 'VacanteController@filtro');
@@ -56,6 +57,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     $router->group(['prefix' => 'correo'], function () use ($router) {
         $router->get('/detalle/{correo_id}','CorreoController@correoById');
         $router->post('/enviar','CorreoController@enviar');
+        $router->get('/gethosts','CorreoController@get_hosts');
     });
 
 });
