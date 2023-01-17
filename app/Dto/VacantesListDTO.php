@@ -11,7 +11,7 @@ class VacantesListDTO
     public $vacante;
     public $descripcion;
     public $categorías_especiales;
-    public $días_laborales;
+    public $dias_laborales;
     public $id_turnos_laborales;
     public $id_nivel_educativo;
     public $sueldo;
@@ -32,7 +32,7 @@ class VacantesListDTO
         $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
-        $this->días_laborales = $obj->días_laborales;
+        $this->dias_laborales = $obj->días_laborales;
         $this->id_turnos_laborales = $obj->tabla_turnos_laborales->turnos;
         $this->id_nivel_educativo = $obj->tabla_nivel_educativo->titulo;
         $this->sueldo = $obj->sueldo;
