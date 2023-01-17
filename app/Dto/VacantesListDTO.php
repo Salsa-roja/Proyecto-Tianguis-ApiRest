@@ -19,7 +19,7 @@ class VacantesListDTO
     public $colonia;
     public $código_postal;
     public $ciudad;
-    public $número_de_puestos_disponibles;
+    public $numero_de_puestos_disponibles;
     public $area;
     public $industria;
     public $tipo_de_puesto;
@@ -40,7 +40,7 @@ class VacantesListDTO
         $this->colonia = $obj->colonia;
         $this->código_postal = $obj->código_postal;
         $this->ciudad = $obj->ciudad;
-        $this->número_de_puestos_disponibles = $obj->número_de_puestos_disponibles;
+        $this->numero_de_puestos_disponibles = $obj->número_de_puestos_disponibles;
         $this->area = $obj->area;
         $this->industria = $obj->industria;
         $this->tipo_de_puesto = $obj->tipo_de_puesto;
