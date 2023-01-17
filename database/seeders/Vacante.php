@@ -14,7 +14,7 @@ class Vacante extends Seeder
      */
     public function run()
     {
-        DB::table('vacante')->insert([
+        DB::table('vacantes')->insert([
             [  
                 'id_empresa' => '1',
                 'vacante' => 'Vendedora de piso ',

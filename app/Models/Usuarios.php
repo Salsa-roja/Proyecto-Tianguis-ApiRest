@@ -46,4 +46,18 @@ class Usuarios extends Model{
                                         'id'//empresa.id
                                     )->where('relUsuarioEmpresa.activo',true);
     }
+
+    /**
+     * usuarios con info de solicitante vacantes a las que se han vinculado
+     */
+    public function rel_usuario_solicitante_vacante(){
+        return $this->hasManyThrough(
+            VacanteSolicitante::class,
+            Solicitante::class,
+            'id_usuario', // Foreign key on solicitantes table...
+            'id_solicitante', // Foreign key on relVacanteSolicitante table...
+            'id', // Local key on usuarios table...
+            'id' // Local key on solicitantes table...
+        ); 
+    }
 }

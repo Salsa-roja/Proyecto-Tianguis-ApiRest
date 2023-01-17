@@ -10,7 +10,7 @@ class Vacantes extends Model
 {
     use HasFactory;
 
-    protected $table = 'vacante';
+    protected $table = 'vacantes';
     protected $primarykey = 'id';
     protected $fillable = [
         'id_empresa',
@@ -46,6 +46,6 @@ class Vacantes extends Model
 
     public function rel_vacante_solicitante()
     {
-        return $this->hasMany(VacanteSolicitante::class);
+        return $this->hasMany(VacanteSolicitante::class,'id_vacante','id');
     }
 }

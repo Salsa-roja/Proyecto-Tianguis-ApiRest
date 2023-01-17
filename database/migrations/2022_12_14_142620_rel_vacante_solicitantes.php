@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
            
             $table->integer('id_vacante')->unsigned();
-            $table->foreign('id_vacante')->references('id')->on('vacante')
+            $table->foreign('id_vacante')->references('id')->on('vacantes')
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->integer('id_solicitante')->unsigned();

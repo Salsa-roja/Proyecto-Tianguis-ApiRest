@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Database\Seeders\Rel_vacante_solicitantes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Usuarios;
+use App\Models\VacanteSolicitante;
 
 class Solicitante extends Model
 {
@@ -42,13 +43,12 @@ class Solicitante extends Model
         'curriculum'
     ];
 
-    public function rel_vacante_solicitante(){
-        return $this->belongsToMany(VacanteSolicitante::class,
-                    'relVacanteSolicitante',
-                    'id_solicitante',
-                    'id_vacante',
-                    'id',//solicitante.id
-                    'id'//vacante.id
-    )->where('relVacanteSolicitante.activo',true);
+    public function rel_usuarios(){
+        return $this->belongsTo(Usuarios::class,'id_usuario','id');
+    }
+
+    public function rel_vacante_solicitante()
+    {
+        return $this->hasMany(VacanteSolicitante::class,'id_solicitante','id');
     }
 }

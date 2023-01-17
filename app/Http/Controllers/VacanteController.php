@@ -68,6 +68,15 @@ class VacanteController extends Controller
         }
     }
 
+    public function getSolicitudesVacante($idVacante){
+        try {
+            $response = VacanteService::getSolicitudesVacante($idVacante);
+            return response()->json($response, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }//...getSolicitudesVacante
+
     public function vincular(Request $request){
         try {
             $this->validate($request, [
@@ -80,5 +89,5 @@ class VacanteController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
-    }
+    }//...vincular
 }           

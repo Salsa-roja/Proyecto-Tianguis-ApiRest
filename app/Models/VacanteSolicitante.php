@@ -18,11 +18,18 @@ class VacanteSolicitante extends Model
         'updated_at'
     ];
 
+    /**
+     * Obtiene solicitudes con info de la vacante    
+     */
+    public function rel_vacantes(){
+        return $this->belongsToMany(Vacantes::class,'relVacanteSolicitante','id','id_vacante');
+    }
+    
+    /**
+     * Obtiene la solicitudes con info del solicitante
+     */
     public function rel_solicitantes(){
-        return $this->hasMany(Solicitante::class,'id_solicitante')->rel_vacantes();
+        return $this->belongsToMany(Solicitante::class, 'relVacanteSolicitante','id','id_solicitante');
     }
 
-    public function rel_vacantes(){
-        return $this->belongsToMany(Vacantes::class,'id_vacante');
-    }
 }

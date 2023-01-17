@@ -6,7 +6,10 @@ use App\Models\Vacantes;
 use App\Dto\ParseDTO;
 use App\Dto\VacantesListDTO;
 use App\Dto\VacantesDBListDTO;
+use App\Models\Usuarios;
 use App\Models\VacanteSolicitante;
+use App\Models\Solicitante;
+
 use Faker\Core\Number;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
@@ -116,6 +119,26 @@ abstract class VacanteService
             return response()->json(['mensaje' => 'Hubo un error al eliminar el vacante', $ex->getMessage()], 400);
         }
     }
+
+    /** 
+     * Obtener solicitudes por vacante
+    */
+    public static function getSolicitudesVacante($idVacante){
+        try {
+            #obtiene lista de relVacanteSolicitante con relacion solicitantes.usuarios y vacantes
+            //$solicitudes = VacanteSolicitante::with(['rel_vacantes','rel_solicitantes.rel_usuarios'])->where('id_vacante',$idVacante)->get();
+            #obtiene solo solicitantes
+            $solicitudes = Solicitante::with(['rel_vacante_solicitante'=>function($query) use ($idVacante){
+                                                    $query->where('id_vacante',$idVacante);
+                                                }])
+                                        ->with('rel_usuarios')->get();
+
+            return $solicitudes;
+        } catch (\Exception $ex) {
+            return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
+        }
+    }//...getSolicitudesVacante
+
     /** 
      * Vincular vacante con solicitante
     */

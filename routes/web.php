@@ -46,6 +46,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
 
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listado', 'VacanteController@getVacante');
+        $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/detalle/{id}', 'VacanteController@searchId');
         // funcion eliminar agregada en rutas admin arriba
