@@ -20,13 +20,29 @@ class RolesSeeder extends Seeder
                 'nombre' => 'Administrador',
                 'permisos' => [
                     [
+                        'nombre' => 'Formulario de Registro de empresa',
+                        'permiso' => 'EmpresasForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'EmpresasList'
+                    ],
+                    [
+                        'nombre' => 'Ocion de menu vacantes',
+                        'permiso' => 'VacantesModule'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'VacantesList'
+                    ],
+                    [
                         'nombre' => 'Listado de usuarios',
                         'permiso' => 'UsuariosList'
                     ],
                     [
                         'nombre' => 'Listado de roles',
                         'permiso' => 'RolesList'
-                    ]
+                    ],
                 ]
             ],
             [
@@ -35,6 +51,10 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Formulario de Registro de solicitante',
                         'permiso' => 'SolicitanteForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'VacantesList'
                     ]
                 ]
             ],

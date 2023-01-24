@@ -20,15 +20,11 @@ class VacanteController extends Controller
     public function getVacantes()
     {
         try {
-            $this->validate($this->request, [
-                'id_empresa' => 'required'
-            ]);
-            $params = $this->request->all();
-            $id_empresa = $params['id_empresa']->auth->id;
+            $id_empresa = $this->request->auth->id_empresa;
             $datos = VacanteService::getVacantes($id_empresa);
             return response()->json( $datos, 200);
         } catch (\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage(),'data'=>$this->request], 500);
+            return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
 
