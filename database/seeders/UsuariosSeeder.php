@@ -23,25 +23,8 @@ class UsuariosSeeder extends Seeder
                 'correo' => 'admin@admin.com',
                 'contrasena' => password_hash('123456789', PASSWORD_BCRYPT),
                 'rol_id' => Rol::where('nombre', 'Administrador')->first()->id
-            ],
-            [
-                'nombres' => 'Jesus Antonio',
-                'ape_paterno' => 'Ibarra',
-                'ape_materno' => 'Larios',
-                'correo' => 'solicitante@quierochamba.com',
-                'contrasena' => password_hash('123456789', PASSWORD_BCRYPT),
-                'rol_id' => Rol::where('nombre', 'Solicitante')->first()->id
-
-            ],
-            [
-                'nombres' => 'Diego Armando Maradonio',
-                'ape_paterno' => 'Del piero',
-                'ape_materno' => 'López',
-                'correo' => 'empresa@quierochamba.com',
-                'contrasena' => password_hash('123456789', PASSWORD_BCRYPT),
-                'rol_id' => Rol::where('nombre', 'Empresa')->first()->id
-
             ]
+
         ];
         foreach ($usuarios as $key => $obj) {
             $z = new Usuarios();

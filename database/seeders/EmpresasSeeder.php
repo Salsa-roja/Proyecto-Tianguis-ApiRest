@@ -31,7 +31,6 @@ class EmpresasSeeder extends Seeder
 
          # guardar empresa
          $Empresa = new Empresa();
-         $Empresa->id_usuario = $Usuario->id; 
          $Empresa->nombre_comercial = "Empaques de México";
          $Empresa->razon_social = "Surtidora Nacional de Plásticos S.A. de C.V.";
          $Empresa->rfc = "STNP290497FGTD";

@@ -34,7 +34,6 @@ abstract class EmpresaService
 
          # guardar empresa
          $Empresa = new Empresa();
-         $Empresa->id_usuario = $Usuario->id; 
          $Empresa->nombre_comercial = $params['nombre_comercial'];
          $Empresa->razon_social = $params['razon_social'];
          $Empresa->rfc = $params['rfc'];

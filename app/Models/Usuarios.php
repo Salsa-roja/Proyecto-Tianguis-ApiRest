@@ -37,18 +37,30 @@ class Usuarios extends Model{
         return $this->belongsTo(Rol::class);
     }
 
+    /**
+     * usuarios con info de empresa
+     */
     public function usuario_empresa(){
-        return $this->belongsToMany(    Empresa::class,
-                                        'relUsuarioEmpresa',
-                                        'usuario_id',
-                                        'empresa_id',
-                                        'id',//usuario.id
-                                        'id'//empresa.id
-                                    )->where('relUsuarioEmpresa.activo',true);
+        return $this->hasOne(UsuariosEmpresas::class,'id_usuario','id');
+        /* return $this->hasOneThrough(
+                                    Empresa::class,
+                                    UsuariosEmpresas::class,
+                                    'id_usuario',// Foreign key on relUsuarioEmpresa table...
+                                    'id_empresa',// Foreign key on empresas table...
+                                    'id',// Local key on usuarios table...
+                                    'id'// Local key on relUsuarioEmpresa table...
+                                ); */
     }
 
     /**
-     * usuarios con info de solicitante vacantes a las que se han vinculado
+     * usuarios con info de solicitante
+     */
+    public function usuario_solicitante(){
+        return $this->hasOne(Solicitante::class,'id_usuario');
+    }
+
+    /**
+     * usuarios con info de solicitante y vacantes a las que se han vinculado
      */
     public function rel_usuario_solicitante_vacante(){
         return $this->hasManyThrough(

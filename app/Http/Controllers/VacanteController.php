@@ -17,13 +17,18 @@ class VacanteController extends Controller
         $this->request = $request;
     }
 
-    public function getVacante()
+    public function getVacantes()
     {
         try {
-            $datos = VacanteService::getVacante();
+            $this->validate($this->request, [
+                'id_empresa' => 'required'
+            ]);
+            $params = $this->request->all();
+            $id_empresa = $params['id_empresa']->auth->id;
+            $datos = VacanteService::getVacantes($id_empresa);
             return response()->json( $datos, 200);
         } catch (\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 500);
+            return response()->json(['error' => $ex->getMessage(),'data'=>$this->request], 500);
         }
     }
 
