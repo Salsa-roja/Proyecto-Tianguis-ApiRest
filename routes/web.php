@@ -21,6 +21,9 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
     $router->group(['prefix' => 'empresas'], function () use ($router) {
         $router->get('/listado', 'EmpresaController@listado');
     });
+    $router->group(['prefix' => 'usuarios'], function () use ($router) {
+        $router->get('/listado', 'UsuarioController@listado');
+    });
 
 });
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
