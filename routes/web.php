@@ -13,6 +13,7 @@ $router->get('/', function () use ($router) {
 $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
+        $router->get('/listado', 'VacanteController@getVacantes');
         $router->delete('/eliminar/{id}', 'VacanteController@inhabilitar');
         $router->post('/vincular','VacanteController@vincular');
     });
@@ -25,14 +26,6 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     $router->group(['prefix' => 'auth'], function ($router) {
         $router->get('/login', 'AuthController@authenticate');
     });
-
-    
-    /* Duplicado abajo
-        $router->group(['prefix' => 'vacantes'], function () use ($router) {
-        $router->get('/listado', 'VacanteController@getVacante');
-        $router->get('/buscar/{name}', 'VacanteController@searchName');
-        $router->get('/detalle/{id}', 'VacanteController@searchId');
-    }); */
     
     $router->get('/c_postales', 'SolicitanteController@getCPs');
     $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
@@ -45,7 +38,6 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     });
 
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
-        $router->get('/listado', 'VacanteController@getVacante');
         $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/detalle/{id}', 'VacanteController@searchId');

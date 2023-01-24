@@ -30,6 +30,6 @@ class Empresa extends Model
 
     public function usuario_empresa()
     {
-        return $this->hasOne(UsuariosEmpresa::class);
+        return $this->hasMany(UsuariosEmpresas::class,'id_empresa','id');
     }
 }

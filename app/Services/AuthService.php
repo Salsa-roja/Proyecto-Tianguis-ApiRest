@@ -9,14 +9,13 @@ use App\Models\Usuarios;
 
 abstract class AuthService
 {
-    public static function authenticate($user, $password)
+    public static function authenticate($correo, $password)
     {
-
-        $user = Usuarios::with(['rol', 'rol.permisos'])
-            ->where(function ($query) use ($user) {
-                $query->where('correo', $user);
-            })
-            ->where("activo", 1)
+        $user = Usuarios::with(['rol', 'rol.permisos','usuario_solicitante','usuario_empresa.rel_empresas'])
+            /* ->where(function ($query) use ($correo) {
+                $query->where('correo', $correo);
+            }) */
+            ->where(['activo'=> 1,'correo'=>$correo])
             ->first();
 
         // return $user;
@@ -35,6 +34,7 @@ abstract class AuthService
                 'status' => 200,
                 'token' => self::jwt($user),
                 'rol_id' => $user->rol_id,
+                'info' => $user,
                 'message' => 'Autorizado'
             ];
         }
@@ -54,6 +54,7 @@ abstract class AuthService
      */
     public static function jwt($user)
     {
+
         $payload = [
             'id' => $user->id,
             'nombre' => $user->nombre_completo,
@@ -62,6 +63,8 @@ abstract class AuthService
             'permisos' => $user->rol->permisos->map(function ($rolePermission) {
                 return $rolePermission->permiso;
             }),
+            'id_empresa' => !is_null($user->usuario_empresa) ? $user->usuario_empresa->rel_empresas['id'] : null,
+            'id_solicitante' => !is_null($user->usuario_solicitante) ? $user->usuario_solicitante['id'] : null,
             'iat' => time(),
             'exp' => time() + 1440 * 5000,
         ];

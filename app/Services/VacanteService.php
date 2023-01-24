@@ -18,10 +18,15 @@ use Mockery\Undefined;
 
 abstract class VacanteService
 {
-    public static function getvacante()
+    public static function getVacantes($id_empresa=null)
     {
         try {
-            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo'])->where('activo', '1')->get();
+            $query = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
+            if(!is_null($id_empresa)){
+                $query = $query->where('id_empresa',$id_empresa); 
+            }
+            $vacantedb = $query->where('activo', '1')->get();
+
             $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
             return $vacante;
         } catch (\Exception $ex) {
