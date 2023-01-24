@@ -9,11 +9,11 @@ use App\Dto\VacantesDBListDTO;
 use App\Models\Usuarios;
 use App\Models\VacanteSolicitante;
 use App\Models\Solicitante;
-
 use Faker\Core\Number;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
+use League\CommonMark\Node\Query;
 use Mockery\Undefined;
 
 abstract class VacanteService
@@ -29,10 +29,21 @@ abstract class VacanteService
         }
     }
 
-    public static function searchId($id)
+    public static function searchId($params)
     {
         try {
-            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo'])->where('id', $id)->where('activo', '1')->first();
+
+
+            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
+            return property_exists($params['request'], 'auth');
+            if(isset($params['request']->auth)){
+                $idSolicitante=SolicitanteService::searchByIdUser($params['request']->auth->id)->id; 
+                $vacantedb =  $vacantedb->addSelect(['vinculado' => VacanteSolicitante::select('id')
+                ->where('id_solicitante',$idSolicitante)
+                ->whereColumn('vacantes.id', 'id_vacante')])
+                ->where('id', $params['request']->idVacante);
+            }
+            $vacantedb=$vacantedb->where(['activo'=> true])->first();
             if ($vacantedb) {
                 $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
             } else {
@@ -60,7 +71,7 @@ abstract class VacanteService
     public static function filtro($request)
     {
         try {
-            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
+            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo',]);
                 
             if ($request['lat'] != 'null' && $request['lng'] != 'null' && $request['distancia']!=0) {
                 $vacantedb = $vacantedb->whereRaw(" 
@@ -144,12 +155,12 @@ abstract class VacanteService
     */
     public static function vincular($params){
         try {
-
+// return $params;
             #datos del solicitante
             $solicitante = SolicitanteService::searchByIdUser($params['request']->auth->id);
 
             #buscar vacante
-            $vacante = VacanteService::searchId($params['id_vacante']);
+            $vacante = VacanteService::searchId($params);
             if(isset($vacante->id)){            
                 #buscar vinculacion previa
                 $yaVinculado = VacanteService::yaVinculado($vacante->id,$solicitante->id);

@@ -46,6 +46,8 @@ class Vacantes extends Model
 
     public function rel_vacante_solicitante()
     {
-        return $this->hasMany(VacanteSolicitante::class,'id_vacante','id');
+        return $this->hasMany(VacanteSolicitante::class, 'id_vacante', 'id');
     }
+
+
 }

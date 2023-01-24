@@ -7,6 +7,7 @@ use App\Models\Vacantes;
 class VacantesListDTO
 {
     public $id;
+    public $vinculadoId;
     public $nombre_comercial;
     public $vacante;
     public $descripcion;
@@ -28,6 +29,7 @@ class VacantesListDTO
     public function __construct(Vacantes $obj)
     {
         $this->id = $obj->id;
+        $this->vinculadoId=$obj->vinculado;
         $this->nombre_comercial = $obj->empresa->nombre_comercial;
         $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
