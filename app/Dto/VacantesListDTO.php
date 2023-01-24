@@ -8,6 +8,7 @@ class VacantesListDTO
 {
     public $id;
     public $id_empresa;
+    public $vinculadoId;
     public $nombre_comercial;
     public $vacante;
     public $descripcion;
@@ -30,6 +31,7 @@ class VacantesListDTO
     {
         $this->id = $obj->id;
         $this->id_empresa = $obj->id_empresa;
+        $this->vinculadoId=$obj->vinculado;
         $this->nombre_comercial = $obj->empresa->nombre_comercial;
         $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
