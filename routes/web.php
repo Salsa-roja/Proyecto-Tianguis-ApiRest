@@ -18,6 +18,10 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/vincular', 'VacanteController@vincular');
         $router->post('/detalle', 'VacanteController@searchId');
     });
+    $router->group(['prefix' => 'empresas'], function () use ($router) {
+        $router->get('/listado', 'EmpresaController@listado');
+    });
+
 });
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
 
