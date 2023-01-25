@@ -46,10 +46,7 @@ class VacanteController extends Controller
     public function searchId(Request $request)
     {
         try {
-        
             $params["request"] = $request;
-           
-           
             $ip = VacanteService::searchId($params);
             return response()->json($ip, 200);
         } catch (\Exception $ex) {
@@ -66,11 +63,21 @@ class VacanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
-
+    
+    public function vacanteMasLejana()
+    {
+        try {
+            $filtro = VacanteService::vacanteMasLejana($this->request->all());
+            return response()->json($filtro, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
     public function filtro()
     {
         try {
-            $filtro = VacanteService::filtro($this->request->all());
+            $params["request"] = $this->request;
+            $filtro = VacanteService::filtro($this->request->all(),$params);
             return response()->json($filtro, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);

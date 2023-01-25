@@ -18,12 +18,12 @@ use Mockery\Undefined;
 
 abstract class VacanteService
 {
-    public static function getVacantes($id_empresa=null)
+    public static function getVacantes($id_empresa = null)
     {
         try {
             $query = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
-            if(!is_null($id_empresa)){
-                $query = $query->where('id_empresa',$id_empresa); 
+            if (!is_null($id_empresa)) {
+                $query = $query->where('id_empresa', $id_empresa);
             }
             $vacantedb = $query->where('activo', '1')->get();
 
@@ -37,18 +37,16 @@ abstract class VacanteService
     public static function searchId($params)
     {
         try {
-
-
             $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
-            return property_exists($params['request'], 'auth');
-            if(isset($params['request']->auth)){
-                $idSolicitante=SolicitanteService::searchByIdUser($params['request']->auth->id)->id; 
+
+            if (isset($params['request']->auth->id)) {
+                $idSolicitante = SolicitanteService::searchByIdUser($params['request']->auth->id)->id;
                 $vacantedb =  $vacantedb->addSelect(['vinculado' => VacanteSolicitante::select('id')
-                ->where('id_solicitante',$idSolicitante)
-                ->whereColumn('vacantes.id', 'id_vacante')])
-                ->where('id', $params['request']->idVacante);
+                    ->where('id_solicitante', $idSolicitante)
+                    ->whereColumn('vacantes.id', 'id_vacante')])
+                    ->where('id', $params['request']->idVacante);
             }
-            $vacantedb=$vacantedb->where(['activo'=> true])->first();
+            $vacantedb = $vacantedb->where(['activo' => true])->first();
             if ($vacantedb) {
                 $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
             } else {
@@ -73,16 +71,37 @@ abstract class VacanteService
             throw new \Exception($ex->getMessage(), 500);
         }
     }
-    public static function filtro($request)
+    public static function vacanteMasLejana($request)
+    {
+        try {
+            $vacantedb = Vacantes::selectRaw("ST_Distance(
+            ST_Transform( CONCAT('SRID=4326;POINT(" . $request['lng'] . " " . $request['lat'] . " )')::geometry, 2163),
+            ST_Transform( CONCAT('SRID=4326;POINT(' , lng, ' ',lat ,')')::geometry, 2163)) as lejano")
+            ->where(['activo' => true])
+            ->orderByDesc('lejano')
+            ->first();
+            return $vacantedb;
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage(), 500);
+        }
+    }
+    public static function filtro($request,$params)
     {
         try {
             $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo',]);
-                
-            if ($request['lat'] != 'null' && $request['lng'] != 'null' && $request['distancia']!=0) {
+
+            if ($request['lat'] != 'null' && $request['lng'] != 'null' && $request['distancia'] != 0) {
+
                 $vacantedb = $vacantedb->whereRaw(" 
                 ST_Distance(
                 ST_Transform( CONCAT('SRID=4326;POINT(" . $request['lng'] . " " . $request['lat'] . " )')::geometry, 2163),
                 ST_Transform( CONCAT('SRID=4326;POINT(' , lng, ' ',lat ,')')::geometry, 2163)) < " . $request['distancia'] . "*1000");
+            }
+            if (isset($params['request']->auth->id)) {
+                $idSolicitante = SolicitanteService::searchByIdUser($params['request']->auth->id)->id;
+                $vacantedb =  $vacantedb->addSelect(['vinculado' => VacanteSolicitante::select('id')
+                    ->where('id_solicitante', $idSolicitante)
+                    ->whereColumn('vacantes.id', 'id_vacante')]);   
             }
             if ($request['idTurno'] != 'null') {
                 $vacantedb = $vacantedb->where('id_turnos_laborales', $request['idTurno']);
@@ -124,7 +143,7 @@ abstract class VacanteService
             if ($id > 0) {
                 $vacante = Vacantes::where('id', $id)->first();
                 if ($vacante) {
-                    $vacante->activo=0;
+                    $vacante->activo = 0;
                     $vacante->save();
                 }
             } else {
@@ -138,41 +157,43 @@ abstract class VacanteService
 
     /** 
      * Obtener solicitudes por vacante
-    */
-    public static function getSolicitudesVacante($idVacante){
+     */
+    public static function getSolicitudesVacante($idVacante)
+    {
         try {
             #obtiene lista de relVacanteSolicitante con relacion solicitantes.usuarios y vacantes
             //$solicitudes = VacanteSolicitante::with(['rel_vacantes','rel_solicitantes.rel_usuarios'])->where('id_vacante',$idVacante)->get();
             #obtiene solo solicitantes
-            $solicitudes = Solicitante::with(['rel_vacante_solicitante'=>function($query) use ($idVacante){
-                                                    $query->where('id_vacante',$idVacante);
-                                                }])
-                                        ->with('rel_usuarios')->get();
+            $solicitudes = Solicitante::with(['rel_vacante_solicitante' => function ($query) use ($idVacante) {
+                $query->where('id_vacante', $idVacante);
+            }])
+                ->with('rel_usuarios')->get();
 
             return $solicitudes;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
         }
-    }//...getSolicitudesVacante
+    } //...getSolicitudesVacante
 
     /** 
      * Vincular vacante con solicitante
-    */
-    public static function vincular($params){
+     */
+    public static function vincular($params)
+    {
         try {
-// return $params;
+            // return $params;
             #datos del solicitante
             $solicitante = SolicitanteService::searchByIdUser($params['request']->auth->id);
 
             #buscar vacante
             $vacante = VacanteService::searchId($params);
-            if(isset($vacante->id)){            
+            if (isset($vacante->id)) {
                 #buscar vinculacion previa
-                $yaVinculado = VacanteService::yaVinculado($vacante->id,$solicitante->id);
+                $yaVinculado = VacanteService::yaVinculado($vacante->id, $solicitante->id);
 
-                if($yaVinculado){
+                if ($yaVinculado) {
                     throw new \Exception('Ya vinculado!');
-                }else{
+                } else {
                     #guardar vinculacion
                     $rel = new VacanteSolicitante();
                     $rel->id_vacante = $vacante->id;
@@ -180,32 +201,34 @@ abstract class VacanteService
                     $rel->save();
 
                     #Enviar correo al solicitante
-                    $data=array(
-                        'remitente'=>null,
-                        'destinatario'=>$params['request']->auth->id,
-                        'asunto'=>'¡Recibimos tu solicitud!',
-                        'cuerpo'=>"Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente",
-                        'titulo'=>'');
+                    $data = array(
+                        'remitente' => null,
+                        'destinatario' => $params['request']->auth->id,
+                        'asunto' => '¡Recibimos tu solicitud!',
+                        'cuerpo' => "Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente",
+                        'titulo' => ''
+                    );
                     CorreosService::guardarYEnviar($data);
                 }
-            }else{
+            } else {
                 throw new \Exception('No existe la vacante');
             }
-            return [$yaVinculado,$vacante,$solicitante];
+            return [$yaVinculado, $vacante, $solicitante];
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al vincular con la vacante', $ex->getMessage()], 400);
-        }        
-    }//...vincular
+        }
+    } //...vincular
 
     /**
      * Buscar vinculacion previa 
-    */
-    public static function yaVinculado($id_vacante,$id_solicitante){
+     */
+    public static function yaVinculado($id_vacante, $id_solicitante)
+    {
         try {
-            $exists = DB::table('relVacanteSolicitante')->where(['id_vacante'=>$id_vacante,'id_solicitante'=>$id_solicitante])->first();
+            $exists = DB::table('relVacanteSolicitante')->where(['id_vacante' => $id_vacante, 'id_solicitante' => $id_solicitante])->first();
             return isset($exists->id);
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al buscar la vinculacion', $ex->getMessage()], 400);
-        }     
+        }
     }
 }
