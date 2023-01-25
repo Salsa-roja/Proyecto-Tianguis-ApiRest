@@ -21,8 +21,25 @@ class Rel_vacante_solicitantes extends Seeder
             ],
             [  
                 'id_vacante' => 2,
+                'id_solicitante' => 2,
+            ],
+            [  
+                'id_vacante' => 3,
                 'id_solicitante' => 1,
-            ]
+            ],
+            [  
+                'id_vacante' => 3,
+                'id_solicitante' => 2,
+            ],
+            [  
+                'id_vacante' => 4,
+                'id_solicitante' => 2,
+            ],
+            [  
+                'id_vacante' => 4,
+                'id_solicitante' => 1,
+            ],
+
         ]);
     }
 }

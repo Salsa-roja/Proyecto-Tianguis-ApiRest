@@ -22,7 +22,7 @@ class VacanteController extends Controller
         try {
             $id_empresa = $this->request->auth->id_empresa;
             $datos = VacanteService::getVacantes($id_empresa);
-            return response()->json( $datos, 200);
+            return response()->json( ['data'=>$datos,'user'=>$this->request->auth], 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
@@ -38,15 +38,20 @@ class VacanteController extends Controller
         }
     }
 
-
-    public function searchId(Request $request)
+    public function detalle($id)
     {
         try {
-        
-            $params["request"] = $request;
-           
-           
-            $ip = VacanteService::searchId($params);
+            $ip = VacanteService::detalle($id);
+            return response()->json($ip, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function searchId($id)
+    {
+        try {
+            $ip = VacanteService::searchId($id);
             return response()->json($ip, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
@@ -84,7 +89,9 @@ class VacanteController extends Controller
 
     public function vincular(Request $request){
         try {
-            $this->validate($request, ['idVacante' => 'required']);
+            $this->validate($request, [
+                'id_vacante' => 'required'
+            ]);
             $params = $request->all();
             $params["request"] = $request;
             $response = VacanteService::vincular($params);

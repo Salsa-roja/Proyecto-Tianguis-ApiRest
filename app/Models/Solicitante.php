@@ -15,6 +15,7 @@ class Solicitante extends Model
     protected $primarykey = 'id';
     protected $fillable = [
         'nombre',
+        'id_usuario',
         'ape_paterno',
         'ape_materno',
         'edad',

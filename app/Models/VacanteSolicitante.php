@@ -32,4 +32,10 @@ class VacanteSolicitante extends Model
         return $this->belongsToMany(Solicitante::class, 'relVacanteSolicitante','id','id_solicitante');
     }
 
+    /**
+     * Obtiene la solicitudes con info del solicitante
+     */
+    public function rel_solicitante(){
+        return $this->belongsTo(Solicitante::class,'id_solicitante');
+    }
 }

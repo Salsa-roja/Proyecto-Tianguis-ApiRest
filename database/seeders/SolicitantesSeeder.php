@@ -19,44 +19,105 @@ class SolicitantesSeeder extends Seeder
      */
     public function run()
     {
-        #guardar usuario
 
-         # guardar usuario
-         $Usuario = new Usuarios();
-         $Usuario->nombres = 'Jesus Antonio';
-         $Usuario->ape_paterno = 'Ibarra';
-         $Usuario->ape_materno = 'Larios';
-         $Usuario->correo = 'solicitante@quierochamba.com';
-         $Usuario->contrasena = password_hash('123456789', PASSWORD_BCRYPT);
-         $Usuario->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
-         $Usuario->save();
+        $solicitantes=[
+            [
+                'nombres' => 'Jesus Antonio',
+                'ape_paterno' => 'Ibarra',
+                'ape_materno' => 'Larios',
+                'correo' => 'solicitante@quierochamba.com',
+                'edad' => 23,
+                'curp' => 'ASDF722HDHWFFW4543',
+                'telefono' => '3333591556',
+                'c_numero' => 'pedro de ceballos #1234',
+                'c_postal' => '44100',
+                'id_colonia' => 1,
+                'ciudad' => 'Guadalajara',
+                'descr_profesional' => 'Experto',
+                'sueldo_deseado' =>10000,
+                'area_desempeno' => 'Mantenimiento',
+                'posicion_interes' => 'Jefe',
+                'industria_interes' => 'Alimentos',
+                'habilidades' => 'Cocina',
+                'exp_profesional' => '2 años',
+                'formacion_educativa' => 'Licenciatura',
+                'disc_lenguaje' => 0,
+                'disc_motriz' => 0,
+                'disc_visual' => 0,
+                'disc_mental' => 0,
+                'disc_auditiva' => 1,
+                'lugar_atencion' => 'Web',
+                'curriculum' => ''
+            ],
+            [
+                'nombres' => 'Alonso Adair',
+                'ape_paterno' => 'Aguet',
+                'ape_materno' => 'Orozco',
+                'correo' => 'solicitante2@quierochamba.com',
+                'edad' => 25,
+                'curp' => 'AUOA970429HJCGRL05',
+                'telefono' => '3121107201',
+                'c_numero' => 'miguel hidalgo y costilla #469',
+                'c_postal' => '44100',
+                'id_colonia' => 1,
+                'ciudad' => 'Guadalajara',
+                'descr_profesional' => 'Experto',
+                'sueldo_deseado' =>19000,
+                'area_desempeno' => 'Programación',
+                'posicion_interes' => 'Jefe',
+                'industria_interes' => 'Tecnología',
+                'habilidades' => 'Angular, Php, JQuery',
+                'exp_profesional' => '2 años',
+                'formacion_educativa' => 'Licenciatura',
+                'disc_lenguaje' => 0,
+                'disc_motriz' => 0,
+                'disc_visual' => 0,
+                'disc_mental' => 0,
+                'disc_auditiva' => 0,
+                'lugar_atencion' => 'Web',
+                'curriculum' => ''
+            ],
+        ];
 
-         # guardar solicitante
-         $Solicitante = new Solicitante();
-         $Solicitante->id_usuario = $Usuario->id; 
-         $Solicitante->edad = 30;
-         $Solicitante->curp = 'ASDF722HDHWFFW4543';
-         $Solicitante->telefono = '3333591556';
-         $Solicitante->c_numero = 'pedro de ceballos #1234';
-         $Solicitante->c_postal = '44100';
-         $Solicitante->id_colonia = 1;
-         $Solicitante->ciudad = 'Guadalajara';
-         $Solicitante->descr_profesional = '';
-         $Solicitante->sueldo_deseado = 10000;
-         $Solicitante->area_desempeno = 'Mantenimiento';
-         $Solicitante->posicion_interes = 'Patron';
-         $Solicitante->industria_interes = 'Google';
-         $Solicitante->habilidades = 'Experto en todo';
-         $Solicitante->exp_profesional = 'Jefe de facebook';
-         $Solicitante->formacion_educativa = 'Universitario';
-         $Solicitante->disc_lenguaje = 0;
-         $Solicitante->disc_motriz = 0;
-         $Solicitante->disc_visual = 0;
-         $Solicitante->disc_mental = 0;
-         $Solicitante->disc_auditiva = 0;
-         $Solicitante->lugar_atencion = 'Web';
-         $Solicitante->curriculum = '';
-         $Solicitante->save();
+        foreach ($solicitantes as $k => $v) {
+            
+            # guardar usuario
+            $Usuario = new Usuarios();
+            $Usuario->nombres = $v['nombres'];
+            $Usuario->ape_paterno = $v['ape_paterno'];
+            $Usuario->ape_materno = $v['ape_materno'];
+            $Usuario->correo = $v['correo'];
+            $Usuario->contrasena = password_hash('123456789', PASSWORD_BCRYPT);
+            $Usuario->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
+            $Usuario->save();
+   
+            # guardar solicitante
+            $Solicitante = new Solicitante();
+            $Solicitante->id_usuario = $Usuario->id; 
+            $Solicitante->edad = $v['edad'];
+            $Solicitante->curp = $v['curp'];
+            $Solicitante->telefono = $v['telefono'];
+            $Solicitante->c_numero = $v['c_numero'];
+            $Solicitante->c_postal = $v['c_postal'];
+            $Solicitante->id_colonia = $v['id_colonia'];
+            $Solicitante->ciudad = $v['ciudad'];
+            $Solicitante->descr_profesional = $v['descr_profesional'];
+            $Solicitante->sueldo_deseado = $v['sueldo_deseado'];
+            $Solicitante->area_desempeno = $v['area_desempeno'];
+            $Solicitante->posicion_interes = $v['posicion_interes'];
+            $Solicitante->industria_interes = $v['industria_interes'];
+            $Solicitante->habilidades = $v['habilidades'];
+            $Solicitante->exp_profesional = $v['exp_profesional'];
+            $Solicitante->formacion_educativa = $v['formacion_educativa'];
+            $Solicitante->disc_lenguaje = $v['disc_lenguaje'];
+            $Solicitante->disc_motriz = $v['disc_motriz'];
+            $Solicitante->disc_visual = $v['disc_visual'];
+            $Solicitante->disc_mental = $v['disc_mental'];
+            $Solicitante->disc_auditiva = $v['disc_auditiva'];
+            $Solicitante->lugar_atencion = $v['lugar_atencion'];
+            $Solicitante->curriculum = $v['curriculum'];
+            $Solicitante->save();
+        }
 
     }
 }

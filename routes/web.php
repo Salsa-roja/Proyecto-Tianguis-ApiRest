@@ -52,8 +52,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
-        // funcion eliminar agregada en rutas admin arriba
-        // $router->post('/detalle', 'VacanteController@searchId');
+        $router->get('/detalle/{id}', 'VacanteController@detalle');
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
         $router->post('/filtro', 'VacanteController@filtro');
