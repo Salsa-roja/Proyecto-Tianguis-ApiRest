@@ -38,7 +38,17 @@ class VacanteController extends Controller
         }
     }
 
-    public function detalle()
+    public function detalle($id)
+    {
+        try {
+            $ip = VacanteService::detalle($id);
+            return response()->json($ip, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function searchId()
     {
         try {
             $params["request"] = $this->request;
@@ -91,7 +101,7 @@ class VacanteController extends Controller
     public function vincular(Request $request){
         try {
             $this->validate($request, [
-                'id_vacante' => 'required'
+                'idVacante' => 'required'
             ]);
             $params = $request->all();
             $params["request"] = $request;
