@@ -227,7 +227,7 @@ abstract class VacanteService
             } else {
                 throw new \Exception('No existe la vacante');
             }
-            return [$yaVinculado, $vacante, $solicitante];
+            return $rel;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al vincular con la vacante', $ex->getMessage()], 400);
         }
