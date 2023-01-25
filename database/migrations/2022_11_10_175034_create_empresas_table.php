@@ -29,7 +29,10 @@ return new class extends Migration
             $table->string('nombre_rh');
             $table->string('correo_rh');
             $table->string('telefono_rh');
-
+            $table->boolean("activo")->default(1);
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            
             $table->timestamps();
         });
     }

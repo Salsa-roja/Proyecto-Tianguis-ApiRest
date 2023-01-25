@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Vacantes;
 use App\Dto\ParseDTO;
+use App\Dto\SolicitudDto;
 use App\Dto\VacantesListDTO;
 use App\Dto\VacantesDBListDTO;
 use App\Models\Usuarios;
@@ -22,12 +23,25 @@ abstract class VacanteService
     {
         try {
             $query = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
-            if (!is_null($id_empresa)) {
-                $query = $query->where('id_empresa', $id_empresa);
+            if($id_empresa != null){
+                $query = $query->where('id_empresa',$id_empresa); 
             }
             $vacantedb = $query->where('activo', '1')->get();
 
-            $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
+            $vacantes = ParseDTO::list($vacantedb, VacantesListDTO::class);
+            return $vacantes;
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage(), 500);
+        }
+    }
+
+    public static function detalle($id)
+    {
+        try {
+
+            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo'])->find($id);
+            $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
+
             return $vacante;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
@@ -162,14 +176,14 @@ abstract class VacanteService
     {
         try {
             #obtiene lista de relVacanteSolicitante con relacion solicitantes.usuarios y vacantes
-            //$solicitudes = VacanteSolicitante::with(['rel_vacantes','rel_solicitantes.rel_usuarios'])->where('id_vacante',$idVacante)->get();
-            #obtiene solo solicitantes
-            $solicitudes = Solicitante::with(['rel_vacante_solicitante' => function ($query) use ($idVacante) {
-                $query->where('id_vacante', $idVacante);
-            }])
-                ->with('rel_usuarios')->get();
+            $solicitudes = VacanteSolicitante::with(['rel_solicitante.rel_usuarios'])->where('id_vacante',$idVacante)->get();
+            $solicitudesDTO=ParseDTO::list($solicitudes, SolicitudDto::class);
 
-            return $solicitudes;
+            /* $solicitudes = Solicitante::with(['rel_usuarios','rel_vacante_solicitante'=>function($query) use ($idVacante){
+                $query->where('id_vacante',$idVacante);
+            }])->get(); */
+            //$sql='SELECT * from "relVacanteSolicitante" where "relVacanteSolicitante"."id_solicitante" in (1, 2) and "id_vacantee" = 4';
+            return $solicitudesDTO;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
         }

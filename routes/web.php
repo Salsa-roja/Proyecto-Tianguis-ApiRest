@@ -12,6 +12,13 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->delete('/eliminar/{id}', 'VacanteController@inhabilitar');
         $router->post('/vincular', 'VacanteController@vincular');
     });
+    $router->group(['prefix' => 'empresas'], function () use ($router) {
+        $router->get('/listado', 'EmpresaController@listado');
+    });
+    $router->group(['prefix' => 'usuarios'], function () use ($router) {
+        $router->get('/listado', 'UsuarioController@listado');
+    });
+
 });
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
@@ -37,8 +44,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
-        // funcion eliminar agregada en rutas admin arriba
-        // $router->post('/detalle', 'VacanteController@searchId');
+        $router->get('/detalle/{id}', 'VacanteController@detalle');
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');

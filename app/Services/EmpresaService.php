@@ -13,7 +13,7 @@ abstract class EmpresaService
 
    public static function listado(){
       try {
-         return "listado empresa";
+         return Empresa::with(['usuario_empresa'])->where('activo', '1')->get();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
