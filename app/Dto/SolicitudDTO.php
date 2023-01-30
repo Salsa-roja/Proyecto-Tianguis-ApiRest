@@ -35,6 +35,9 @@ class SolicitudDto
    public $fecha_solicitud;
    public $nombre_completo;
    public $correo;
+   public $file;
+   public $file64;
+
 
 
    public function __construct(VacanteSolicitante $obj)
@@ -69,6 +72,10 @@ class SolicitudDto
          $this->disc_auditiva = $obj->rel_solicitante->disc_auditiva;
          $this->lugar_atencion = $obj->rel_solicitante->lugar_atencion;
          $this->curriculum = $obj->rel_solicitante->curriculum;
+         $this->file = $obj->rel_solicitante->file;
+         $this->file64 = $obj->rel_solicitante->file64;
+
+         
          
          if(isset($obj->rel_solicitante->rel_usuarios)){
             $this->nombre_completo = $obj->rel_solicitante->rel_usuarios->nombre_completo;

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Usuarios;
 use App\Models\VacanteSolicitante;
-
+use App\Services\ArchivosService;
 class Solicitante extends Model
 {
     use HasFactory;
@@ -43,6 +43,20 @@ class Solicitante extends Model
         'lugar_atencion',
         'curriculum'
     ];
+
+    protected $appends = ['file','file64'];
+    public function getfileAttribute()
+    {
+        if (isset($this->curriculum) && $this->curriculum != '')
+        return env('APP_URL') . '/dwl/solicitantes/'.$this->id;
+    }
+
+  
+    public function getfile64Attribute()
+    {
+        if (isset($this->curriculum) && $this->curriculum != '')
+        return ArchivosService::base64File('solicitantes',$this->curriculum);
+    }
 
     public function rel_usuarios(){
         return $this->belongsTo(Usuarios::class,'id_usuario','id');

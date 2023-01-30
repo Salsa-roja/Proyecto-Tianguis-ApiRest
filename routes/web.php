@@ -5,16 +5,28 @@
 $router->get('/', function () use ($router) {
     return "Quiero chamba " . $router->app->version();
 });
+
+# Descarga de archivos
+$router->get('/dwl/solicitantes/{idSolicitante}', 'SolicitanteController@descarga_cv');
+
+/* $router->group(['prefix' => 'dwl'], function () use ($router) {
+    $router->get('/solicitantes/{idSolicitante}', 'SolicitanteController@descarga_cv');
+}); */
+
 # Rutas para sistema admin (valida autenticacion de uuario)
 $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
+
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listado', 'VacanteController@getVacantes');
         $router->delete('/eliminar/{id}', 'VacanteController@inhabilitar');
         $router->post('/vincular', 'VacanteController@vincular');
     });
+
+
     $router->group(['prefix' => 'empresas'], function () use ($router) {
         $router->get('/listado', 'EmpresaController@listado');
     });
+
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
     });
@@ -27,17 +39,19 @@ $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], fu
 
     });
 });
+
 # Rutas para landing
 $router->group(['middleware' => array('cors')], function () use ($router) {
-
     $router->group(['prefix' => 'auth'], function ($router) {
         $router->get('/login', 'AuthController@authenticate');
     });
-    $router->get('/c_postales', 'SolicitanteController@getCPs');
-    $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
+
     $router->group(['prefix' => 'registro-solicitante'], function () use ($router) {
         $router->post('/guardar', 'SolicitanteController@guardar');
     });
+    $router->get('/c_postales', 'SolicitanteController@getCPs');
+    $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
+
     $router->group(['prefix' => 'registro-empresa'], function () use ($router) {
         $router->post('/guardar', 'EmpresaController@guardar');
     });

@@ -12,6 +12,8 @@ class SolicitanteController extends Controller
         //
     } 
 
+    public $storage="solicitantes";
+
     public function listado(){
         try {
             $items = SolicitanteService::listado();
@@ -58,7 +60,7 @@ class SolicitanteController extends Controller
             if($request->hasFile('curriculum')){
 
                 $fieldArchivo = ArchivosService::subirArchivo($request->file('curriculum'),
-                                                                'solicitantes',
+                                                                $this->storage,
                                                                 'CV_'.$params['curp'],
                                                                 'path' 
                 );
@@ -84,6 +86,19 @@ class SolicitanteController extends Controller
         try {
             $items = SolicitanteService::getColonias($cpostal);
             return response()->json($items, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    /**
+     * descargar archivo cv
+     */
+    public function descarga_cv($idSolicitante){
+        try {
+            $itemDB = SolicitanteService::searchById($idSolicitante);
+            //return $itemDB;
+            return ArchivosService::descargaStorage($this->storage,$itemDB->curriculum);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }

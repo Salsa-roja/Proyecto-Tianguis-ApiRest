@@ -53,6 +53,33 @@ class ArchivosService
         }
     }
 
+    /**
+     * @param storageName string
+     * @param fileName string
+     */
+    public static function descargaStorage($storageName,$fileName)
+    {
+        try {
+            return Storage::disk($storageName)->download($fileName);
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * @param storageName string
+     * @param fileName string
+     */
+    public static function base64File($storageName,$fileName)
+    {
+        try {
+            $path = Storage::disk($storageName)->path($fileName);
+            return base64_encode(file_get_contents($path));
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
     /* public static function mostrarArchivo()
     {
 

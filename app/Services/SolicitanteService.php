@@ -19,6 +19,20 @@ abstract class SolicitanteService
          throw new \Exception($e->getMessage());
       }
    }
+
+   /**
+    * Buscar solicitante por id
+    **/
+    public static function searchById($id){
+      try {
+         $itemDB = Solicitante::where('id', $id)->first();
+         
+         return $itemDB;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    /**
     * Buscar solicitante por id usuario
     **/
@@ -98,4 +112,5 @@ abstract class SolicitanteService
          throw new \Exception($e->getMessage());
       }
    }
+
 }
