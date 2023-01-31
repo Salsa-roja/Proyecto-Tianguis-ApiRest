@@ -102,7 +102,7 @@ abstract class VacanteService
     public static function filtro($request,$params)
     {
         try {
-            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo',]);
+            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
 
             if ($request['lat'] != 'null' && $request['lng'] != 'null' && $request['distancia'] != 0) {
 
