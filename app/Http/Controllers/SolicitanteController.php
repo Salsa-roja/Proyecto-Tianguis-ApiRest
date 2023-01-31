@@ -14,6 +14,15 @@ class SolicitanteController extends Controller
 
     public $storage="solicitantes";
 
+    public function searchById($idSolicitante){
+        try {
+            $itemDB = SolicitanteService::searchById($idSolicitante);
+            return response()->json($itemDB, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
     public function listado(){
         try {
             $items = SolicitanteService::listado();

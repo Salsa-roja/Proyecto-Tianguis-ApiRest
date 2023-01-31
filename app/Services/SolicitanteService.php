@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Solicitante;
 use App\Models\Usuarios;
 use App\Models\Rol;
+use App\Dto\ParseDTO;
+use App\Dto\SolicitanteDto;
 
 
 abstract class SolicitanteService
@@ -25,9 +27,10 @@ abstract class SolicitanteService
     **/
     public static function searchById($id){
       try {
-         $itemDB = Solicitante::where('id', $id)->first();
+         $itemDB = Solicitante::with(['rel_usuarios'])->find($id);
+         $itemDTO = ParseDTO::obj($itemDB, SolicitanteDTO::class);
          
-         return $itemDB;
+         return $itemDTO;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }

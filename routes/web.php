@@ -46,15 +46,22 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/login', 'AuthController@authenticate');
     });
 
+    #Solicitantes
+    $router->group(['prefix' => 'solicitantes'], function () use ($router) {
+        $router->get('/c_postales', 'SolicitanteController@getCPs');
+        $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
+        $router->get('/detalle/{idSolicitante}', 'SolicitanteController@searchById');
+    });
     $router->group(['prefix' => 'registro-solicitante'], function () use ($router) {
         $router->post('/guardar', 'SolicitanteController@guardar');
     });
-    $router->get('/c_postales', 'SolicitanteController@getCPs');
-    $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
 
+    #empresas
     $router->group(['prefix' => 'registro-empresa'], function () use ($router) {
         $router->post('/guardar', 'EmpresaController@guardar');
     });
+
+    #vacantes
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
@@ -62,8 +69,9 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
-
     });
+
+    #correo
     $router->group(['prefix' => 'correo'], function () use ($router) {
         $router->get('/detalle/{correo_id}', 'CorreoController@correoById');
         $router->post('/enviar', 'CorreoController@enviar');
