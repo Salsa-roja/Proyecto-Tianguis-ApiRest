@@ -61,4 +61,15 @@ class CorreoController extends Controller
             echo "No se encontraron registros MX para el dominio especificado.";
         }
     }
+
+    public function broadcast(Request $request){
+        try {
+            $params = $request['params'];
+            return $request;
+        } catch (\Exception $ex) {
+            return response()->json([   'error' => $ex->getMessage(),
+                                        'funcion' => 'CorreoController->broadcast()'
+                                    ], 500);
+        }
+    }//...broadcast
 }
