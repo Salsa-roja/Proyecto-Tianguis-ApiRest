@@ -16,6 +16,8 @@ class VacantesListDTO
     public $dias_laborales;
     public $id_turnos_laborales;
     public $id_nivel_educativo;
+    public $turnos_laborales;
+    public $nivel_educativo;
     public $sueldo;
     public $direccion;
     public $colonia;
@@ -37,8 +39,10 @@ class VacantesListDTO
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
         $this->dias_laborales = $obj->días_laborales;
-        $this->id_turnos_laborales = $obj->tabla_turnos_laborales->turnos;
-        $this->id_nivel_educativo = $obj->tabla_nivel_educativo->titulo;
+        $this->id_turnos_laborales = $obj->tabla_turnos_laborales->id;
+        $this->id_nivel_educativo = $obj->tabla_nivel_educativo->id;
+        $this->turnos_laborales = $obj->tabla_turnos_laborales->turnos;
+        $this->nivel_educativo = $obj->tabla_nivel_educativo->titulo;
         $this->sueldo = $obj->sueldo;
         $this->direccion = $obj->direccion;
         $this->colonia = $obj->colonia;

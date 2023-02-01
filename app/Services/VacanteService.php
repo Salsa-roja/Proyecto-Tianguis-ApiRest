@@ -35,18 +35,6 @@ abstract class VacanteService
         }
     }
 
-    public static function detalle($id)
-    {
-        try {
-
-            $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo'])->find($id);
-            $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
-
-            return $vacante;
-        } catch (\Exception $ex) {
-            throw new \Exception($ex->getMessage(), 500);
-        }
-    }
 
     public static function searchId($params)
     {
@@ -60,7 +48,7 @@ abstract class VacanteService
                     ->whereColumn('vacantes.id', 'id_vacante')])
                     ->where('id', $params['request']->idVacante);
             }
-            $vacantedb = $vacantedb->where(['activo' => true])->first();
+            $vacantedb = $vacantedb->where(['activo' => true])->find($params['request']->idVacante);
             if ($vacantedb) {
                 $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
             } else {
