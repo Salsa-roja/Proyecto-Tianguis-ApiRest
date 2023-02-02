@@ -75,5 +75,6 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/detalle/{correo_id}', 'CorreoController@correoById');
         $router->post('/enviar', 'CorreoController@enviar');
         $router->get('/gethosts', 'CorreoController@get_hosts');
+        $router->post('/broadcast', 'CorreoController@broadcast');
     });
 });
