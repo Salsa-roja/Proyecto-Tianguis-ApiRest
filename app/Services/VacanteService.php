@@ -23,8 +23,8 @@ abstract class VacanteService
     {
         try {
             $query = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
-            if($id_empresa != null){
-                $query = $query->where('id_empresa',$id_empresa); 
+            if ($id_empresa != null) {
+                $query = $query->where('id_empresa', $id_empresa);
             }
             $vacantedb = $query->where('activo', '1')->get();
 
@@ -35,13 +35,12 @@ abstract class VacanteService
         }
     }
 
-
     public static function searchId($params)
     {
         try {
             $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
 
-            if (isset($params['request']->auth->id)) {
+            if (isset($params['request']->auth->id) && SolicitanteService::searchByIdUser($params['request']->auth->id)) {
                 $idSolicitante = SolicitanteService::searchByIdUser($params['request']->auth->id)->id;
                 $vacantedb =  $vacantedb->addSelect(['vinculado' => VacanteSolicitante::select('id')
                     ->where('id_solicitante', $idSolicitante)
@@ -73,21 +72,23 @@ abstract class VacanteService
             throw new \Exception($ex->getMessage(), 500);
         }
     }
+
     public static function vacanteMasLejana($request)
     {
         try {
             $vacantedb = Vacantes::selectRaw("ST_Distance(
             ST_Transform( CONCAT('SRID=4326;POINT(" . $request['lng'] . " " . $request['lat'] . " )')::geometry, 2163),
             ST_Transform( CONCAT('SRID=4326;POINT(' , lng, ' ',lat ,')')::geometry, 2163)) as lejano")
-            ->where(['activo' => true])
-            ->orderByDesc('lejano')
-            ->first();
+                ->where(['activo' => true])
+                ->orderByDesc('lejano')
+                ->first();
             return $vacantedb;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
         }
     }
-    public static function filtro($request,$params)
+
+    public static function filtro($request, $params)
     {
         try {
             $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo']);
@@ -103,7 +104,7 @@ abstract class VacanteService
                 $idSolicitante = SolicitanteService::searchByIdUser($params['request']->auth->id)->id;
                 $vacantedb =  $vacantedb->addSelect(['vinculado' => VacanteSolicitante::select('id')
                     ->where('id_solicitante', $idSolicitante)
-                    ->whereColumn('vacantes.id', 'id_vacante')]);   
+                    ->whereColumn('vacantes.id', 'id_vacante')]);
             }
             if ($request['idTurno'] != 'null') {
                 $vacantedb = $vacantedb->where('id_turnos_laborales', $request['idTurno']);
@@ -138,7 +139,6 @@ abstract class VacanteService
         return ['lat' => null, 'lng' => null, 'domicilio' => $address];
     }
 
-
     public static function inhabilitar($id)
     {
         try {
@@ -164,8 +164,8 @@ abstract class VacanteService
     {
         try {
             #obtiene lista de relVacanteSolicitante con relacion solicitantes.usuarios y vacantes
-            $solicitudes = VacanteSolicitante::with(['rel_solicitante.rel_usuarios'])->where('id_vacante',$idVacante)->get();
-            $solicitudesDTO=ParseDTO::list($solicitudes, SolicitudDto::class);
+            $solicitudes = VacanteSolicitante::with(['rel_solicitante.rel_usuarios'])->where('id_vacante', $idVacante)->get();
+            $solicitudesDTO = ParseDTO::list($solicitudes, SolicitudDto::class);
 
             /* $solicitudes = Solicitante::with(['rel_usuarios','rel_vacante_solicitante'=>function($query) use ($idVacante){
                 $query->where('id_vacante',$idVacante);
