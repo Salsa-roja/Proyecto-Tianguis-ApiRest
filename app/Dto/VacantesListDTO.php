@@ -38,7 +38,7 @@ class VacantesListDTO
         $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
         $this->categorías_especiales = $obj->categorías_especiales;
-        $this->dias_laborales = $obj->días_laborales;
+        $this->dias_laborales = $obj->dias_laborales;
         $this->id_turnos_laborales = $obj->tabla_turnos_laborales->id;
         $this->id_nivel_educativo = $obj->tabla_nivel_educativo->id;
         $this->turnos_laborales = $obj->tabla_turnos_laborales->turnos;
@@ -48,7 +48,7 @@ class VacantesListDTO
         $this->colonia = $obj->colonia;
         $this->código_postal = $obj->código_postal;
         $this->ciudad = $obj->ciudad;
-        $this->numero_de_puestos_disponibles = $obj->número_de_puestos_disponibles;
+        $this->numero_de_puestos_disponibles = $obj->numero_de_puestos_disponibles;
         $this->area = $obj->area;
         $this->industria = $obj->industria;
         $this->tipo_de_puesto = $obj->tipo_de_puesto;

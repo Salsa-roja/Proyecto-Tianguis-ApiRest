@@ -102,4 +102,15 @@ class VacanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }//...vincular
+
+    public function save(Request $request)
+    {
+        try {
+            $params["request"] = $request;
+            $datos = VacanteService::guardar($request->all(),$params);
+            return response()->json($datos, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage(), 'msg' => 'Algo salió mal.'], 500);
+        }
+    }
 }           

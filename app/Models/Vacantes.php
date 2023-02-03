@@ -7,26 +7,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Vacantes extends Model
-{
+{ 
     use HasFactory;
 
     protected $table = 'vacantes';
     protected $primarykey = 'id';
     protected $fillable = [
         'id_empresa',
-        'vacantes',
+        'vacante',
         'descripcion',
         'categorías_especiales',
-        'días_laborales',
+        'dias_laborales',
         'id_turnos_laborales',
         'id_nivel_educativo',
+        'sueldo',
         'direccion',
         'colonia',
         'código_postal',
         'ciudad',
-        'número_de_puestos_disponibles',
+        'numero_de_puestos_disponibles',
         'area',
-        'Industria',
+        'industria',
         'tipo_de_puesto',
         'habilidades_requeridas',
     ];
