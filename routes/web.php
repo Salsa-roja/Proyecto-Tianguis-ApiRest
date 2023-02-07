@@ -20,6 +20,8 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->get('/listado', 'VacanteController@getVacantes');
         $router->delete('/eliminar/{id}', 'VacanteController@inhabilitar');
         $router->post('/vincular', 'VacanteController@vincular');
+        $router->post('/guarda', 'VacanteController@save');
+
     });
 
     $router->group(['prefix' => 'solicitantes'], function () use ($router) {

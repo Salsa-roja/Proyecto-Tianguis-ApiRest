@@ -9,7 +9,7 @@ use App\Dto\VacantesListDTO;
 use App\Dto\VacantesDBListDTO;
 use App\Models\Usuarios;
 use App\Models\VacanteSolicitante;
-use App\Models\Solicitante;
+use App\Models\UsuariosEmpresas;
 use Faker\Core\Number;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
@@ -100,7 +100,7 @@ abstract class VacanteService
                 ST_Transform( CONCAT('SRID=4326;POINT(" . $request['lng'] . " " . $request['lat'] . " )')::geometry, 2163),
                 ST_Transform( CONCAT('SRID=4326;POINT(' , lng, ' ',lat ,')')::geometry, 2163)) < " . $request['distancia'] . "*1000");
             }
-            if (isset($params['request']->auth->id)) {
+            if (isset($params['request']->auth->id) && SolicitanteService::searchByIdUser($params['request']->auth->id)) {
                 $idSolicitante = SolicitanteService::searchByIdUser($params['request']->auth->id)->id;
                 $vacantedb =  $vacantedb->addSelect(['vinculado' => VacanteSolicitante::select('id')
                     ->where('id_solicitante', $idSolicitante)
@@ -231,6 +231,49 @@ abstract class VacanteService
             return isset($exists->id);
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al buscar la vinculacion', $ex->getMessage()], 400);
+        }
+    }
+
+    public static function guardar(array $request, $params)
+    {
+        try {
+            $datos = [
+                'vacante' => $request['vacante'],
+                'descripcion' => $request['descripcion'],
+                'categorías_especiales' => $request['categorías_especiales'],
+                'dias_laborales' => $request['dias_laborales'],
+                'id_turnos_laborales' => $request['turnos_laborales'],
+                'id_nivel_educativo' => $request['nivel_educativo'],
+                'sueldo' => $request['sueldo'],
+                'direccion' => $request['direccion'],
+                'colonia' => $request['colonia'],
+                'código_postal' => $request['código_postal'],
+                'ciudad' => $request['ciudad'],
+                'numero_de_puestos_disponibles' => $request['numero_de_puestos_disponibles'],
+                'area' => $request['area'],
+                'industria' => $request['industria'],
+                'tipo_de_puesto' => $request['tipo_de_puesto'],
+                'habilidades_requeridas' => $request['habilidades_requeridas'],
+                'lat' => '24.34445',
+                'lng' => '21.213'
+            ];
+            if ($request['id'] > 0) {
+                $datos =$datos+ ['id' => $request['id'],'id_empresa' => $request['id_empresa']
+                ];
+                $Vacantes = Vacantes::where('id', $request['id'])->first();
+                if ($Vacantes) {
+                    $Vacantes->update($datos);
+                    $Vacantes->save();
+                }
+            } else {
+                $id_empresa = UsuariosEmpresas::where('id_usuario', $params['request']->auth->id)->first()->id_empresa;
+                $datos =$datos+['id_empresa' => $id_empresa];
+                    $Vacantes = Vacantes::create($datos);
+                $Vacantes->save();
+            }
+            return response()->json($Vacantes, Response::HTTP_CREATED);
+        } catch (\Exception $ex) {
+            return response()->json(['mensaje' => 'Hubo un error al registrar el usuario', $ex->getMessage()], 400);
         }
     }
 }
