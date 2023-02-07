@@ -32,6 +32,9 @@ class SolicitanteController extends Controller
         }
     }
 
+    /**
+     * Guardar nuevo solicitante
+     */
     public function guardar(Request $request){
         try{
             $this->validate($request, [
@@ -76,6 +79,43 @@ class SolicitanteController extends Controller
             }
 
             $items = SolicitanteService::guardar($params,$fieldArchivo);
+            return response()->json($items, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Guardar nuevo Curriculum del solicitante
+     */
+    public function guardarCv(Request $request){
+        try{
+            $this->validate($request, [
+                'nuevo_cv' => 'required',
+                'id_solicitante' => 'required'
+            ]);
+            $params = $request->all();
+            $params["request"] = $request;
+            
+            #obtener info del solicitante
+            $solicitante = SolicitanteService::searchById($params['id_solicitante'],false);
+            $params["solicitante"] = $solicitante;
+
+            #borrar archivo si existe
+            if($solicitante->curriculum!=''){
+                ArchivosService::borrarArchivoStorage($solicitante->curriculum,$this->storage);
+            }
+
+            if($request->hasFile('nuevo_cv')){
+
+                $fieldArchivo = ArchivosService::subirArchivo($request->file('nuevo_cv'),
+                                                                $this->storage,
+                                                                'CV_'.$solicitante->curp.date('_Y-m-d_h-i-s'),
+                                                                'path' 
+                );
+            }
+
+            $items = SolicitanteService::guardarCv($params,$fieldArchivo);
             return response()->json($items, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);

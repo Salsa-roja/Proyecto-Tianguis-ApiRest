@@ -93,7 +93,12 @@ class ArchivosService
             throw new \Exception($e->getMessage());
         }
     } */
-
+    /**
+     * Modificar un archivo de la tabla archivos cuando el archivo es parte de una relacion `tabla` - archivos
+     * 
+     * @param request - formulario [nombre,ruta]
+     * @param id - id del archivo a modificar
+     */
     public static function modificarArchivo(Request $request, $id)
     {
         try {
@@ -117,18 +122,30 @@ class ArchivosService
         }
     }
 
-    public static function borrarArchivo($id)//borrar de db
+    /**
+     * Borrar un archivo de la tabla archivos cuando el archivo es parte de una relacion `tabla` - archivos
+     * 
+     * @param id - id del registro en la tabla archivos
+     * @param storage - el alias de almacenamiento
+     */
+    public static function borrarArchivo($id,$storage)//borrar de db
     {
         try {
-            DB::table('archivos')->where('id', $id)->update([
-                'activo' => false
-            ]);
+            $file = Archivo::find($id);
+            ArchivosService::borrarArchivoStorage($file->path,$storage);
+            $file->delete();
             return response()->json('Ok');
         } catch (\Exception $e) {
             throw new Exception($e->getMessage());
         }
     }
 
+    /**
+     * Borrar archivo del almacenamiento
+     * 
+     * @param path - nombre de archivo
+     * @param storage - el alias de almacenamiento
+     */
     public static function borrarArchivoStorage($path,$storage){
         if(Storage::disk($storage)->exists($path))
             return Storage::disk($storage)->delete($path);

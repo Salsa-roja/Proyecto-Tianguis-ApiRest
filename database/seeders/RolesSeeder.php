@@ -17,6 +17,7 @@ class RolesSeeder extends Seeder
     {
         $roles = [
             [
+                'id' => 1,
                 'nombre' => 'Administrador',
                 'permisos' => [
                     [
@@ -54,11 +55,20 @@ class RolesSeeder extends Seeder
                 ]
             ],
             [
+                'id' => 2,
                 'nombre' => 'Solicitante',
                 'permisos' => [
                     [
+                        'nombre' => 'Ocion de menu Solicitantes',
+                        'permiso' => 'SolicitantesModule'
+                    ],
+                    [
+                        'nombre' => 'Perfil de Solicitante',
+                        'permiso' => 'SolicitantesPerfil'
+                    ],
+                    [
                         'nombre' => 'Formulario de Registro de solicitante',
-                        'permiso' => 'SolicitanteForm'
+                        'permiso' => 'SolicitantesForm'
                     ],
                     [
                         'nombre' => 'Listado de vacantes',
@@ -67,11 +77,16 @@ class RolesSeeder extends Seeder
                 ]
             ],
             [
+                'id' => 3,
                 'nombre' => 'Empresa',
                 'permisos' => [
                     [
                         'nombre' => 'Ocion de menu vacantes',
                         'permiso' => 'VacantesModule'
+                    ],
+                    [
+                        'nombre' => 'Perfil de Empresa',
+                        'permiso' => 'EmpresasPerfil'
                     ],
                     [
                         'nombre' => 'Formulario de Registro de vacantes',
@@ -84,13 +99,22 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Redactar emails con interfaz',
                         'permiso' => 'WriteMail'
-                    ],                    
+                    ],
+                    [
+                        'nombre' => 'Opcion de menu Usuarios',
+                        'permiso' => 'UsuariosModule'
+                    ],
+                    [
+                        'nombre' => 'Listado de usuarios',
+                        'permiso' => 'UsuariosList'
+                    ],              
                 ]
             ]
         ];
 
         foreach ($roles as $key => $role) {
             $r = new Rol();
+            $r->id = $role['id'];
             $r->nombre = $role['nombre'];
             $r->save();
             $permisosSaved = [];

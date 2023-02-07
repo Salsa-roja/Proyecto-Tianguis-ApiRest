@@ -37,7 +37,7 @@ return new class extends Migration
             $table->boolean("disc_mental")->default(0);
             $table->boolean("disc_auditiva")->default(0);
             $table->enum('lugar_atencion',["Web","Dependencia","Feria"]);
-            $table->string("curriculum", 255);
+            $table->string("curriculum", 255)->default('');
 
             $table->foreign('id_usuario')->references('id')->on('usuarios')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('id_colonia')->references('id')->on('cat_c_postal_colonias')->onUpdate('cascade')->onDelete('cascade');

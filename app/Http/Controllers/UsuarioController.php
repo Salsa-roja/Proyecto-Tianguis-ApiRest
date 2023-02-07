@@ -13,9 +13,9 @@ class UsuarioController extends Controller
         //
     } 
 
-    public function listado(){
+    public function listado(Request $request){
         try {
-            $items = UsuarioService::listado();
+            $items = UsuarioService::listado($request->auth);
             return response()->json($items, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);

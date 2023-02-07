@@ -22,6 +22,9 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/vincular', 'VacanteController@vincular');
     });
 
+    $router->group(['prefix' => 'solicitantes'], function () use ($router) {
+        $router->post('/guardarCv', 'SolicitanteController@guardarCv');
+    });
 
     $router->group(['prefix' => 'empresas'], function () use ($router) {
         $router->get('/listado', 'EmpresaController@listado');

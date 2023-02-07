@@ -60,6 +60,7 @@ abstract class AuthService
             'nombre' => $user->nombre_completo,
             'correo' => $user->correo,
             'rol' => $user->rol->nombre,
+            'rol_id' => $user->rol_id,
             'permisos' => $user->rol->permisos->map(function ($rolePermission) {
                 return $rolePermission->permiso;
             }),

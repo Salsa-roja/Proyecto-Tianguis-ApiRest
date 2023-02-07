@@ -25,12 +25,15 @@ abstract class SolicitanteService
    /**
     * Buscar solicitante por id
     **/
-    public static function searchById($id){
+    public static function searchById($id,$dto=true){
       try {
-         $itemDB = Solicitante::with(['rel_usuarios'])->find($id);
-         $itemDTO = ParseDTO::obj($itemDB, SolicitanteDTO::class);
-         
-         return $itemDTO;
+         $item = Solicitante::with(['rel_usuarios'])->find($id);
+         if($dto){
+            $itemDTO = ParseDTO::obj($item, SolicitanteDTO::class);
+            return $itemDTO;
+         }else{
+            return $item;
+         }
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
@@ -94,6 +97,21 @@ abstract class SolicitanteService
          throw new \Exception($e->getMessage());
       }
    }
+
+   public static function guardarCv($params,$fieldArchivo){
+      try {
+
+         # guardar nuevo curriculum
+         $itemDB = $params['solicitante'];
+         $itemDB->curriculum = $fieldArchivo;
+         $itemDB->save();
+
+         return $itemDB;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    /**
     * Lista codigos postales  
     * */
