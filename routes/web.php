@@ -26,6 +26,7 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'solicitantes'], function () use ($router) {
         $router->post('/guardarCv', 'SolicitanteController@guardarCv');
+        $router->get('/borrarCv/{idSolicitante}', 'SolicitanteController@borrarCv');
     });
 
     $router->group(['prefix' => 'empresas'], function () use ($router) {

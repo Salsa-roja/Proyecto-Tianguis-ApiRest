@@ -110,7 +110,7 @@ class SolicitanteController extends Controller
 
                 $fieldArchivo = ArchivosService::subirArchivo($request->file('nuevo_cv'),
                                                                 $this->storage,
-                                                                'CV_'.$solicitante->curp.date('_Y-m-d_h-i-s'),
+                                                                'CV_'.$solicitante->curp,
                                                                 'path' 
                 );
             }
@@ -121,6 +121,26 @@ class SolicitanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+
+    /**
+     * Borrar Curriculum del solicitante
+     */
+    public function borrarCv($idSolicitante){
+        try{
+            #obtener info del solicitante
+            $solicitante = SolicitanteService::searchById($idSolicitante,false);
+            #borrar archivo
+            ArchivosService::borrarArchivoStorage($solicitante->curriculum,$this->storage);
+            #borrar path 
+            $solicitante->curriculum='';
+            $solicitante->save();
+            
+            return response()->json($solicitante, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
 
     public function getCPs(){
         try {
