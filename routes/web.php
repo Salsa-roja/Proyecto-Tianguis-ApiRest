@@ -8,6 +8,8 @@ $router->get('/', function () use ($router) {
 
 # Descarga de archivos
 $router->get('/dwl/solicitantes/{idSolicitante}', 'SolicitanteController@descarga_cv');
+$router->get('/dwl/empresas/{idEmpresa}/{archivo}', 'EmpresaController@descarga_archivo');
+
 
 /* $router->group(['prefix' => 'dwl'], function () use ($router) {
     $router->get('/solicitantes/{idSolicitante}', 'SolicitanteController@descarga_cv');
@@ -31,6 +33,10 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'empresas'], function () use ($router) {
         $router->get('/listado', 'EmpresaController@listado');
+        $router->get('/detalle/{idSolicitante}', 'EmpresaController@searchById');
+        $router->post('/guardarDocto', 'EmpresaController@guardarDocto');
+        $router->get('/borrarDocto/{idEmpresa}/{archivo}', 'EmpresaController@borrarDocto');
+
     });
 
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
