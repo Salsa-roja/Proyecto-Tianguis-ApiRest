@@ -8,12 +8,34 @@ use App\Models\Empresa;
 use App\Models\Usuarios;
 use App\Models\UsuariosEmpresas;
 use App\Models\Rol;
+use App\Dto\ParseDTO;
+
 abstract class EmpresaService
 {
 
    public static function listado(){
       try {
          return Empresa::with(['usuario_empresa'])->where('activo', '1')->get();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   /**
+    * Buscar empresa por id
+    *
+    * @param id number - id de la empresa
+    * @param dto boolean - aplicar o no el dto
+    **/
+    public static function searchById($id,$dto=true){
+      try {
+         $item = Empresa::with(['usuario_empresa'])->find($id);
+         if($dto){
+            $itemDTO = ParseDTO::obj($item, EmpresaDTO::class);
+            return $itemDTO;
+         }else{
+            return $item;
+         }
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
@@ -64,6 +86,22 @@ abstract class EmpresaService
          throw new \Exception($e->getMessage());
       }
    }
+
+   public static function guardarDocto($params,$fieldArchivo){
+      try {
+         $campo = $params['inputName'];
+
+         # guardar nuevo archivo
+         $itemDB = $params['empresa'];
+         $itemDB->$campo = $fieldArchivo;
+         $itemDB->save();
+
+         return $itemDB;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    /**
     * Lista codigos postales  
     * */

@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('rfc');
             $table->text('descripcion');
             $table->string('numero_empleados');
-            $table->string('constancia_sit_fiscal');
-            $table->string('licencia_municipal');
-            $table->string('alta_patronal');
+            $table->string('constancia_sit_fiscal')->default('');
+            $table->string('licencia_municipal')->default('');
+            $table->string('alta_patronal')->default('');
             $table->boolean('contr_discapacitados')->default(0);
             $table->boolean('contr_antecedentes')->default(0);
             $table->boolean('contr_adultos')->default(0);
