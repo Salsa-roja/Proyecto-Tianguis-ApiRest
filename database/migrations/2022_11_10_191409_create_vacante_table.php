@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer("id_turnos_laborales");
             $table->integer("id_nivel_educativo");
             $table->string("sueldo", 255);
-            $table->string("direccion", 255);
+            $table->string("calle", 255);
             $table->string("colonia", 255);
             $table->string("código_postal", 255);
             $table->string("ciudad", 255);
@@ -40,7 +40,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->foreign('id_turnos_laborales')->references('id')->on('turnos_laborales');
+            $table->foreign('id_turnos_laborales')->references('id')->on('tur   nos_laborales');
             $table->foreign('id_nivel_educativo')->references('id')->on('nivel_educativo');
             $table->foreign('id_empresa')->references('id')->on('empresas');
 

@@ -19,7 +19,7 @@ class VacantesListDTO
     public $turnos_laborales;
     public $nivel_educativo;
     public $sueldo;
-    public $direccion;
+    public $calle;
     public $colonia;
     public $código_postal;
     public $ciudad;
@@ -44,7 +44,7 @@ class VacantesListDTO
         $this->turnos_laborales = $obj->tabla_turnos_laborales->turnos;
         $this->nivel_educativo = $obj->tabla_nivel_educativo->titulo;
         $this->sueldo = $obj->sueldo;
-        $this->direccion = $obj->direccion;
+        $this->calle = $obj->calle;
         $this->colonia = $obj->colonia;
         $this->código_postal = $obj->código_postal;
         $this->ciudad = $obj->ciudad;

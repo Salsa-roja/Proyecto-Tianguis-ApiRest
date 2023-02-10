@@ -21,7 +21,7 @@ class Vacantes extends Model
         'id_turnos_laborales',
         'id_nivel_educativo',
         'sueldo',
-        'direccion',
+        'calle',
         'colonia',
         'código_postal',
         'ciudad',
