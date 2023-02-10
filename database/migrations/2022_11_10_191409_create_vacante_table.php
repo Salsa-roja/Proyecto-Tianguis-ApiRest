@@ -40,7 +40,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->foreign('id_turnos_laborales')->references('id')->on('tur   nos_laborales');
+            $table->foreign('id_turnos_laborales')->references('id')->on('turnos_laborales');
             $table->foreign('id_nivel_educativo')->references('id')->on('nivel_educativo');
             $table->foreign('id_empresa')->references('id')->on('empresas');
 
