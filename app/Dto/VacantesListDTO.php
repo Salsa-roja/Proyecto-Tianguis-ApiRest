@@ -28,12 +28,14 @@ class VacantesListDTO
     public $industria;
     public $tipo_de_puesto;
     public $habilidades_requeridas;
+    public $lat;
+    public $lng;
 
     public function __construct(Vacantes $obj)
     {
         $this->id = $obj->id;
         $this->id_empresa = $obj->id_empresa;
-        $this->vinculadoId=$obj->vinculado;
+        $this->vinculadoId = $obj->vinculado;
         $this->nombre_comercial = $obj->empresa->nombre_comercial;
         $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
@@ -53,5 +55,7 @@ class VacantesListDTO
         $this->industria = $obj->industria;
         $this->tipo_de_puesto = $obj->tipo_de_puesto;
         $this->habilidades_requeridas = $obj->habilidades_requeridas;
+        $this->lat = $obj->lat;
+        $this->lng = $obj->lng;
     }
 }
