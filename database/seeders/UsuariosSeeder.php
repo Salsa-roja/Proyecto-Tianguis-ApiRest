@@ -33,6 +33,7 @@ class UsuariosSeeder extends Seeder
             $z->rol_id = $obj['rol_id'];//Rol::where('nombre', 'Administrador')->first()->id;
             $z->ape_paterno = $obj['ape_paterno'];
             $z->ape_materno = $obj['ape_materno'];
+            $z->nombre_login = $obj['nombre_login'];
             $z->correo = $obj['correo'];
             $z->contrasena = $obj['contrasena'];
             $z->save();
