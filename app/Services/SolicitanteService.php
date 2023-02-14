@@ -52,6 +52,14 @@ abstract class SolicitanteService
       }
    }
 
+   public static function existeByCurp($curp){
+      try {
+         return Solicitante::where('curp',$curp)->exists();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    public static function guardar($params,$fieldArchivo){
       try {
 

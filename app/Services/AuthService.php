@@ -9,13 +9,10 @@ use App\Models\Usuarios;
 
 abstract class AuthService
 {
-    public static function authenticate($correo, $password)
+    public static function authenticate($nombre_login, $password)
     {
         $user = Usuarios::with(['rol', 'rol.permisos','usuario_solicitante','usuario_empresa.rel_empresas'])
-            /* ->where(function ($query) use ($correo) {
-                $query->where('correo', $correo);
-            }) */
-            ->where(['activo'=> 1,'correo'=>$correo])
+            ->where(['activo'=> 1,'nombre_login'=>$nombre_login])
             ->first();
 
         // return $user;

@@ -50,6 +50,15 @@ abstract class UsuarioService
          throw new \Exception($e->getMessage());
       }
    }
+
+   public static function existeByUsername($nombre_login){
+      try {
+         return Usuarios::where('nombre_login',$nombre_login)->exists();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    /**
     * Lista codigos postales  
     * */

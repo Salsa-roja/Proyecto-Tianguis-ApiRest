@@ -5,12 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\SolicitanteService;
 use App\Services\ArchivosService;
+use App\Services\UsuarioService;
 class SolicitanteController extends Controller
 {
+    private $statusHttp; //200:ok, 201: created, 400:error en solicitud, 401:no autorizado
+    private $msg;
+    private $data;
+    private $status;
+
+
     public function __construct()
     {
-        //
+        $this->msg='';
+        $this->data=[];
+        $this->status=false;
     } 
+
+    private function jsonResponse(){
+       return response()->json([
+            'status'=>$this->status,
+            'msg'=>$this->msg,
+            'data'=>$this->data
+        ], 200);
+    }
 
     public $storage="solicitantes";
 
@@ -45,6 +62,7 @@ class SolicitanteController extends Controller
                 'curp' => 'required',
                 'telefono' => 'required',
                 'nombre_login' => 'required',
+                'correo',
                 'contrasena' => 'required',
                 'c_numero' => 'required',
                 'c_postal' => 'required',
@@ -66,9 +84,21 @@ class SolicitanteController extends Controller
                 'lugar_atencion' => 'required',
                 'curriculum' => 'required'
             ]);
+
             $params = $request->all();
             $params["request"] = $request;
-            
+
+            #valida si el usuario ya existe
+            if( UsuarioService::existeByUsername($params['nombre_login']) ){                
+                $this->msg='El nombre de usuario ya esta en uso, utiliza otro';
+                return $this->jsonResponse();
+            }
+            #valida si el solicitante ya existe
+            if( SolicitanteService::existeByCurp($params['curp']) ){                
+                $this->msg='La CURP ya está en uso, por favor verifica';
+                return $this->jsonResponse();
+            }
+
             if($request->hasFile('curriculum')){
 
                 $fieldArchivo = ArchivosService::subirArchivo($request->file('curriculum'),
@@ -77,9 +107,11 @@ class SolicitanteController extends Controller
                                                                 'path' 
                 );
             }
+            
+            $this->data = SolicitanteService::guardar($params,$fieldArchivo);
+            $this->status=true;
 
-            $items = SolicitanteService::guardar($params,$fieldArchivo);
-            return response()->json($items, 200);
+            return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
