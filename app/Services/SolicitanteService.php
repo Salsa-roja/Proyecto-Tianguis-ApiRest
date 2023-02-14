@@ -56,14 +56,16 @@ abstract class SolicitanteService
       try {
 
          # guardar usuario
-         $itemUs = new Usuarios();
-         $itemUs->nombres = $params['nombre'];
-         $itemUs->ape_paterno = $params['ape_paterno'];
-         $itemUs->ape_materno = $params['ape_materno'];
-         $itemUs->correo = $params['correo'];
-         $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
-         $itemUs->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
-         $itemUs->save();
+         $paramsUs=[
+            'nombres' => $params['nombre'],
+            'ape_paterno' => $params['ape_paterno'],
+            'ape_materno' => $params['ape_materno'],
+            'correo' => $params['correo'],
+            'nombre_login' => $params['nombre_login'],
+            'contrasena' => $params['contrasena'],
+            'rol_id' => Rol::where('nombre', 'Solicitante')->first()->id,
+         ];
+         $itemUs=UsuarioService::guardar($paramsUs);
 
          # guardar solicitante
          $itemDB = new Solicitante();

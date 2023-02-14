@@ -25,6 +25,7 @@ class SolicitantesSeeder extends Seeder
                 'nombres' => 'Jesus Antonio',
                 'ape_paterno' => 'Ibarra',
                 'ape_materno' => 'Larios',
+                'nombre_login' => 'Solicitante1',
                 'correo' => 'solicitante@quierochamba.com',
                 'edad' => 23,
                 'curp' => 'ASDF722HDHWFFW4543',
@@ -53,6 +54,7 @@ class SolicitantesSeeder extends Seeder
                 'nombres' => 'Alonso Adair',
                 'ape_paterno' => 'Aguet',
                 'ape_materno' => 'Orozco',
+                'nombre_login' => 'Solicitante2',
                 'correo' => 'solicitante2@quierochamba.com',
                 'edad' => 25,
                 'curp' => 'AUOA970429HJCGRL05',
@@ -87,6 +89,7 @@ class SolicitantesSeeder extends Seeder
             $Usuario->ape_paterno = $v['ape_paterno'];
             $Usuario->ape_materno = $v['ape_materno'];
             $Usuario->correo = $v['correo'];
+            $Usuario->nombre_login = $v['nombre_login'];
             $Usuario->contrasena = password_hash('123456789', PASSWORD_BCRYPT);
             $Usuario->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
             $Usuario->save();

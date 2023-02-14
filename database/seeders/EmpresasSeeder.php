@@ -24,6 +24,7 @@ class EmpresasSeeder extends Seeder
          $Usuario->nombres = "Diego Armando Maradonio Del piero López";
          $Usuario->ape_paterno = "";
          $Usuario->ape_materno = "";
+         $Usuario->nombre_login = "Empresa1";
          $Usuario->correo = "empresa@quierochamba.com";
          $Usuario->contrasena = password_hash("123456789", PASSWORD_BCRYPT);
          $Usuario->rol_id = Rol::where('nombre', 'Empresa')->first()->id;

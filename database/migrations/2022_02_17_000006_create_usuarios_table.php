@@ -15,10 +15,10 @@ class CreateUsuariosTable extends Migration
             $table->string("nombres", 255);
             $table->string("ape_paterno", 255);
             $table->string("ape_materno", 255);
+            $table->string("nombre_login", 40);
             $table->string("correo", 155);
             $table->string("contrasena", 255);
             $table->boolean("activo")->default(1);
-            // $table->enum("estatus", ['activo', 'inactivo', 'suspendido', 'eliminado']);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();

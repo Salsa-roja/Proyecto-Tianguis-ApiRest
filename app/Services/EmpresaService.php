@@ -45,14 +45,17 @@ abstract class EmpresaService
       try {
 
          # guardar usuario
-         $Usuario = new Usuarios();
-         $Usuario->nombres = $params['nombre_rh'];
-         $Usuario->ape_paterno = '';
-         $Usuario->ape_materno = '';
-         $Usuario->correo = $params['correo_rh'];
-         $Usuario->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
-         $Usuario->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
-         $Usuario->save();
+         $paramsUs=[
+            'nombres' => $params['nombre_rh'],
+            'ape_paterno' => '',
+            'ape_materno' => '',
+            'correo' => $params['correo_rh'],
+            'nombre_login' => $params['nombre_login'],
+            'contrasena' => $params['contrasena'],
+            'rol_id' => Rol::where('nombre', 'Empresa')->first()->id
+         ];
+         $Usuario=UsuarioService::guardar($paramsUs);
+
 
          # guardar empresa
          $Empresa = new Empresa();

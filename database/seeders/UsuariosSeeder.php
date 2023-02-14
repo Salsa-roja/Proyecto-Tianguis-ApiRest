@@ -17,9 +17,10 @@ class UsuariosSeeder extends Seeder
     {
         $usuarios = [
             [
-                'nombres' => 'Administrador',
+                'nombres' => 'Administrador General',
                 'ape_paterno' => '',
                 'ape_materno' => '',
+                'nombre_login' => 'admin1',
                 'correo' => 'admin@admin.com',
                 'contrasena' => password_hash('123456789', PASSWORD_BCRYPT),
                 'rol_id' => Rol::where('nombre', 'Administrador')->first()->id

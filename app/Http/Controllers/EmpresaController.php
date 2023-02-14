@@ -47,6 +47,7 @@ class EmpresaController extends Controller
                 'contr_discapacitados',
                 'contr_antecedentes',
                 'contr_adultos',
+                'nombre_login' => 'required',
                 'nombre_rh' => 'required',
                 'correo_rh' => 'required',
                 'contrasena' => 'required',

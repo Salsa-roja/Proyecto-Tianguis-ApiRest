@@ -44,7 +44,7 @@ class SolicitanteController extends Controller
                 'edad' => 'required',
                 'curp' => 'required',
                 'telefono' => 'required',
-                'correo' => 'required',
+                'nombre_login' => 'required',
                 'contrasena' => 'required',
                 'c_numero' => 'required',
                 'c_postal' => 'required',
