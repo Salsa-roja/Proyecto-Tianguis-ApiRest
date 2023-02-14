@@ -45,6 +45,10 @@ class RolesSeeder extends Seeder
                         'permiso' => 'UsuariosMenu'
                     ],
                     [
+                        'nombre' => 'Formulario de Usuarios',
+                        'permiso' => 'UsuariosForm'
+                    ],
+                    [
                         'nombre' => 'Formulario de empresa',
                         'permiso' => 'EmpresasForm'
                     ],
@@ -97,6 +101,10 @@ class RolesSeeder extends Seeder
                         'permiso' => 'EmpresasModule'
                     ],
                     [
+                        'nombre' => 'Formulario de empresa',
+                        'permiso' => 'EmpresasForm'
+                    ],
+                    [
                         'nombre' => 'Modulo de vacantes',
                         'permiso' => 'VacantesModule'
                     ],
@@ -111,6 +119,10 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Opcion de menu Usuarios',
                         'permiso' => 'UsuariosMenu'
+                    ],
+                    [
+                        'nombre' => 'Formulario de Usuarios',
+                        'permiso' => 'UsuariosForm'
                     ],
                     [
                         'nombre' => 'Perfil de Empresa',

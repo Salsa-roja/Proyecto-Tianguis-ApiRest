@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Dto\ParseDTO;
 use App\Dto\UsuarioListDTO;
+use App\Dto\UsuarioEmpresaListDTO;
 use App\Models\Usuarios;
 use App\Models\UsuariosEmpresas;
 use App\Models\Rol;
@@ -15,11 +16,13 @@ abstract class UsuarioService
    public static function listado($auth){
       try {
 
-         if($auth->rol == 1){
+         if($auth->rol == 'Administrador'){         
             $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->get();
             $usuarios = ParseDTO::list($usuariosdb, UsuarioListDTO::class);
          }else{
-            $usuarios = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
+            $usuariosdb = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
+            $usuarios = ParseDTO::list($usuariosdb, UsuarioEmpresaListDTO::class);
+            //$usuarios = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
 
          }
          return $usuarios;

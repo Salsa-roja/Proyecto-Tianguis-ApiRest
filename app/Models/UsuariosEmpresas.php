@@ -19,7 +19,7 @@ class UsuariosEmpresas extends Model
     ];
 
     public function rel_usuarios(){
-        return $this->hasMany(Usuarios::class,'id','id_usuario');
+        return $this->hasOne(Usuarios::class,'id','id_usuario');
     }
 
     public function rel_empresas(){

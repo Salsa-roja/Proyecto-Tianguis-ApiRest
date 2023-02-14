@@ -7,15 +7,12 @@ $router->get('/', function () use ($router) {
 });
 
 # Descarga de archivos
-$router->get('/dwl/solicitantes/{idSolicitante}', 'SolicitanteController@descarga_cv');
-$router->get('/dwl/empresas/{idEmpresa}/{archivo}', 'EmpresaController@descarga_archivo');
-
-
-/* $router->group(['prefix' => 'dwl'], function () use ($router) {
+$router->group(['prefix' => 'dwl'], function () use ($router) {
     $router->get('/solicitantes/{idSolicitante}', 'SolicitanteController@descarga_cv');
-}); */
+    $router->get('/empresas/{idEmpresa}/{archivo}', 'EmpresaController@descarga_archivo');
+});
 
-# Rutas para sistema admin (valida autenticacion de uuario)
+# Rutas para sistema admin (valida autenticacion de usuario)
 $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'vacantes'], function () use ($router) {

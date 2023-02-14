@@ -59,7 +59,7 @@ abstract class EmpresaService
          $Empresa->nombre_comercial = $params['nombre_comercial'];
          $Empresa->razon_social = $params['razon_social'];
          $Empresa->rfc = $params['rfc'];
-         $Empresa->descripcion = $params['descripcion'];
+         $Empresa->descripcion = $params['descripcion']; 
          $Empresa->numero_empleados = $params['numero_empleados'];
 
          $Empresa->constancia_sit_fiscal = $fieldsArchivo['constancia_sit_fiscal'];
