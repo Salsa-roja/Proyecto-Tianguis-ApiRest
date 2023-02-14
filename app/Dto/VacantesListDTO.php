@@ -19,7 +19,7 @@ class VacantesListDTO
     public $turnos_laborales;
     public $nivel_educativo;
     public $sueldo;
-    public $direccion;
+    public $calle;
     public $colonia;
     public $código_postal;
     public $ciudad;
@@ -28,12 +28,14 @@ class VacantesListDTO
     public $industria;
     public $tipo_de_puesto;
     public $habilidades_requeridas;
+    public $lat;
+    public $lng;
 
     public function __construct(Vacantes $obj)
     {
         $this->id = $obj->id;
         $this->id_empresa = $obj->id_empresa;
-        $this->vinculadoId=$obj->vinculado;
+        $this->vinculadoId = $obj->vinculado;
         $this->nombre_comercial = $obj->empresa->nombre_comercial;
         $this->vacante = $obj->vacante;
         $this->descripcion = $obj->descripcion;
@@ -44,7 +46,7 @@ class VacantesListDTO
         $this->turnos_laborales = $obj->tabla_turnos_laborales->turnos;
         $this->nivel_educativo = $obj->tabla_nivel_educativo->titulo;
         $this->sueldo = $obj->sueldo;
-        $this->direccion = $obj->direccion;
+        $this->calle = $obj->calle;
         $this->colonia = $obj->colonia;
         $this->código_postal = $obj->código_postal;
         $this->ciudad = $obj->ciudad;
@@ -53,5 +55,7 @@ class VacantesListDTO
         $this->industria = $obj->industria;
         $this->tipo_de_puesto = $obj->tipo_de_puesto;
         $this->habilidades_requeridas = $obj->habilidades_requeridas;
+        $this->lat = $obj->lat;
+        $this->lng = $obj->lng;
     }
 }

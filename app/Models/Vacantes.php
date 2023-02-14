@@ -21,7 +21,7 @@ class Vacantes extends Model
         'id_turnos_laborales',
         'id_nivel_educativo',
         'sueldo',
-        'direccion',
+        'calle',
         'colonia',
         'código_postal',
         'ciudad',
@@ -30,6 +30,8 @@ class Vacantes extends Model
         'industria',
         'tipo_de_puesto',
         'habilidades_requeridas',
+        'lat',
+        'lng'
     ];
     public function tabla_turnos_laborales()
     {

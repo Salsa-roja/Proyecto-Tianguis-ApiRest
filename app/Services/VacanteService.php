@@ -245,7 +245,7 @@ abstract class VacanteService
                 'id_turnos_laborales' => $request['turnos_laborales'],
                 'id_nivel_educativo' => $request['nivel_educativo'],
                 'sueldo' => $request['sueldo'],
-                'direccion' => $request['direccion'],
+                'calle' => $request['calle'],
                 'colonia' => $request['colonia'],
                 'código_postal' => $request['código_postal'],
                 'ciudad' => $request['ciudad'],
@@ -254,8 +254,8 @@ abstract class VacanteService
                 'industria' => $request['industria'],
                 'tipo_de_puesto' => $request['tipo_de_puesto'],
                 'habilidades_requeridas' => $request['habilidades_requeridas'],
-                'lat' => '24.34445',
-                'lng' => '21.213'
+                'lat' => $request['lat'],
+                'lng' => $request['lng']
             ];
             if ($request['id'] > 0) {
                 $datos =$datos+ ['id' => $request['id'],'id_empresa' => $request['id_empresa']
