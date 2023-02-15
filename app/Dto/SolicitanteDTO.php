@@ -33,6 +33,10 @@ class SolicitanteDTO
    public $file;
    public $file64;
    public $nombre_completo;
+   public $nombres;
+   public $ape_materno;
+   public $ape_paterno;
+   public $nombre_login;
    public $correo;
 
    public function __construct(Solicitante $obj)
@@ -67,6 +71,10 @@ class SolicitanteDTO
 
       if(isset($obj->rel_usuarios)){
          $this->nombre_completo = $obj->rel_usuarios->nombre_completo;
+         $this->nombres = $obj->rel_usuarios->nombres;
+         $this->ape_materno = $obj->rel_usuarios->ape_materno;
+         $this->ape_paterno = $obj->rel_usuarios->ape_paterno;
+         $this->nombre_login = $obj->rel_usuarios->nombre_login;
          $this->correo = $obj->rel_usuarios->correo;
       }
    

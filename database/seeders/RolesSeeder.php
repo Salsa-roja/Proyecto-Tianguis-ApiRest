@@ -83,8 +83,8 @@ class RolesSeeder extends Seeder
                         'permiso' => 'SolicitantesPerfil'
                     ],
                     [
-                        'nombre' => 'Formulario de solicitante',
-                        'permiso' => 'SolicitantesForm'
+                        'nombre' => 'Editar perfil solicitante',
+                        'permiso' => 'SolicitantesPerfilForm'
                     ],
                     [
                         'nombre' => 'Listado de vacantes',

@@ -60,6 +60,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/c_postales', 'SolicitanteController@getCPs');
         $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
         $router->get('/detalle/{idSolicitante}', 'SolicitanteController@searchById');
+        $router->post('/editar', 'SolicitanteController@editar');
     });
     $router->group(['prefix' => 'registro-solicitante'], function () use ($router) {
         $router->post('/guardar', 'SolicitanteController@guardar');

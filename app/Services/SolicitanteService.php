@@ -65,7 +65,7 @@ abstract class SolicitanteService
 
          # guardar usuario
          $paramsUs=[
-            'nombres' => $params['nombre'],
+            'nombres' => $params['nombres'],
             'ape_paterno' => $params['ape_paterno'],
             'ape_materno' => $params['ape_materno'],
             'correo' => $params['correo'],
@@ -76,33 +76,80 @@ abstract class SolicitanteService
          $itemUs=UsuarioService::guardar($paramsUs);
 
          # guardar solicitante
-         $itemDB = new Solicitante();
-         $itemDB->id_usuario = $itemUs->id; 
-         $itemDB->edad = $params['edad'];
-         $itemDB->curp = $params['curp'];
-         $itemDB->telefono = $params['telefono'];
-         $itemDB->c_numero = $params['c_numero'];
-         $itemDB->c_postal = $params['c_postal'];
-         $itemDB->id_colonia = $params['id_colonia'];
-         $itemDB->ciudad = $params['ciudad'];
-         $itemDB->descr_profesional = $params['descr_profesional'];
-         $itemDB->sueldo_deseado = $params['sueldo_deseado'];
-         $itemDB->area_desempeno = $params['area_desempeno'];
-         $itemDB->posicion_interes = $params['posicion_interes'];
-         $itemDB->industria_interes = $params['industria_interes'];
-         $itemDB->habilidades = $params['habilidades'];
-         $itemDB->exp_profesional = $params['exp_profesional'];
-         $itemDB->formacion_educativa = $params['formacion_educativa'];
-         $itemDB->disc_lenguaje = $params['disc_lenguaje'];
-         $itemDB->disc_motriz = $params['disc_motriz'];
-         $itemDB->disc_visual = $params['disc_visual'];
-         $itemDB->disc_mental = $params['disc_mental'];
-         $itemDB->disc_auditiva = $params['disc_auditiva'];
-         $itemDB->lugar_atencion = $params['lugar_atencion'];
-         $itemDB->curriculum = $fieldArchivo;
-         $itemDB->save();
+         $Solicitante = new Solicitante();
+         $Solicitante->id_usuario = $itemUs->id; 
+         $Solicitante->edad = $params['edad'];
+         $Solicitante->curp = $params['curp'];
+         $Solicitante->telefono = $params['telefono'];
+         $Solicitante->c_numero = $params['c_numero'];
+         $Solicitante->c_postal = $params['c_postal'];
+         $Solicitante->id_colonia = $params['id_colonia'];
+         $Solicitante->ciudad = $params['ciudad'];
+         $Solicitante->descr_profesional = $params['descr_profesional'];
+         $Solicitante->sueldo_deseado = $params['sueldo_deseado'];
+         $Solicitante->area_desempeno = $params['area_desempeno'];
+         $Solicitante->posicion_interes = $params['posicion_interes'];
+         $Solicitante->industria_interes = $params['industria_interes'];
+         $Solicitante->habilidades = $params['habilidades'];
+         $Solicitante->exp_profesional = $params['exp_profesional'];
+         $Solicitante->formacion_educativa = $params['formacion_educativa'];
+         $Solicitante->disc_lenguaje = $params['disc_lenguaje'];
+         $Solicitante->disc_motriz = $params['disc_motriz'];
+         $Solicitante->disc_visual = $params['disc_visual'];
+         $Solicitante->disc_mental = $params['disc_mental'];
+         $Solicitante->disc_auditiva = $params['disc_auditiva'];
+         $Solicitante->lugar_atencion = $params['lugar_atencion'];
+         $Solicitante->curriculum = $fieldArchivo;
+         $Solicitante->save();
 
-         return $itemDB;
+         return $Solicitante;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function editar($params){
+      try {
+
+         # obtener info de solicitante
+         $Solicitante = SolicitanteService::searchById($params['id'],false);
+
+         # editar usuario
+         $paramsUs=[
+            'nombres' => $params['nombres'],
+            'ape_paterno' => $params['ape_paterno'],
+            'ape_materno' => $params['ape_materno'],
+            'correo' => $params['correo'],
+            'nombre_login' => $params['nombre_login']
+         ];
+         $itemUs=UsuarioService::editar($Solicitante->id_usuario,$paramsUs);
+         
+         # editar solicitante
+         $Solicitante->id_usuario = $itemUs->id; 
+         $Solicitante->edad = $params['edad'];
+         $Solicitante->curp = $params['curp'];
+         $Solicitante->telefono = $params['telefono'];
+         $Solicitante->c_numero = $params['c_numero'];
+         $Solicitante->c_postal = $params['c_postal'];
+         $Solicitante->id_colonia = $params['id_colonia'];
+         $Solicitante->ciudad = $params['ciudad'];
+         $Solicitante->descr_profesional = $params['descr_profesional'];
+         $Solicitante->sueldo_deseado = $params['sueldo_deseado'];
+         $Solicitante->area_desempeno = $params['area_desempeno'];
+         $Solicitante->posicion_interes = $params['posicion_interes'];
+         $Solicitante->industria_interes = $params['industria_interes'];
+         $Solicitante->habilidades = $params['habilidades'];
+         $Solicitante->exp_profesional = $params['exp_profesional'];
+         $Solicitante->formacion_educativa = $params['formacion_educativa'];
+         $Solicitante->disc_lenguaje = $params['disc_lenguaje'];
+         $Solicitante->disc_motriz = $params['disc_motriz'];
+         $Solicitante->disc_visual = $params['disc_visual'];
+         $Solicitante->disc_mental = $params['disc_mental'];
+         $Solicitante->disc_auditiva = $params['disc_auditiva'];
+         $Solicitante->lugar_atencion = $params['lugar_atencion'];
+         $Solicitante->save();
+
+         return $Solicitante;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }

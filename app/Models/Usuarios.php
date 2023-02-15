@@ -16,6 +16,7 @@ class Usuarios extends Model{
         'nombres',
         'ape_paterno',
         'ape_materno',
+        'nombre_login',
         'correo',
         'contrasena',
         'activo',

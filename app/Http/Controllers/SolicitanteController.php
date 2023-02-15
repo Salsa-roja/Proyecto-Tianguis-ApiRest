@@ -55,7 +55,7 @@ class SolicitanteController extends Controller
     public function guardar(Request $request){
         try{
             $this->validate($request, [
-                'nombre' => 'required',
+                'nombres' => 'required',
                 'ape_paterno' => 'required',
                 'ape_materno' => 'required',
                 'edad' => 'required',
@@ -109,6 +109,53 @@ class SolicitanteController extends Controller
             }
             
             $this->data = SolicitanteService::guardar($params,$fieldArchivo);
+            $this->status=true;
+
+            return $this->jsonResponse();
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Editar solicitante
+     */
+    public function editar(Request $request){
+        try{
+            $this->validate($request, [
+                'id' => 'required',
+                'nombres' => 'required',
+                'ape_paterno' => 'required',
+                'ape_materno' => 'required',
+                'edad' => 'required',
+                'curp' => 'required',
+                'telefono' => 'required',
+                'nombre_login' => 'required',
+                'correo',
+                'c_numero' => 'required',
+                'c_postal' => 'required',
+                'id_colonia' => 'required',
+                'ciudad',
+                'descr_profesional' => 'required',
+                'sueldo_deseado' => 'required',
+                'area_desempeno',
+                'posicion_interes',
+                'industria_interes',
+                'habilidades',
+                'exp_profesional',
+                'formacion_educativa',
+                'disc_lenguaje',
+                'disc_motriz',
+                'disc_visual',
+                'disc_mental',
+                'disc_auditiva',
+                'lugar_atencion' => 'required'
+            ]);
+
+            $params = $request->all();
+            $params["request"] = $request;
+            
+            $this->data = SolicitanteService::editar($params);
             $this->status=true;
 
             return $this->jsonResponse();

@@ -31,6 +31,23 @@ abstract class UsuarioService
       }
    }
 
+   /**
+    * Buscar usuario por id
+    **/
+    public static function searchById($id,$dto=true){
+      try {
+         $item = Usuarios::find($id);
+         if($dto){
+            $itemDTO = ParseDTO::obj($item, UsuarioListDTO::class);
+            return $itemDTO;
+         }else{
+            return $item;
+         }
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    public static function guardar($params){
       try {
 
@@ -46,6 +63,23 @@ abstract class UsuarioService
          $itemUs->save();
 
          return $itemUs;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function editar($idUsuario,$params){
+      try {
+
+         $Usuario = UsuarioService::searchById($idUsuario,false);
+         $Usuario->nombres = $params['nombres'];
+         $Usuario->ape_paterno = $params['ape_paterno'];
+         $Usuario->ape_materno = $params['ape_materno'];
+         $Usuario->correo = $params['correo'];
+         $Usuario->nombre_login = $params['nombre_login'];
+         $Usuario->save();
+
+         return $Usuario;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
