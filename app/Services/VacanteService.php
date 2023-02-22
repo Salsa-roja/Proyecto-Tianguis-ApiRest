@@ -6,8 +6,8 @@ use App\Models\Vacantes;
 use App\Dto\ParseDTO;
 use App\Dto\SolicitudDto;
 use App\Dto\VacantesListDTO;
-use App\Dto\VacantesDBListDTO;
-use App\Models\Usuarios;
+use App\Dto\EstatusPostulacionDto;
+use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
 use App\Models\UsuariosEmpresas;
 use Faker\Core\Number;
@@ -177,6 +177,17 @@ abstract class VacanteService
         }
     } //...getSolicitudesVacante
 
+    public static function updateEstatusSolisitud(array $params)
+    {
+        try {
+            $solicitudes = VacanteSolicitante::find($params['idVacante']);
+            $solicitudes->id_estatus=$params['idEstatus'];
+            $solicitudes->save();   
+            return $solicitudes;
+        } catch (\Exception $ex) {
+            return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
+        }
+    }
     /** 
      * Vincular vacante con solicitante
      */
@@ -258,7 +269,8 @@ abstract class VacanteService
                 'lng' => $request['lng']
             ];
             if ($request['id'] > 0) {
-                $datos =$datos+ ['id' => $request['id'],'id_empresa' => $request['id_empresa']
+                $datos = $datos + [
+                    'id' => $request['id'], 'id_empresa' => $request['id_empresa']
                 ];
                 $Vacantes = Vacantes::where('id', $request['id'])->first();
                 if ($Vacantes) {
@@ -267,13 +279,23 @@ abstract class VacanteService
                 }
             } else {
                 $id_empresa = UsuariosEmpresas::where('id_usuario', $params['request']->auth->id)->first()->id_empresa;
-                $datos =$datos+['id_empresa' => $id_empresa];
-                    $Vacantes = Vacantes::create($datos);
+                $datos = $datos + ['id_empresa' => $id_empresa];
+                $Vacantes = Vacantes::create($datos);
                 $Vacantes->save();
             }
             return response()->json($Vacantes, Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al registrar el usuario', $ex->getMessage()], 400);
+        }
+    }
+    public static function getEstatusPostulacion()
+    {
+        try {
+            $niveEduldb = Estatus_postulacion::all();
+            $nivelEdu = ParseDTO::list($niveEduldb, EstatusPostulacionDto::class);
+            return $nivelEdu;
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage(), 500);
         }
     }
 }

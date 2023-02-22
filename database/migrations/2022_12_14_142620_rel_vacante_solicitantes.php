@@ -11,11 +11,11 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up() 
+    public function up()
     {
         Schema::create('relVacanteSolicitante', function (Blueprint $table) {
             $table->id();
-           
+
             $table->integer('id_vacante')->unsigned();
             $table->foreign('id_vacante')->references('id')->on('vacantes')
                 ->onDelete('cascade')->onUpdate('cascade');
@@ -23,6 +23,9 @@ return new class extends Migration
             $table->integer('id_solicitante')->unsigned();
             $table->foreign('id_solicitante')->references('id')->on('solicitantes')
                 ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->integer("id_estatus");
+            $table->foreign('id_estatus')->references('id')->on('estatus_postulacion');
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';

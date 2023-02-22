@@ -6,6 +6,7 @@ use App\Models\VacanteSolicitante;
 
 class SolicitudDto
 {
+   public $id;
    public $id_solicitante;
    public $id_vacante;
    public $id_usuario;
@@ -37,18 +38,23 @@ class SolicitudDto
    public $correo;
    public $file;
    public $file64;
+   public $id_estatus;
+   public $estatus;
+
 
 
 
    public function __construct(VacanteSolicitante $obj)
    {
-
+      $this->id = $obj->id;
       $this->id_solicitante = $obj->id_solicitante;
       $this->id_vacante = $obj->id_vacante;
       $this->status_solicitud = $obj->activo;
       $this->fecha_solicitud = $obj->created_at;
 
       if(isset($obj->rel_solicitante)){
+         $this->id_estatus = $obj->tabla_estatus->id;
+         $this->estatus = $obj->tabla_estatus->estatus;
          $this->id_usuario = $obj->rel_solicitante->id_usuario;
          $this->edad = $obj->rel_solicitante->edad;
          $this->curp = $obj->rel_solicitante->curp;

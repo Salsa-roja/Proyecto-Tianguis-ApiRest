@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class VacanteController extends Controller
 {
-   
+
     private $request;
 
     public function __construct(Request $request)
@@ -22,7 +22,7 @@ class VacanteController extends Controller
         try {
             $id_empresa = $this->request->auth->id_empresa;
             $datos = VacanteService::getVacantes($id_empresa);
-            return response()->json( ['data'=>$datos,'user'=>$this->request->auth], 200);
+            return response()->json(['data' => $datos, 'user' => $this->request->auth], 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
@@ -38,7 +38,7 @@ class VacanteController extends Controller
         }
     }
 
-   
+
     public function searchId()
     {
         try {
@@ -59,7 +59,7 @@ class VacanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
-    
+
     public function vacanteMasLejana()
     {
         try {
@@ -69,27 +69,40 @@ class VacanteController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+
     public function filtro()
     {
         try {
             $params["request"] = $this->request;
-            $filtro = VacanteService::filtro($this->request->all(),$params);
+            $filtro = VacanteService::filtro($this->request->all(), $params);
             return response()->json($filtro, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
 
-    public function getSolicitudesVacante($idVacante){
+    public function getSolicitudesVacante($idVacante)
+    {
         try {
             $response = VacanteService::getSolicitudesVacante($idVacante);
             return response()->json($response, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
-    }//...getSolicitudesVacante
+    } //...getSolicitudesVacante
 
-    public function vincular(Request $request){
+    public function updateEstatusSolisitud(Request $request)
+    {
+        try {
+            // $params["request"] = $request;
+            $response = VacanteService::updateEstatusSolisitud($request->all());
+            return response()->json($response, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+    public function vincular(Request $request)
+    {
         try {
             $this->validate($request, [
                 'idVacante' => 'required'
@@ -101,16 +114,26 @@ class VacanteController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
-    }//...vincular
+    } //...vincular
+
+    public function getEstatusPostulacion()
+    {
+        try {
+            $datos = VacanteService::getEstatusPostulacion();
+            return response()->json($datos, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
 
     public function save(Request $request)
     {
         try {
             $params["request"] = $request;
-            $datos = VacanteService::guardar($request->all(),$params);
+            $datos = VacanteService::guardar($request->all(), $params);
             return response()->json($datos, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage(), 'msg' => 'Algo salió mal.'], 500);
         }
     }
-}           
+}

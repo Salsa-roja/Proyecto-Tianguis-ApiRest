@@ -76,7 +76,9 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
-        $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
+        $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');      
+        $router->post('/updateEstatusSolisitud', 'VacanteController@updateEstatusSolisitud');              
+        $router->get('/getEstatusPostulacion', 'VacanteController@getEstatusPostulacion');          
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
     });
 

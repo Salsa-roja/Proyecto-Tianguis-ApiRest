@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EmpresasSeeder::class);
         $this->call(Nivel_educativo::class);
         $this->call(Turnos_laborales::class);
+        $this->call(Estatus_postulacion::class);
         $this->call(SolicitantesSeeder::class);
         $this->call(Vacante::class);
         $this->call(Rel_vacante_solicitantes::class);

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('id_empresa');
             $table->string("vacante", 255);
             $table->string("descripcion", 255);
-            $table->string("categorías_especiales", 255);       
+            $table->string("categorías_especiales", 255);
             $table->string("dias_laborales")->default(1);
             $table->integer("id_turnos_laborales");
             $table->integer("id_nivel_educativo");
@@ -32,8 +32,8 @@ return new class extends Migration
             $table->string("industria", 255);
             $table->string("tipo_de_puesto", 255);
             $table->string("habilidades_requeridas", 255);
-            $table->decimal("lat", 23,14)->nullable();
-            $table->decimal("lng", 23,14)->nullable();
+            $table->decimal("lat", 23, 14)->nullable();
+            $table->decimal("lng", 23, 14)->nullable();
             $table->boolean("activo")->default(1);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
@@ -43,7 +43,6 @@ return new class extends Migration
             $table->foreign('id_turnos_laborales')->references('id')->on('turnos_laborales');
             $table->foreign('id_nivel_educativo')->references('id')->on('nivel_educativo');
             $table->foreign('id_empresa')->references('id')->on('empresas');
-
         });
     }
 
