@@ -26,6 +26,7 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
     $router->group(['prefix' => 'solicitantes'], function () use ($router) {
         $router->post('/guardarCv', 'SolicitanteController@guardarCv');
         $router->get('/borrarCv/{idSolicitante}', 'SolicitanteController@borrarCv');
+        $router->post('/editar', 'SolicitanteController@editar');
     });
 
     $router->group(['prefix' => 'empresas'], function () use ($router) {
@@ -33,7 +34,7 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->get('/detalle/{idSolicitante}', 'EmpresaController@searchById');
         $router->post('/guardarDocto', 'EmpresaController@guardarDocto');
         $router->get('/borrarDocto/{idEmpresa}/{archivo}', 'EmpresaController@borrarDocto');
-
+        $router->post('/editar', 'EmpresaController@editar');
     });
 
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
@@ -60,7 +61,6 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/c_postales', 'SolicitanteController@getCPs');
         $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
         $router->get('/detalle/{idSolicitante}', 'SolicitanteController@searchById');
-        $router->post('/editar', 'SolicitanteController@editar');
     });
     $router->group(['prefix' => 'registro-solicitante'], function () use ($router) {
         $router->post('/guardar', 'SolicitanteController@guardar');

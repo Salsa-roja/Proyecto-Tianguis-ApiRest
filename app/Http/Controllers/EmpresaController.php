@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\EmpresaService;
 use App\Services\ArchivosService;
+use App\Services\UsuarioService;
 
 class EmpresaController extends Controller
 {
@@ -32,7 +33,9 @@ class EmpresaController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
-
+    /** 
+     * Guardar Empresa
+     */
     public function guardar(Request $request){
         try{
             $this->validate($request, [
@@ -56,6 +59,16 @@ class EmpresaController extends Controller
             $params = $request->all();
             $params["request"] = $request;
             $fieldsArchivo=[];
+
+            if( UsuarioService::existeByUsername($params['nombre_login']) ){                
+                $this->msg='El nombre de usuario ya está en uso, utiliza otro';
+                return $this->jsonResponse();
+            }
+            #valida si el solicitante ya existe
+            if( EmpresaService::existeByRFC($params['rfc']) ){                
+                $this->msg='El RFC ya está en uso, por favor verifica';
+                return $this->jsonResponse();
+            }
 
             #guardar archivos con prefijo alias
             if($request->hasFile('constancia_sit_fiscal')){
@@ -81,8 +94,42 @@ class EmpresaController extends Controller
                 );
             }
 
-            $items = EmpresaService::guardar($params,$fieldsArchivo);
-            return response()->json($items, 200);
+            $this->data = EmpresaService::guardar($params,$fieldsArchivo);
+            $this->status=true;
+
+            return $this->jsonResponse();
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Editar Empresa
+     */
+
+     public function editar(Request $request){
+        try{
+            $this->validate($request, [
+                'id' => 'required',
+                'nombre_comercial' => 'required',
+                'razon_social' => 'required',
+                'rfc' => 'required',
+                'descripcion' => 'required',
+                'numero_empleados' => 'required',
+                'contr_discapacitados',
+                'contr_antecedentes',
+                'contr_adultos',
+                'nombre_rh' => 'required',
+                'correo_rh' => 'required',
+                'telefono_rh' => 'required'
+            ]);
+            $params = $request->all();
+            $params["request"] = $request;
+
+            $this->data = EmpresaService::editar($params);
+            $this->status=true;
+
+            return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }

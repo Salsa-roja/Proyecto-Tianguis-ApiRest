@@ -8,26 +8,10 @@ use App\Services\ArchivosService;
 use App\Services\UsuarioService;
 class SolicitanteController extends Controller
 {
-    private $statusHttp; //200:ok, 201: created, 400:error en solicitud, 401:no autorizado
-    private $msg;
-    private $data;
-    private $status;
-
-
     public function __construct()
     {
-        $this->msg='';
-        $this->data=[];
-        $this->status=false;
-    } 
 
-    private function jsonResponse(){
-       return response()->json([
-            'status'=>$this->status,
-            'msg'=>$this->msg,
-            'data'=>$this->data
-        ], 200);
-    }
+    } 
 
     public $storage="solicitantes";
 
@@ -90,7 +74,7 @@ class SolicitanteController extends Controller
 
             #valida si el usuario ya existe
             if( UsuarioService::existeByUsername($params['nombre_login']) ){                
-                $this->msg='El nombre de usuario ya esta en uso, utiliza otro';
+                $this->msg='El nombre de usuario ya está en uso, utiliza otro';
                 return $this->jsonResponse();
             }
             #valida si el solicitante ya existe

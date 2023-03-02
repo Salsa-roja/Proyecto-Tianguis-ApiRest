@@ -90,6 +90,32 @@ abstract class EmpresaService
       }
    }
 
+   public static function editar($params){
+      try {
+
+         #obtener info de la empresa
+         $Empresa = EmpresaService::searchById($params['id'],false);
+
+         # guardar empresa
+         $Empresa->nombre_comercial = $params['nombre_comercial'];
+         $Empresa->razon_social = $params['razon_social'];
+         $Empresa->rfc = $params['rfc'];
+         $Empresa->descripcion = $params['descripcion']; 
+         $Empresa->numero_empleados = $params['numero_empleados'];
+         $Empresa->contr_discapacitados = $params['contr_discapacitados'];
+         $Empresa->contr_antecedentes = $params['contr_antecedentes'];
+         $Empresa->contr_adultos = $params['contr_adultos'];
+         $Empresa->nombre_rh = $params['nombre_rh'];
+         $Empresa->correo_rh = $params['correo_rh'];
+         $Empresa->telefono_rh = $params['telefono_rh'];
+         $Empresa->save();
+
+         return $Empresa;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
    public static function guardarDocto($params,$fieldArchivo){
       try {
          $campo = $params['inputName'];
@@ -122,6 +148,14 @@ abstract class EmpresaService
    public static function getColonias($cpostal){
       try {
          return DB::table('cat_c_postal_colonias')->select(['id','asentamiento_nombre','ciudad'])->where('cp',$cpostal)->get();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function existeByRFC($rfc){
+      try {
+         return Empresa::where('rfc',$rfc)->exists();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
