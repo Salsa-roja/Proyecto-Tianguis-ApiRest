@@ -6,7 +6,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    public $statusHttp; //200:ok, 201: created, 400:error en solicitud, 401:no autorizado
+    public $statusHttp=200; //200:ok, 201: created, 400:error en solicitud, 401:no autorizado
     public $msg;
     public $data;
     public $status;
@@ -22,7 +22,8 @@ class Controller extends BaseController
        return response()->json([
             'status'=>$this->status,
             'msg'=>$this->msg,
-            'data'=>$this->data
-        ], 200);
+            'data'=>$this->data,
+            'statusHttp'=>$this->statusHttp
+        ], $this->statusHttp);
     }
 }

@@ -20,7 +20,6 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->delete('/eliminar/{id}', 'VacanteController@inhabilitar');
         $router->post('/vincular', 'VacanteController@vincular');
         $router->post('/guarda', 'VacanteController@save');
-
     });
 
     $router->group(['prefix' => 'solicitantes'], function () use ($router) {
@@ -39,6 +38,9 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
+        $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
+        $router->post('/guardar','UsuarioController@guardar');
+        $router->post('/editar','UsuarioController@editar');
     });
 
 });

@@ -43,14 +43,6 @@ class Usuarios extends Model{
      */
     public function usuario_empresa(){
         return $this->hasOne(UsuariosEmpresas::class,'id_usuario','id');
-        /* return $this->hasOneThrough(
-                                    Empresa::class,
-                                    UsuariosEmpresas::class,
-                                    'id_usuario',// Foreign key on relUsuarioEmpresa table...
-                                    'id_empresa',// Foreign key on empresas table...
-                                    'id',// Local key on usuarios table...
-                                    'id'// Local key on relUsuarioEmpresa table...
-                                ); */
     }
 
     /**
