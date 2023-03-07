@@ -29,11 +29,16 @@ return new class extends Migration
             $table->string('nombre_rh');
             $table->string('correo_rh');
             $table->string('telefono_rh');
+            $table->integer("id_estatus");
+            $table->integer("No_de_alertas")->default(0);
             $table->boolean("activo")->default(1);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             
             $table->timestamps();
+           
+            $table->foreign('id_estatus')->references('id')->on('estatus_empresa');
+
         });
     }
 

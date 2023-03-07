@@ -6,6 +6,10 @@ namespace App\Http\Controllers;
 use App\Services\VacanteService;
 use Illuminate\Http\Request;
 //use PDF;
+use App\Models\VacanteSolicitante;
+use App\Dto\ParseDTO;
+use App\Dto\SolicitudDto;
+use DateTime;
 
 class VacanteController extends Controller
 {
@@ -126,6 +130,13 @@ class VacanteController extends Controller
         }
     }
 
+    public function test()
+    {
+        // $fecha_entrada = strtotime("19-11-2008 21:00:00");
+        $datos = VacanteService::test();
+        return $datos;
+    }
+    
     public function save(Request $request)
     {
         try {

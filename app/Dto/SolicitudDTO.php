@@ -7,9 +7,13 @@ use App\Models\VacanteSolicitante;
 class SolicitudDto
 {
    public $id;
+   public $id_Usuario_Empresa_Vacante = [];
    public $id_solicitante;
    public $id_vacante;
    public $id_usuario;
+   public $id_empresa;
+   public $vacante;
+   public $alertas_en_empresa;
    public $edad;
    public $curp;
    public $telefono;
@@ -40,7 +44,7 @@ class SolicitudDto
    public $file64;
    public $id_estatus;
    public $estatus;
-
+   public $Fecha_actualizacion;
 
 
 
@@ -49,10 +53,16 @@ class SolicitudDto
       $this->id = $obj->id;
       $this->id_solicitante = $obj->id_solicitante;
       $this->id_vacante = $obj->id_vacante;
+      $this->vacante = $obj->rel_vacantes->vacante;
+      $this->alertas_en_empresa = $obj->rel_vacantes->empresa->No_de_alertas;
       $this->status_solicitud = $obj->activo;
       $this->fecha_solicitud = $obj->created_at;
+      $this->Fecha_actualizacion = $obj->updated_at;
+      foreach ($obj->rel_vacantes->empresa->usuario_empresa as $usuarioEmpresa) {
+         array_push($this->id_Usuario_Empresa_Vacante, $usuarioEmpresa->id_usuario);
+      }
 
-      if(isset($obj->rel_solicitante)){
+      if (isset($obj->rel_solicitante)) {
          $this->id_estatus = $obj->tabla_estatus->id;
          $this->estatus = $obj->tabla_estatus->estatus;
          $this->id_usuario = $obj->rel_solicitante->id_usuario;
@@ -81,14 +91,12 @@ class SolicitudDto
          $this->file = $obj->rel_solicitante->file;
          $this->file64 = $obj->rel_solicitante->file64;
 
-         
-         
-         if(isset($obj->rel_solicitante->rel_usuarios)){
+
+
+         if (isset($obj->rel_solicitante->rel_usuarios)) {
             $this->nombre_completo = $obj->rel_solicitante->rel_usuarios->nombre_completo;
             $this->correo = $obj->rel_solicitante->rel_usuarios->correo;
          }
-
       }
-   
    }
 }

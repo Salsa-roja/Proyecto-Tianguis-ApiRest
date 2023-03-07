@@ -10,12 +10,14 @@ use App\Dto\EstatusPostulacionDto;
 use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
 use App\Models\UsuariosEmpresas;
+use App\Models\Empresa;
 use Faker\Core\Number;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use League\CommonMark\Node\Query;
 use Mockery\Undefined;
+use Carbon\Carbon;
 
 abstract class VacanteService
 {
@@ -181,8 +183,8 @@ abstract class VacanteService
     {
         try {
             $solicitudes = VacanteSolicitante::find($params['idVacante']);
-            $solicitudes->id_estatus=$params['idEstatus'];
-            $solicitudes->save();   
+            $solicitudes->id_estatus = $params['idEstatus'];
+            $solicitudes->save();
             return $solicitudes;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
@@ -286,6 +288,53 @@ abstract class VacanteService
             return response()->json($Vacantes, Response::HTTP_CREATED);
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al registrar el usuario', $ex->getMessage()], 400);
+        }
+    }
+    public static function test()
+    {
+        try {
+            $vacanteSoli = VacanteSolicitante::all();
+            $Dia_de_hoy = Carbon::now();
+            $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDto::class);
+
+            // return $solicitudesDTO;  
+
+            foreach ($solicitudesDTO as $solicitud) {
+                if ($solicitud->Fecha_actualizacion != null) {
+                    $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
+                    if ($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == 'visto') {
+                        foreach ($solicitud->id_Usuario_Empresa_Vacante as $id_empresa) {
+                            $data = array(
+                                'remitente' => null,
+                                'destinatario' => $id_empresa,
+                                'asunto' => '¡Actualiza tus postulaciones !',
+                                'cuerpo' => "Tienes una postulacion sin estatus actualizado desde hace 3 dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo,
+                                'titulo' => ''
+                            );
+                            CorreosService::guardarYEnviar($data);
+                        }
+                    }
+                    if ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == 'En proceso') {
+                        $vacanteSoliId = Empresa::find($solicitud->id);
+                        $vacanteSoliId->alertas_en_empresa=$vacanteSoliId->alertas_en_empresa+1;
+                        $vacanteSoliId->save(); 
+
+                        foreach ($solicitud->id_Usuario_Empresa_Vacante as $id_empresa) {
+                            $data = array(
+                                'remitente' => null,
+                                'destinatario' => $id_empresa,
+                                'asunto' => '¡Actualiza tus postulaciones !',
+                                'cuerpo' => "Tienes una postulacion sin estatus actualizado desde hace mas de 7 dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo,
+                                'titulo' => ''
+                            );
+                            CorreosService::guardarYEnviar($data);
+                           
+                        }
+                    }
+                }
+            }
+        } catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage(), 500);
         }
     }
     public static function getEstatusPostulacion()

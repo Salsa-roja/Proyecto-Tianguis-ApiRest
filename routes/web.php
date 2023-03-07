@@ -80,6 +80,8 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->post('/updateEstatusSolisitud', 'VacanteController@updateEstatusSolisitud');              
         $router->get('/getEstatusPostulacion', 'VacanteController@getEstatusPostulacion');          
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
+        $router->get('/test', 'VacanteController@test');
+
     });
 
     #correo

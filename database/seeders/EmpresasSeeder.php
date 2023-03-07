@@ -49,6 +49,7 @@ class EmpresasSeeder extends Seeder
          $Empresa->nombre_rh = "Diego Armando Maradonio Del piero López";
          $Empresa->correo_rh = "empresa@quierochamba.com";
          $Empresa->telefono_rh = "3121232222";
+         $Empresa->id_estatus = 1 ;
          $Empresa->save();
 
          # guardar relacion

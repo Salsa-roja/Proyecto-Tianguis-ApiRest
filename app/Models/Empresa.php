@@ -16,6 +16,7 @@ class Empresa extends Model
         'nombre_comercial',
         'razon_social',
         'rfc',
+        'No_de_alertas',
         'descripcion',
         'numero_empleados',
         'constancia_sit_fiscal',
@@ -26,7 +27,9 @@ class Empresa extends Model
         'contr_adultos',
         'nombre_rh',
         'correo_rh',
-        'telefono_rh'
+        'id_estatus',
+        'telefono_rh',
+        'estatus'
     ];
 
     protected $appends = ['files'];
