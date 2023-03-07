@@ -8,7 +8,7 @@ class UsuarioEmpresaListDto
 {
     public $id;
     public $id_empresa;
-    public $id_usuario;
+    public $id_relacion;
     public $nombreCompleto;
     public $nombres;
     public $ape_paterno;
@@ -21,9 +21,9 @@ class UsuarioEmpresaListDto
     public function __construct(UsuariosEmpresas $obj)
     {
 
-        $this->id = $obj->id;
+        $this->id = $obj->id_usuario;
         $this->id_empresa = $obj->id_empresa;
-        $this->id_usuario = $obj->id_usuario;
+        $this->id_relacion = $obj->id;
 
         if(isset($obj->rel_usuarios)){
             $this->nombres          = $obj->rel_usuarios->nombres;

@@ -15,6 +15,7 @@ class UsuarioListDto
     public $correo;
     public $idRol;
     public $rol;
+    public $idEmpresa;
 
 
     public function __construct(Usuarios $obj)
@@ -29,5 +30,7 @@ class UsuarioListDto
         $this->correo = $obj->correo;
         $this->idRol=$obj->rol->id;
         $this->rol = $obj->rol->nombre;
+        if(isset($obj->usuario_empresa))
+            $this->idEmpresa = $obj->usuario_empresa->id_empresa;
     }
 }

@@ -36,7 +36,7 @@ abstract class UsuarioService
     **/
     public static function searchById($id,$dto=true){
       try {
-         $item = Usuarios::find($id);
+         $item = Usuarios::with('usuario_empresa')->find($id);
          if($dto){
             $itemDTO = ParseDTO::obj($item, UsuarioListDTO::class);
             return $itemDTO;
@@ -50,8 +50,6 @@ abstract class UsuarioService
 
    public static function guardar($params){
       try {
-
-
          $itemUs = new Usuarios();
          $itemUs->nombres = $params['nombres'];
          $itemUs->ape_paterno = $params['ape_paterno'];
@@ -59,8 +57,29 @@ abstract class UsuarioService
          $itemUs->correo = $params['correo'];
          $itemUs->nombre_login = $params['nombre_login'];
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
-         $itemUs->rol_id = $params['rol_id'];
-         $itemUs->save();
+
+         switch ($params['request']->auth->rol) {
+            case 'Administrador':
+                  $itemUs->rol_id = Rol::where('nombre', 'Administrador')->first()->id;
+                  $itemUs->save();
+               break;
+            case 'Empresa':
+                  $itemUs->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
+                  $itemUs->save();
+                  # guardar relacion
+                  $UsrEmp = new UsuariosEmpresas();
+                  $UsrEmp->id_usuario = $itemUs->id;
+                  $UsrEmp->id_empresa = $params['request']->auth->id_empresa;
+                  $UsrEmp->save();
+               break;
+            case 'Solicitante':
+                  return false;
+               break;
+            default:
+                  $itemUs->rol_id = $params['rol_id'];
+                  $itemUs->save();
+               break;
+         }
 
          return $itemUs;
       } catch (\Exception $e) {
@@ -68,10 +87,10 @@ abstract class UsuarioService
       }
    }
 
-   public static function editar($idUsuario,$params){
+   public static function editar($params){
       try {
 
-         $Usuario = UsuarioService::searchById($idUsuario,false);
+         $Usuario = UsuarioService::searchById($params['id'],false);
          $Usuario->nombres = $params['nombres'];
          $Usuario->ape_paterno = $params['ape_paterno'];
          $Usuario->ape_materno = $params['ape_materno'];

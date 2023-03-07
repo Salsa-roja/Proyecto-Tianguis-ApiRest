@@ -129,6 +129,10 @@ class RolesSeeder extends Seeder
                         'permiso' => 'EmpresasPerfil'
                     ],
                     [
+                        'nombre' => 'Editar perfil empresa',
+                        'permiso' => 'EmpresasPerfilForm'
+                    ],
+                    [
                         'nombre' => 'Formulario de vacantes',
                         'permiso' => 'VacantesForm'
                     ],
