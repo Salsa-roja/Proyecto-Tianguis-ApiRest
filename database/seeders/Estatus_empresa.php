@@ -19,6 +19,9 @@ class Estatus_empresa extends Seeder
                 'estatus' => 'Activo'
             ],
             [
+                'estatus' => 'Inhabilitado'
+            ],
+            [
                 'estatus' => 'Rechazado'
             ],
             [
@@ -26,9 +29,6 @@ class Estatus_empresa extends Seeder
             ],
             [
                 'estatus' => 'En revicion'
-            ],
-            [
-                'estatus' => 'Inhabilitado'
             ]
         ]);
     }

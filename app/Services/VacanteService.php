@@ -303,7 +303,15 @@ abstract class VacanteService
                 if ($solicitud->Fecha_actualizacion != null) {
                     $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
                     if ($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == 'visto') {
-                        foreach ($solicitud->id_Usuario_Empresa_Vacante as $id_empresa) {
+                        $empresaSoliId = Empresa::find($solicitud->id_empresa);
+                        $alertas = $empresaSoliId->No_de_alertas;
+                        $empresaSoliId->No_de_alertas = $alertas + 1;
+                        if($empresaSoliId->No_de_alertas<=10){
+                            $empresaSoliId->activo=0;
+                        }
+                        $empresaSoliId->save();
+
+                        foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
                             $data = array(
                                 'remitente' => null,
                                 'destinatario' => $id_empresa,
@@ -315,11 +323,15 @@ abstract class VacanteService
                         }
                     }
                     if ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == 'En proceso') {
-                        $vacanteSoliId = Empresa::find($solicitud->id);
-                        $vacanteSoliId->alertas_en_empresa=$vacanteSoliId->alertas_en_empresa+1;
-                        $vacanteSoliId->save(); 
+                        $empresaSoliId = Empresa::find($solicitud->id_empresa);
+                        $alertas = $empresaSoliId->No_de_alertas;
+                        $empresaSoliId->No_de_alertas = $alertas + 1;
+                        if($empresaSoliId->No_de_alertas<=10){
+                            $empresaSoliId->activo=0;
+                        }
+                        $empresaSoliId->save();
 
-                        foreach ($solicitud->id_Usuario_Empresa_Vacante as $id_empresa) {
+                        foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
                             $data = array(
                                 'remitente' => null,
                                 'destinatario' => $id_empresa,
@@ -328,7 +340,6 @@ abstract class VacanteService
                                 'titulo' => ''
                             );
                             CorreosService::guardarYEnviar($data);
-                           
                         }
                     }
                 }

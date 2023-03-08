@@ -28,8 +28,7 @@ class Empresa extends Model
         'nombre_rh',
         'correo_rh',
         'id_estatus',
-        'telefono_rh',
-        'estatus'
+        'telefono_rh'
     ];
 
     protected $appends = ['files'];
@@ -60,5 +59,10 @@ class Empresa extends Model
     public function usuario_empresa()
     {
         return $this->hasMany(UsuariosEmpresas::class,'id_empresa','id');
+    }
+
+    public function empresa_estatus()
+    {
+        return $this->belongsTo(estatus_empresa::class,'id_estatus','id');
     }
 }

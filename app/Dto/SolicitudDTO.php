@@ -7,7 +7,7 @@ use App\Models\VacanteSolicitante;
 class SolicitudDto
 {
    public $id;
-   public $id_Usuario_Empresa_Vacante = [];
+   public $id_Usuario_Empresa= [];
    public $id_solicitante;
    public $id_vacante;
    public $id_usuario;
@@ -54,12 +54,13 @@ class SolicitudDto
       $this->id_solicitante = $obj->id_solicitante;
       $this->id_vacante = $obj->id_vacante;
       $this->vacante = $obj->rel_vacantes->vacante;
+      $this->id_empresa = $obj->rel_vacantes->empresa->id;
       $this->alertas_en_empresa = $obj->rel_vacantes->empresa->No_de_alertas;
       $this->status_solicitud = $obj->activo;
       $this->fecha_solicitud = $obj->created_at;
       $this->Fecha_actualizacion = $obj->updated_at;
       foreach ($obj->rel_vacantes->empresa->usuario_empresa as $usuarioEmpresa) {
-         array_push($this->id_Usuario_Empresa_Vacante, $usuarioEmpresa->id_usuario);
+         array_push($this->id_Usuario_Empresa, $usuarioEmpresa->id_usuario);
       }
 
       if (isset($obj->rel_solicitante)) {
