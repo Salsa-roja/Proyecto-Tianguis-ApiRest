@@ -84,5 +84,40 @@ class CorreosService
                                     ], 500);
         }
     }
+    public static function notificacionVacanteVista ($params){
+        try {
+            //CorreosService::guardar($params);
+            $remitente = !is_null($params['remitente']) ? Usuarios::find($params['remitente']):[];
+            $destinatario = Usuarios::find($params['destinatario']);
+            $template = isset($params['template']) ? $params['template'] : '/mail/mail';
 
+            $data['remitente'] = $remitente;
+            $data['destinatario'] = $destinatario;
+            $data['params'] = $params;
+
+            return Mail::send($template,
+                                compact('data'),
+                                function($message) use($params,$remitente,$destinatario) { 
+                                    $message->to($destinatario->correo, $destinatario->nombres.' '.$destinatario->ape_paterno)
+                                            ->subject($params['asunto'])
+                                            ->from(env("MAIL_FROM_ADDRESS"),env("MAIL_FROM_NAME"))
+                                            ; 
+                                }
+            );
+            //$user = UserNotifiable::find($params['remitente']);
+            //genera error: Please provide a valid cache path. 
+            //$user->notify(new EmailSimple($itemDB));
+            //return $itemDB;
+
+            /* return [
+                    "correo"=>$correo, 
+                    "remitente"=>$remitente, 
+                    "destinatario"=>$destinatario
+                ]; */
+        } catch (\Exception $e) {
+            return response()->json([   'error' => $e->getMessage(),
+                                        'funcion' => 'guardarYEnviar'
+                                    ], 500);
+        }
+    }
 }

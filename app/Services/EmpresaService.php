@@ -9,13 +9,16 @@ use App\Models\Usuarios;
 use App\Models\UsuariosEmpresas;
 use App\Models\Rol;
 use App\Dto\ParseDTO;
+use App\Dto\EmpresaDTO;
 
 abstract class EmpresaService
 {
 
    public static function listado(){
       try {
-         return Empresa::with(['usuario_empresa'])->where('activo', '1')->get();
+         $empresasList =Empresa::where('activo', '1')->get();
+         $itemDTO = ParseDTO::list($empresasList, EmpresaDto::class);
+         return $itemDTO;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
@@ -155,4 +158,5 @@ abstract class EmpresaService
          throw new \Exception($e->getMessage());
       }
    }
+   
 }

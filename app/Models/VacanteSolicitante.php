@@ -24,7 +24,7 @@ class VacanteSolicitante extends Model
      */
     public function rel_vacantes()
     {
-        return $this->belongsToMany(Vacantes::class, 'relVacanteSolicitante', 'id', 'id_vacante');
+        return $this->belongsTo(Vacantes::class,'id_vacante');
     }
 
     /**

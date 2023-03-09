@@ -16,6 +16,7 @@ class Empresa extends Model
         'nombre_comercial',
         'razon_social',
         'rfc',
+        'No_de_alertas',
         'descripcion',
         'numero_empleados',
         'constancia_sit_fiscal',
@@ -26,6 +27,7 @@ class Empresa extends Model
         'contr_adultos',
         'nombre_rh',
         'correo_rh',
+        'id_estatus',
         'telefono_rh'
     ];
 
@@ -57,5 +59,10 @@ class Empresa extends Model
     public function usuario_empresa()
     {
         return $this->hasMany(UsuariosEmpresas::class,'id_empresa','id');
+    }
+
+    public function empresa_estatus()
+    {
+        return $this->belongsTo(estatus_empresa::class,'id_estatus','id');
     }
 }
