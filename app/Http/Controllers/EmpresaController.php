@@ -9,10 +9,13 @@ use App\Services\UsuarioService;
 
 class EmpresaController extends Controller
 {
-    public function __construct()
+    private $request;
+
+    public function __construct(Request $request)
     {
-        //
+        $this->request = $request;
     } 
+ 
 
     public $storage="empresas";
 
@@ -36,9 +39,9 @@ class EmpresaController extends Controller
     /** 
      * Guardar Empresa
      */
-    public function guardar(Request $request){
+    public function guardar(){
         try{
-            $this->validate($request, [
+            $this->validate($this->request, [
                 'nombre_comercial' => 'required',
                 'razon_social' => 'required',
                 'rfc' => 'required',
@@ -56,8 +59,8 @@ class EmpresaController extends Controller
                 'contrasena' => 'required',
                 'telefono_rh' => 'required'
             ]);
-            $params = $request->all();
-            $params["request"] = $request;
+            $params = $this->request->all();
+            $params["request"] = $this->request;
             $fieldsArchivo=[];
 
             if( UsuarioService::existeByUsername($params['nombre_login']) ){                
@@ -71,23 +74,23 @@ class EmpresaController extends Controller
             }
 
             #guardar archivos con prefijo alias
-            if($request->hasFile('constancia_sit_fiscal')){
+            if($this->request->hasFile('constancia_sit_fiscal')){
 
-                $fieldsArchivo['constancia_sit_fiscal'] =   ArchivosService::subirArchivo($request->file('constancia_sit_fiscal'),
+                $fieldsArchivo['constancia_sit_fiscal'] =   ArchivosService::subirArchivo($this->request->file('constancia_sit_fiscal'),
                                                                 'empresas',
                                                                 'c_sit_fiscal_'.$params['rfc'],
                                                                 'path'
                                                             );
             }
-            if($request->hasFile('licencia_municipal')){
-                $fieldsArchivo['licencia_municipal'] = ArchivosService::subirArchivo($request->file('licencia_municipal'),
+            if($this->request->hasFile('licencia_municipal')){
+                $fieldsArchivo['licencia_municipal'] = ArchivosService::subirArchivo($this->request->file('licencia_municipal'),
                                                                 'empresas',
                                                                 'lic_municipal_'.$params['rfc'],
                                                                 'path'
                 );
             }
-            if($request->hasFile('alta_patronal')){
-                $fieldsArchivo['alta_patronal'] = ArchivosService::subirArchivo($request->file('alta_patronal'),
+            if($this->request->hasFile('alta_patronal')){
+                $fieldsArchivo['alta_patronal'] = ArchivosService::subirArchivo($this->request->file('alta_patronal'),
                                                                 'empresas',
                                                                 'alta_patronal_'.$params['rfc'],
                                                                 'path'
@@ -107,9 +110,9 @@ class EmpresaController extends Controller
      * Editar Empresa
      */
 
-     public function editar(Request $request){
+     public function editar(){
         try{
-            $this->validate($request, [
+            $this->validate($this->request, [
                 'id' => 'required',
                 'nombre_comercial' => 'required',
                 'razon_social' => 'required',
@@ -123,8 +126,8 @@ class EmpresaController extends Controller
                 'correo_rh' => 'required',
                 'telefono_rh' => 'required'
             ]);
-            $params = $request->all();
-            $params["request"] = $request;
+            $params = $this->request->all();
+            $params["request"] = $this->request;
 
             $this->data = EmpresaService::editar($params);
             $this->status=true;
@@ -138,15 +141,15 @@ class EmpresaController extends Controller
     /**
      * Guardar nuevo Archivo de la empresa
      */
-    public function guardarDocto(Request $request){
+    public function guardarDocto(){
         try{
-            $this->validate($request, [
+            $this->validate($this->request, [
                 'inputName' => 'required',
                 'id_empresa' => 'required'
             ]);
-            $params = $request->all();
+            $params = $this->request->all();
 
-            $params["request"] = $request;
+            $params["request"] = $this->request;
             
             #obtener info de la empresa
             $empresa = EmpresaService::searchById($params['id_empresa'],false);
@@ -160,7 +163,7 @@ class EmpresaController extends Controller
             }
 
 
-            if( $request->hasFile($campo) ){
+            if( $this->request->hasFile($campo) ){
                 # obtener prefijo para generar el nobre de archivo correspondiente
                 switch ($campo) {
                     case 'constancia_sit_fiscal':
@@ -173,7 +176,7 @@ class EmpresaController extends Controller
                         $prefix = 'alta_patronal_';
                         break;
                 }
-                $fieldArchivo = ArchivosService::subirArchivo($request->file( $campo ),
+                $fieldArchivo = ArchivosService::subirArchivo($this->request->file( $campo ),
                                                                 $this->storage,
                                                                 $prefix.$empresa->rfc,
                                                                 'path' 

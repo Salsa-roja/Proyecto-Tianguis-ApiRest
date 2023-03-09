@@ -72,8 +72,10 @@ abstract class SolicitanteService
             'nombre_login' => $params['nombre_login'],
             'contrasena' => $params['contrasena'],
             'rol_id' => Rol::where('nombre', 'Solicitante')->first()->id,
+            'request' => $params['request']
          ];
-         $itemUs=UsuarioService::guardar($paramsUs);
+         
+         $itemUs=UsuarioService::guardarUsuarioSolicitante($paramsUs);
 
          # guardar solicitante
          $Solicitante = new Solicitante();
