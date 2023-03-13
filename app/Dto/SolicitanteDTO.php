@@ -38,6 +38,7 @@ class SolicitanteDTO
    public $ape_paterno;
    public $nombre_login;
    public $correo;
+   public $solicitudes=[];
 
    public function __construct(Solicitante $obj)
    {
@@ -77,6 +78,16 @@ class SolicitanteDTO
          $this->nombre_login = $obj->rel_usuarios->nombre_login;
          $this->correo = $obj->rel_usuarios->correo;
       }
+
+      if(isset($obj->rel_vacante_solicitante)){
+         foreach ($obj->rel_vacante_solicitante as $k => $rvs) {
+            $solicitud = $rvs->rel_vacantes;
+            $solicitud->id_solicitante = $rvs->id_solicitante;
+            $solicitud->status = $rvs->tabla_estatus;
+            array_push($this->solicitudes,$solicitud);
+         }
+      }
+
    
    }
 }

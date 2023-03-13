@@ -27,7 +27,7 @@ abstract class SolicitanteService
     **/
     public static function searchById($id,$dto=true){
       try {
-         $item = Solicitante::with(['rel_usuarios'])->find($id);
+         $item = Solicitante::with(['rel_usuarios','rel_vacante_solicitante.rel_vacantes.empresa','rel_vacante_solicitante.tabla_estatus'])->find($id);
          if($dto){
             $itemDTO = ParseDTO::obj($item, SolicitanteDTO::class);
             return $itemDTO;
@@ -72,8 +72,10 @@ abstract class SolicitanteService
             'nombre_login' => $params['nombre_login'],
             'contrasena' => $params['contrasena'],
             'rol_id' => Rol::where('nombre', 'Solicitante')->first()->id,
+            'request' => $params['request']
          ];
-         $itemUs=UsuarioService::guardar($paramsUs);
+         
+         $itemUs=UsuarioService::guardarUsuarioSolicitante($paramsUs);
 
          # guardar solicitante
          $Solicitante = new Solicitante();

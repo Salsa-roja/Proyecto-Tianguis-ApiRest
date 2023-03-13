@@ -8,10 +8,13 @@ use App\Services\ArchivosService;
 use App\Services\UsuarioService;
 class SolicitanteController extends Controller
 {
-    public function __construct()
-    {
+    private $request;
 
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
     } 
+ 
 
     private $storage="solicitantes";
 
@@ -36,9 +39,9 @@ class SolicitanteController extends Controller
     /**
      * Guardar nuevo solicitante
      */
-    public function guardar(Request $request){
+    public function guardar(){
         try{
-            $this->validate($request, [
+            $this->validate($this->request, [
                 'nombres' => 'required',
                 'ape_paterno' => 'required',
                 'ape_materno' => 'required',
@@ -69,9 +72,9 @@ class SolicitanteController extends Controller
                 'curriculum' => 'required'
             ]);
 
-            $params = $request->all();
-            $params["request"] = $request;
-
+            $params = $this->request->all();
+            $params["request"] = $this->request;
+            
             #valida si el usuario ya existe
             if( UsuarioService::existeByUsername($params['nombre_login']) ){                
                 $this->msg='El nombre de usuario ya está en uso, utiliza otro';
@@ -83,9 +86,9 @@ class SolicitanteController extends Controller
                 return $this->jsonResponse();
             }
 
-            if($request->hasFile('curriculum')){
+            if($this->request->hasFile('curriculum')){
 
-                $fieldArchivo = ArchivosService::subirArchivo($request->file('curriculum'),
+                $fieldArchivo = ArchivosService::subirArchivo($this->request->file('curriculum'),
                                                                 $this->storage,
                                                                 'CV_'.$params['curp'],
                                                                 'path' 
@@ -104,9 +107,9 @@ class SolicitanteController extends Controller
     /**
      * Editar solicitante
      */
-    public function editar(Request $request){
+    public function editar(){
         try{
-            $this->validate($request, [
+            $this->validate($this->request, [
                 'id' => 'required',
                 'nombres' => 'required',
                 'ape_paterno' => 'required',
@@ -136,8 +139,8 @@ class SolicitanteController extends Controller
                 'lugar_atencion' => 'required'
             ]);
 
-            $params = $request->all();
-            $params["request"] = $request;
+            $params = $this->request->all();
+            $params["request"] = $this->request;
             
             $this->data = SolicitanteService::editar($params);
             $this->status=true;
@@ -151,14 +154,14 @@ class SolicitanteController extends Controller
     /**
      * Guardar nuevo Curriculum del solicitante
      */
-    public function guardarCv(Request $request){
+    public function guardarCv(){
         try{
-            $this->validate($request, [
+            $this->validate($this->request, [
                 'nuevo_cv' => 'required',
                 'id_solicitante' => 'required'
             ]);
-            $params = $request->all();
-            $params["request"] = $request;
+            $params = $this->request->all();
+            $params["request"] = $this->request;
             
             #obtener info del solicitante
             $solicitante = SolicitanteService::searchById($params['id_solicitante'],false);
@@ -169,9 +172,9 @@ class SolicitanteController extends Controller
                 ArchivosService::borrarArchivoStorage($solicitante->curriculum,$this->storage);
             }
 
-            if($request->hasFile('nuevo_cv')){
+            if($this->request->hasFile('nuevo_cv')){
 
-                $fieldArchivo = ArchivosService::subirArchivo($request->file('nuevo_cv'),
+                $fieldArchivo = ArchivosService::subirArchivo($this->request->file('nuevo_cv'),
                                                                 $this->storage,
                                                                 'CV_'.$solicitante->curp,
                                                                 'path' 

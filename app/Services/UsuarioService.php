@@ -50,6 +50,9 @@ abstract class UsuarioService
 
    public static function guardar($params){
       try {
+         if(isset($params['request']->auth))
+            if($params['request']->auth->rol=="Empresa")
+               return UsuarioService::guardarUsuarioEmpresa($params);
          $itemUs = new Usuarios();
          $itemUs->nombres = $params['nombres'];
          $itemUs->ape_paterno = $params['ape_paterno'];
@@ -58,28 +61,50 @@ abstract class UsuarioService
          $itemUs->nombre_login = $params['nombre_login'];
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
 
-         switch ($params['request']->auth->rol) {
-            case 'Administrador':
-                  $itemUs->rol_id = Rol::where('nombre', 'Administrador')->first()->id;
-                  $itemUs->save();
-               break;
-            case 'Empresa':
-                  $itemUs->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
-                  $itemUs->save();
-                  # guardar relacion
-                  $UsrEmp = new UsuariosEmpresas();
-                  $UsrEmp->id_usuario = $itemUs->id;
-                  $UsrEmp->id_empresa = $params['request']->auth->id_empresa;
-                  $UsrEmp->save();
-               break;
-            case 'Solicitante':
-                  return false;
-               break;
-            default:
-                  $itemUs->rol_id = $params['rol_id'];
-                  $itemUs->save();
-               break;
-         }
+         $itemUs->rol_id = Rol::where('nombre', 'Administrador')->first()->id;
+         $itemUs->save();
+
+         return $itemUs;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function guardarUsuarioEmpresa($params){
+      try {
+         $itemUs = new Usuarios();
+         $itemUs->nombres = $params['nombres'];
+         $itemUs->ape_paterno = $params['ape_paterno'];
+         $itemUs->ape_materno = $params['ape_materno'];
+         $itemUs->correo = $params['correo'];
+         $itemUs->nombre_login = $params['nombre_login'];
+         $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
+
+         $itemUs->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
+         $itemUs->save();
+         # guardar relacion
+         $UsrEmp = new UsuariosEmpresas();
+         $UsrEmp->id_usuario = $itemUs->id;
+         $UsrEmp->id_empresa = isset($params['request']->auth) ? $params['request']->auth->id_empresa : $params['empresa_id'];
+         $UsrEmp->save();
+
+         return $itemUs;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function guardarUsuarioSolicitante($params){
+      try {
+         $itemUs = new Usuarios();
+         $itemUs->nombres = $params['nombres'];
+         $itemUs->ape_paterno = $params['ape_paterno'];
+         $itemUs->ape_materno = $params['ape_materno'];
+         $itemUs->correo = $params['correo'];
+         $itemUs->nombre_login = $params['nombre_login'];
+         $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
+         $itemUs->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
+         $itemUs->save();
 
          return $itemUs;
       } catch (\Exception $e) {

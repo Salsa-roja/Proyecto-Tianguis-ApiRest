@@ -47,19 +47,6 @@ abstract class EmpresaService
    public static function guardar($params,$fieldsArchivo){
       try {
 
-         # guardar usuario
-         $paramsUs=[
-            'nombres' => $params['nombre_rh'],
-            'ape_paterno' => '',
-            'ape_materno' => '',
-            'correo' => $params['correo_rh'],
-            'nombre_login' => $params['nombre_login'],
-            'contrasena' => $params['contrasena'],
-            'rol_id' => Rol::where('nombre', 'Empresa')->first()->id
-         ];
-         $Usuario=UsuarioService::guardar($paramsUs);
-
-
          # guardar empresa
          $Empresa = new Empresa();
          $Empresa->nombre_comercial = $params['nombre_comercial'];
@@ -81,12 +68,20 @@ abstract class EmpresaService
          $Empresa->telefono_rh = $params['telefono_rh'];
          $Empresa->save();
 
-         # guardar relacion
-         $UsrEmp = new UsuariosEmpresas();
-         $UsrEmp->id_usuario = $Usuario->id;
-         $UsrEmp->id_empresa = $Empresa->id;
-         $UsrEmp->save();
-
+         # guardar usuario
+         $paramsUs=[
+            'nombres' => $params['nombre_rh'],
+            'ape_paterno' => '',
+            'ape_materno' => '',
+            'correo' => $params['correo_rh'],
+            'nombre_login' => $params['nombre_login'],
+            'contrasena' => $params['contrasena'],
+            'rol_id' => Rol::where('nombre', 'Empresa')->first()->id,
+            'request' => $params['request'],
+            'empresa_id'=>$Empresa->id
+         ];
+         $Usuario=UsuarioService::guardarUsuarioEmpresa($paramsUs);
+         
          return [$Usuario,$Empresa];
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
