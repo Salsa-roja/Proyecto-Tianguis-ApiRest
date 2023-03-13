@@ -13,7 +13,7 @@ class SolicitanteController extends Controller
 
     } 
 
-    public $storage="solicitantes";
+    private $storage="solicitantes";
 
     public function searchById($idSolicitante){
         try {

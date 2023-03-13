@@ -11,13 +11,12 @@ use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
 use App\Models\UsuariosEmpresas;
 use App\Models\Empresa;
-use Faker\Core\Number;
-use Hamcrest\Type\IsNumeric;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
-use League\CommonMark\Node\Query;
-use Mockery\Undefined;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
+
+
 
 abstract class VacanteService
 {
@@ -290,56 +289,63 @@ abstract class VacanteService
             return response()->json(['mensaje' => 'Hubo un error al registrar el usuario', $ex->getMessage()], 400);
         }
     }
+
+    public static function desactivarEmpresas($id)
+    {
+        $empresaSoliId = Empresa::find($id);
+        $alertas = $empresaSoliId->No_de_alertas;
+        $empresaSoliId->No_de_alertas = $alertas + 1;
+        if ($empresaSoliId->No_de_alertas <= 10) {
+            $empresaSoliId->activo = 0;
+        }
+        $empresaSoliId->save();
+    }
+
+    public static function NotificacionCorreo($id_empresa, $solicitudVacante, $solicitudNombre_completo, $solicitudId_empresa, $solicitudEstatus)
+    {
+        if ($solicitudEstatus == 'visto') {
+            $data = array(
+                'remitente' => null,
+                'destinatario' => $id_empresa,
+                'asunto' => '¡Actualiza tus postulaciones !',
+                'cuerpo' => "Tienes una postulacion con estatus ''" . $solicitudEstatus . "'' sin actualizar desde hace 3 dias en la vacante " . $solicitudVacante . " en la que se ha postulado el solicitante " . $solicitudNombre_completo,
+                'titulo' => ''
+            );
+        } else {
+            $data = array(
+                'remitente' => null,
+                'destinatario' => $id_empresa,
+                'asunto' => '¡Actualiza tus postulaciones !',
+                'cuerpo' => "Tienes una postulacion con estatus ''" . $solicitudEstatus . "'' sin actualizar desde hace mas de 7 dias en la vacante " . $solicitudVacante . " en la que se ha postulado el solicitante " . $solicitudNombre_completo,
+                'titulo' => ''
+            );
+        }
+        CorreosService::guardarYEnviar($data);
+    }
+
     public static function test()
     {
         try {
+            $ESTATUS_VACANTE_VISTO = Config('constants.MY_CONSTANT');
+            $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
+
             $vacanteSoli = VacanteSolicitante::all();
             $Dia_de_hoy = Carbon::now();
             $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDto::class);
 
-            // return $solicitudesDTO;  
-
             foreach ($solicitudesDTO as $solicitud) {
                 if ($solicitud->Fecha_actualizacion != null) {
                     $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
-                    if ($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == 'visto') {
-                        $empresaSoliId = Empresa::find($solicitud->id_empresa);
-                        $alertas = $empresaSoliId->No_de_alertas;
-                        $empresaSoliId->No_de_alertas = $alertas + 1;
-                        if($empresaSoliId->No_de_alertas<=10){
-                            $empresaSoliId->activo=0;
-                        }
-                        $empresaSoliId->save();
-
+                    if ($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_VACANTE_VISTO) {
+                        VacanteService::desactivarEmpresas($solicitud->id_empresa);
                         foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
-                            $data = array(
-                                'remitente' => null,
-                                'destinatario' => $id_empresa,
-                                'asunto' => '¡Actualiza tus postulaciones !',
-                                'cuerpo' => "Tienes una postulacion sin estatus actualizado desde hace 3 dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo,
-                                'titulo' => ''
-                            );
-                            CorreosService::guardarYEnviar($data);
+                            VacanteService::NotificacionCorreo($id_empresa, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
                         }
                     }
-                    if ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == 'En proceso') {
-                        $empresaSoliId = Empresa::find($solicitud->id_empresa);
-                        $alertas = $empresaSoliId->No_de_alertas;
-                        $empresaSoliId->No_de_alertas = $alertas + 1;
-                        if($empresaSoliId->No_de_alertas<=10){
-                            $empresaSoliId->activo=0;
-                        }
-                        $empresaSoliId->save();
-
+                    if ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_VACANTE_EN_PROCESO) {
+                        VacanteService::desactivarEmpresas($solicitud->id_empresa);
                         foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
-                            $data = array(
-                                'remitente' => null,
-                                'destinatario' => $id_empresa,
-                                'asunto' => '¡Actualiza tus postulaciones !',
-                                'cuerpo' => "Tienes una postulacion sin estatus actualizado desde hace mas de 7 dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo,
-                                'titulo' => ''
-                            );
-                            CorreosService::guardarYEnviar($data);
+                            VacanteService::NotificacionCorreo($id_empresa, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
                         }
                     }
                 }
@@ -348,6 +354,7 @@ abstract class VacanteService
             throw new \Exception($ex->getMessage(), 500);
         }
     }
+
     public static function getEstatusPostulacion()
     {
         try {
