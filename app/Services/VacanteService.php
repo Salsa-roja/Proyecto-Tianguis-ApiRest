@@ -229,11 +229,11 @@ abstract class VacanteService
                         'titulo' => ''
                     );
                     CorreosService::guardarYEnviar($data);
+                    return $rel;
                 }
             } else {
                 throw new \Exception('No existe la vacante');
             }
-            return $rel;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al vincular con la vacante', $ex->getMessage()], 400);
         }
