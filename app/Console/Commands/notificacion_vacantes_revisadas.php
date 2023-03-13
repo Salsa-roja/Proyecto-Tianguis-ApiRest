@@ -65,7 +65,16 @@ class notificacion_vacantes_revisadas extends Command
             }
         }
 
-
+        //TODO: ajustar nuevos parametros de funcion enviar correo:
+        /**
+            'from_mail' => null,
+            'from_name' => null,
+            'to_mail' => $correo,
+            'to_name' => $nombres,
+            'asunto' => '',
+            'cuerpo' => '',
+            'titulo' => ''
+        */
         $data = array(
             'remitente' => null,
             'destinatario' => $cosa->id_solicitante,
@@ -74,6 +83,8 @@ class notificacion_vacantes_revisadas extends Command
             'titulo' => ''
         );
         CorreosService::guardarYEnviar($data);
+
+
         // return 0;
 
     }

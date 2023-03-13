@@ -18,39 +18,6 @@ class CorreoController extends Controller
         }
 
     }
-    /**
-     * Enviar notificacion por correo electronico
-     *
-     * @param  array ['remitente','destinatario','asunto','cuerpo','titulo'] - All required
-     * @return response
-     */
-    public function enviar($params){
-        try {
-            $msg='';
-            $status=false;
-            $stCode=500;
-
-            # Validar que vengan todos los datos
-            if(array_search(null, $params) === false){
-                # Validar envio del correo
-                if(CorreosService::guardarYEnviar($params)){
-                    $status=true;
-                    $stCode=200; 
-                }else{
-                    $msg="Error al enviar correo";
-                }
-            }else{
-                $msg="Es necesario proporcionar todos los campos";
-            }
-
-            return response()->json(['status'=>$status,'message'=>$msg,'params'=>$params],$stCode);
-        } catch (\Exception $ex) {
-            return response()->json([   'error' => $ex->getMessage(),
-                                        'funcion' => 'CorreoController->enviar()'
-                                    ], 500);
-        }
-
-    }//...enviar
 
     public function get_hosts(){
         if (dns_get_mx("hotmail.com", $mxhosts, $mxweights)) {
@@ -64,7 +31,19 @@ class CorreoController extends Controller
 
     public function broadcast(Request $request){
         try {
-            $params = $request['params'];
+
+            $data = array(
+                'from_mail' => null,
+                'from_name' => null,
+                'to_mail' => 'aguet97@gmail.com',
+                'to_name' => 'Alonso Aguet',
+                'asunto' => 'Broadcast Correo',
+                'cuerpo' => $request['htmlContent'],
+                'titulo' => '',
+                'template' => 'mail/broadcast'
+            );
+
+            CorreosService::guardarYEnviar($data);
             return $request;
         } catch (\Exception $ex) {
             return response()->json([   'error' => $ex->getMessage(),
