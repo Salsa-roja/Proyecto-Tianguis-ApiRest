@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use App\Models\Usuarios;
 
 
 
@@ -214,10 +215,15 @@ abstract class VacanteService
                     $rel->id_solicitante = $solicitante->id;
                     $rel->save();
 
+                    #obtener datos del usuario
+                    $usuario = Usuarios::find($params['request']->auth->id);
+                    
                     #Enviar correo al solicitante
                     $data = array(
-                        'remitente' => null,
-                        'destinatario' => $params['request']->auth->id,
+                        'from_mail' => null,
+                        'from_name' => null,
+                        'to_mail' => $usuario->correo,
+                        'to_name' => $usuario->nombres.' '.$usuario->ape_paterno,
                         'asunto' => '¡Recibimos tu solicitud!',
                         'cuerpo' => "Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente",
                         'titulo' => ''
@@ -301,25 +307,27 @@ abstract class VacanteService
         $empresaSoliId->save();
     }
 
-    public static function NotificacionCorreo($id_empresa, $solicitudVacante, $solicitudNombre_completo, $solicitudId_empresa, $solicitudEstatus)
+    public static function NotificacionCorreo($id_usuario, $solicitudVacante, $solicitudNombre_completo, $solicitudId_empresa, $solicitudEstatus)
     {
         if ($solicitudEstatus == 'visto') {
-            $data = array(
-                'remitente' => null,
-                'destinatario' => $id_empresa,
-                'asunto' => '¡Actualiza tus postulaciones !',
-                'cuerpo' => "Tienes una postulacion con estatus ''" . $solicitudEstatus . "'' sin actualizar desde hace 3 dias en la vacante " . $solicitudVacante . " en la que se ha postulado el solicitante " . $solicitudNombre_completo,
-                'titulo' => ''
-            );
+            //TODO: Logica status visto
         } else {
-            $data = array(
-                'remitente' => null,
-                'destinatario' => $id_empresa,
-                'asunto' => '¡Actualiza tus postulaciones !',
-                'cuerpo' => "Tienes una postulacion con estatus ''" . $solicitudEstatus . "'' sin actualizar desde hace mas de 7 dias en la vacante " . $solicitudVacante . " en la que se ha postulado el solicitante " . $solicitudNombre_completo,
-                'titulo' => ''
-            );
+            //TODO: Logica otro status
         }
+        #obtener datos del usuario
+        $usuario = Usuarios::find($id_usuario);
+
+        #Enviar correo al usuario
+        $data = array(
+            'from_mail' => null,
+            'from_name' => null,
+            'to_mail' => $usuario->correo,
+            'to_name' => $usuario->nombres.' '.$usuario->ape_paterno,
+            'asunto' => '¡Actualiza tus postulaciones !',
+            'cuerpo' => "Tienes una postulacion con estatus ''" . $solicitudEstatus . "'' sin actualizar desde hace mas de 7 dias en la vacante " . $solicitudVacante . " en la que se ha postulado el solicitante " . $solicitudNombre_completo,
+            'titulo' => 'Atención!'
+        );
+
         CorreosService::guardarYEnviar($data);
     }
 
@@ -338,14 +346,14 @@ abstract class VacanteService
                     $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
                     if ($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_VACANTE_VISTO) {
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
-                        foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
-                            VacanteService::NotificacionCorreo($id_empresa, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
+                        foreach ($solicitud->id_Usuario_Empresa as $id_usuario) {
+                            VacanteService::NotificacionCorreo($id_usuario, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
                         }
                     }
                     if ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_VACANTE_EN_PROCESO) {
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
-                        foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
-                            VacanteService::NotificacionCorreo($id_empresa, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
+                        foreach ($solicitud->id_Usuario_Empresa as $id_usuario) {
+                            VacanteService::NotificacionCorreo($id_usuario, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
                         }
                     }
                 }

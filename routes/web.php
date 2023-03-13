@@ -43,6 +43,13 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/editar','UsuarioController@editar');
     });
 
+    #correo
+    $router->group(['prefix' => 'correo'], function () use ($router) {
+        $router->get('/detalle/{correo_id}', 'CorreoController@correoById');
+        $router->post('/enviar', 'CorreoController@enviar');
+        $router->get('/gethosts', 'CorreoController@get_hosts');
+        $router->post('/broadcast', 'CorreoController@broadcast');
+    });
 });
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
@@ -86,11 +93,4 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
 
     });
 
-    #correo
-    $router->group(['prefix' => 'correo'], function () use ($router) {
-        $router->get('/detalle/{correo_id}', 'CorreoController@correoById');
-        $router->post('/enviar', 'CorreoController@enviar');
-        $router->get('/gethosts', 'CorreoController@get_hosts');
-        $router->post('/broadcast', 'CorreoController@broadcast');
-    });
 });
