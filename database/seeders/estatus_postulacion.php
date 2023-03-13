@@ -14,21 +14,23 @@ class Estatus_postulacion extends Seeder
      */
     public function run()
     {
+
+
         DB::table('estatus_postulacion')->insert([
             [
-                'estatus' => 'No visto'
+                'estatus' =>  Config('constants.ESTATUS_VACANTE_NO_VISTO')
             ],
             [
-                'estatus' => 'visto'
+                'estatus' =>  Config('constants.ESTATUS_VACANTE_VISTO')
             ],
             [
-                'estatus' => 'En proceso'
+                'estatus' =>  Config('constants.ESTATUS_VACANTE_EN_PROCESO')
             ],
             [
-                'estatus' => 'Aceptado'
+                'estatus' => Config('constants.ESTATUS_VACANTE_ACEPTADO')
             ],
             [
-                'estatus' => 'Rechazado'
+                'estatus' => Config('constants.ESTATUS_VACANTE_RECHAZADO')
             ],
         ]);
     }

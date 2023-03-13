@@ -212,6 +212,7 @@ abstract class VacanteService
                     $rel = new VacanteSolicitante();
                     $rel->id_vacante = $vacante->id;
                     $rel->id_solicitante = $solicitante->id;
+                    $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_VACANTE_NO_VISTO'))->first()->id;
                     $rel->save();
 
                     #Enviar correo al solicitante
@@ -329,6 +330,9 @@ abstract class VacanteService
             $ESTATUS_VACANTE_VISTO = Config('constants.MY_CONSTANT');
             $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
 
+            return    VacanteSolicitante::with(['rel_vacantes.empresa'])->all();
+         
+            
             $vacanteSoli = VacanteSolicitante::all();
             $Dia_de_hoy = Carbon::now();
             $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDto::class);
@@ -338,13 +342,13 @@ abstract class VacanteService
                     $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
                     if ($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_VACANTE_VISTO) {
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
-                        foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
+                        foreach ($solicitud->id_Usuario_de_Empresa as $id_empresa) {
                             VacanteService::NotificacionCorreo($id_empresa, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
                         }
                     }
                     if ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_VACANTE_EN_PROCESO) {
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
-                        foreach ($solicitud->id_Usuario_Empresa as $id_empresa) {
+                        foreach ($solicitud->id_Usuario_de_Empresa as $id_empresa) {
                             VacanteService::NotificacionCorreo($id_empresa, $solicitud->vacante, $solicitud->nombre_completo, $solicitud->id_empresa, $solicitud->estatus);
                         }
                     }
