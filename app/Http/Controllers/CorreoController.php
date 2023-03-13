@@ -31,15 +31,18 @@ class CorreoController extends Controller
 
     public function broadcast(Request $request){
         try {
-            $params = $request['params'];
-            #Enviar correo al solicitante
+
             $data = array(
-                'remitente' => null,
-                'destinatario' => $params['request']->auth->id,
+                'from_mail' => null,
+                'from_name' => null,
+                'to_mail' => 'aguet97@gmail.com',
+                'to_name' => 'Alonso Aguet',
                 'asunto' => 'Broadcast Correo',
-                'cuerpo' => $params['htmlContent'],
-                'titulo' => ''
+                'cuerpo' => $request['htmlContent'],
+                'titulo' => '',
+                'template' => 'mail/broadcast'
             );
+
             CorreosService::guardarYEnviar($data);
             return $request;
         } catch (\Exception $ex) {
