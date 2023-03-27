@@ -16,19 +16,19 @@ class Estatus_empresa extends Seeder
     {
         DB::table('estatus_empresa')->insert([
             [
-                'estatus' => 'Activo'
+                'estatus' => Config('constants.ESTATUS_EMPRESA_ACTIVO')
             ],
             [
-                'estatus' => 'Inhabilitado'
+                'estatus' => Config('constants.ESTATUS_EMPRESA_INHABILITADO')
             ],
             [
-                'estatus' => 'Rechazado'
+                'estatus' => Config('constants.ESTATUS_EMPRESA_RECHAZADO')
             ],
             [
-                'estatus' => 'Alerta'
+                'estatus' => Config('constants.ESTATUS_EMPRESA_ALERTA')
             ],
             [
-                'estatus' => 'En revicion'
+                'estatus' => Config('constants.ESTATUS_EMPRESA_EN_REVICION')
             ]
         ]);
     }
