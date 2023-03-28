@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Estatus_postulacion extends Seeder
+class EstatusPostulacionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,7 +19,7 @@ class Estatus_postulacion extends Seeder
                 'estatus' => 'No visto'
             ],
             [
-                'estatus' => 'visto'
+                'estatus' => 'Visto'
             ],
             [
                 'estatus' => 'En proceso'
