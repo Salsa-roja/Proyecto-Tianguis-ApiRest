@@ -10,6 +10,7 @@ use App\Models\UsuariosEmpresas;
 use App\Models\Rol;
 use App\Dto\ParseDTO;
 use App\Dto\EmpresaDTO;
+use App\Models\Estatus_empresa;
 
 abstract class EmpresaService
 {
@@ -66,6 +67,7 @@ abstract class EmpresaService
          $Empresa->nombre_rh = $params['nombre_rh'];
          $Empresa->correo_rh = $params['correo_rh'];
          $Empresa->telefono_rh = $params['telefono_rh'];
+         $Empresa->d_estatus = Estatus_empresa::where('estatus', Config('constants.ESTATUS_EMPRESA_EN_REVICION'))->first()->id;
          $Empresa->save();
 
          # guardar usuario
@@ -158,5 +160,23 @@ abstract class EmpresaService
          throw new \Exception($e->getMessage());
       }
    }
-   
+   public static function getEstatusEmpresas(){
+      try {
+         $item =Estatus_empresa::where('activo', '1')->get();
+  
+         return $item;
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+   public static function updateEstatusEmpresa(array $params){
+      try {
+         $solicitudes = Empresa::find($params['id']);
+         $solicitudes->id_estatus = $params['idEstatus'];
+         $solicitudes->save();
+         return $solicitudes;
+     } catch (\Exception $ex) {
+         return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
+     }
+   }
 }

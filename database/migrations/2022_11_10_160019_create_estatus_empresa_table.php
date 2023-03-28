@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('estatus_empresa', function (Blueprint $table) {
             $table->id();
             $table->string("estatus");
-
+            $table->boolean("activo")->default(1);
             $table->timestamps();
         });
     }

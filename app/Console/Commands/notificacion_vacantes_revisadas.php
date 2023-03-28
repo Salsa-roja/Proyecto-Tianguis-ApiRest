@@ -3,10 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\controllers\VacanteController;
-use App\Services\CorreosService;
-use Illuminate\Support\Facades\Storage;
-use App\Models\VacanteSolicitante;
+use App\Services\VacanteService;
+
 
 
 class notificacion_vacantes_revisadas extends Command
@@ -42,50 +40,7 @@ class notificacion_vacantes_revisadas extends Command
      */
     public function handle()
     {
-        $fecha_actual = strtotime(date("d-m-Y H:i:00", time()));
-        $cosa = VacanteSolicitante::all();
-        // $solicitudesDTO = ParseDTO::list($cosa, SolicitudDto::class);
-
-        foreach ($cosa as $fecha) {
-
-            if ($fecha['updated_at'] != null) {
-                $hora = $fecha['updated_at']->format('Y/m/d H:i:00');
-                if ($fecha_actual - $hora = 3) {
-                    return "La fecha actual es mayor a la comparada";
-                } else {
-                    return "La fecha comparada es igual o menor";
-                }
-            } else {
-                $hora = $fecha['created_at']->format('Y/m/d H:i:00');
-                if ($fecha_actual - $hora = 3) {
-                    return "La fecha actual es mayor a la comparada";
-                } else {
-                    return "La fecha comparada es igual o menor";
-                }
-            }
-        }
-
-        //TODO: ajustar nuevos parametros de funcion enviar correo:
-        /**
-            'from_mail' => null,
-            'from_name' => null,
-            'to_mail' => $correo,
-            'to_name' => $nombres,
-            'asunto' => '',
-            'cuerpo' => '',
-            'titulo' => ''
-        */
-        $data = array(
-            'remitente' => null,
-            'destinatario' => $cosa->id_solicitante,
-            'asunto' => '¡Recibimos tu solicitud!',
-            'cuerpo' => "Tu solicitud para la vacante " . $cosa->rel_vacantes[0]['vacante'] . " se ha procesado correctamente",
-            'titulo' => ''
-        );
-        CorreosService::guardarYEnviar($data);
-
-
-        // return 0;
+        VacanteService::NotificacionEstatusVacantesDesactualizado();
 
     }
 }

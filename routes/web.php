@@ -30,12 +30,14 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     $router->group(['prefix' => 'empresas'], function () use ($router) {
         $router->get('/listado', 'EmpresaController@listado');
+        $router->post('/updateEstatusEmpresa', 'EmpresaController@updateEstatusEmpresa');
+        $router->get('/getEstatusEmpresas', 'EmpresaController@getEstatusEmpresas');
         $router->get('/detalle/{idSolicitante}', 'EmpresaController@searchById');
         $router->post('/guardarDocto', 'EmpresaController@guardarDocto');
         $router->get('/borrarDocto/{idEmpresa}/{archivo}', 'EmpresaController@borrarDocto');
         $router->post('/editar', 'EmpresaController@editar');
     });
-
+    
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');

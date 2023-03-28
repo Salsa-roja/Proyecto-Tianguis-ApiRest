@@ -31,9 +31,11 @@ class EmpresaDto
     public function __construct(Empresa $obj)
     {
         $this->id = $obj->id;
+
         foreach ($obj->usuario_empresa as $usuarioEmpresa) {
             array_push($this->id_Usuario, $usuarioEmpresa->id_usuario);
         }
+        
         $this->nombre_comercial = $obj->nombre_comercial;
         $this->razon_social = $obj->razon_social;
         $this->rfc = $obj->rfc;

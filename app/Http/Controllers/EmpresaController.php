@@ -221,4 +221,25 @@ class EmpresaController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+
+    public function getEstatusEmpresas()
+    {
+        try {
+            $itemDB = EmpresaService::getEstatusEmpresas();
+            //return $itemDB;
+            return response()->json($itemDB, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+    public function updateEstatusEmpresa(){
+        try {
+           
+            $response = EmpresaService::updateEstatusEmpresa($this->request->all());
+            return response()->json($response, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
 }
+
