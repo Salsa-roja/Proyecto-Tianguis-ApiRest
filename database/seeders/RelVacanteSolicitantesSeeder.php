@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Rel_vacante_solicitantes extends Seeder
+class RelVacanteSolicitantesSeeder extends Seeder
 {
     /**
      * Run the database seeds.

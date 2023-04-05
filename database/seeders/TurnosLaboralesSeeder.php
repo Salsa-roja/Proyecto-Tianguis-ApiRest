@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Turnos_laborales extends Seeder
+class TurnosLaboralesSeeder extends Seeder
 {
     /**
      * Run the database seeds.

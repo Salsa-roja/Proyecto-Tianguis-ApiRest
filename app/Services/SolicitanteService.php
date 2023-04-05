@@ -27,13 +27,10 @@ abstract class SolicitanteService
     **/
     public static function searchById($id,$dto=true){
       try {
+
          $item = Solicitante::with(['rel_usuarios','rel_vacante_solicitante.rel_vacantes.empresa','rel_vacante_solicitante.tabla_estatus'])->find($id);
-         if($dto){
-            $itemDTO = ParseDTO::obj($item, SolicitanteDTO::class);
-            return $itemDTO;
-         }else{
-            return $item;
-         }
+         
+         return ($dto)? ParseDTO::obj($item, SolicitanteDTO::class) : $item;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }

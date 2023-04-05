@@ -20,8 +20,11 @@ class SolicitanteController extends Controller
 
     public function searchById($idSolicitante){
         try {
-            $itemDB = SolicitanteService::searchById($idSolicitante);
-            return response()->json($itemDB, 200);
+            //$itemDB = SolicitanteService::searchById($idSolicitante);
+            //return response()->json($itemDB, 200);
+            $this->data= SolicitanteService::searchById($idSolicitante);
+            $this->status=true;
+            return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }

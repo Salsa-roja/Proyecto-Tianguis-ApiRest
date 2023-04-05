@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Nivel_educativo extends Seeder
+class NivelEducativoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
