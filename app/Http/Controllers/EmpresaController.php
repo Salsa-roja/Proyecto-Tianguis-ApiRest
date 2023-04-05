@@ -241,5 +241,30 @@ class EmpresaController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+    public function filtroDeBusquedaSolicitantes()
+    {
+        try {
+            // return'hola';
+            $params["request"] = $this->request;
+            $filtro = EmpresaService::filtroDeBusquedaSolicitantes($this->request->all(), $params);
+            return response()->json($filtro, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+    public function vincular(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'idVacante' => 'required'
+            ]);
+            $params = $request->all();
+            $params["request"] = $request;
+            $response = EmpresaService::vincular($params);
+            return response()->json($response, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
 }
 

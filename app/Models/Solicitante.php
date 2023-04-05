@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Usuarios;
 use App\Models\VacanteSolicitante;
 use App\Services\ArchivosService;
+
 class Solicitante extends Model
 {
     use HasFactory;
@@ -41,29 +42,35 @@ class Solicitante extends Model
         'disc_mental',
         'disc_auditiva',
         'lugar_atencion',
-        'curriculum'
+        'curriculum',
+        'id_nivel_educativo'
     ];
 
-    protected $appends = ['file','file64'];
+    protected $appends = ['file', 'file64'];
     public function getfileAttribute()
     {
         if (isset($this->curriculum) && $this->curriculum != '')
-        return env('APP_URL') . '/dwl/solicitantes/'.$this->id;
+            return env('APP_URL') . '/dwl/solicitantes/' . $this->id;
     }
 
-  
+
     public function getfile64Attribute()
     {
         if (isset($this->curriculum) && $this->curriculum != '')
-        return ArchivosService::base64File('solicitantes',$this->curriculum);
+            return ArchivosService::base64File('solicitantes', $this->curriculum);
     }
 
-    public function rel_usuarios(){
-        return $this->belongsTo(Usuarios::class,'id_usuario','id');
+    public function rel_usuarios()
+    {
+        return $this->belongsTo(Usuarios::class, 'id_usuario', 'id');
     }
 
     public function rel_vacante_solicitante()
     {
-        return $this->hasMany(VacanteSolicitante::class,'id_solicitante','id');
+        return $this->hasMany(VacanteSolicitante::class, 'id_solicitante', 'id');
+    }
+    public function tabla_nivel_educativo()
+    {
+        return $this->belongsTo(Nivel_educativo::class, 'id_nivel_educativo');
     }
 }

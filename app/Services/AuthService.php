@@ -31,6 +31,7 @@ abstract class AuthService
                 'status' => 200,
                 'token' => self::jwt($user),
                 'rol_id' => $user->rol_id,
+                'estatus' => $user->usuario_empresa->rel_empresas->activo,
                 'info' => $user,
                 'message' => 'Autorizado'
             ];

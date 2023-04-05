@@ -48,7 +48,8 @@ class SolicitantesSeeder extends Seeder
                 'disc_mental' => 0,
                 'disc_auditiva' => 1,
                 'lugar_atencion' => 'Web',
-                'curriculum' => ''
+                'curriculum' => '',
+                'id_nivel_educativo'=> 4
             ],
             [
                 'nombres' => 'Alonso Adair',
@@ -77,7 +78,8 @@ class SolicitantesSeeder extends Seeder
                 'disc_mental' => 0,
                 'disc_auditiva' => 0,
                 'lugar_atencion' => 'Web',
-                'curriculum' => ''
+                'curriculum' => '',
+                'id_nivel_educativo'=> 3
             ],
         ];
 
@@ -119,6 +121,7 @@ class SolicitantesSeeder extends Seeder
             $Solicitante->disc_auditiva = $v['disc_auditiva'];
             $Solicitante->lugar_atencion = $v['lugar_atencion'];
             $Solicitante->curriculum = $v['curriculum'];
+            $Solicitante->id_nivel_educativo = $v['id_nivel_educativo'];
             $Solicitante->save();
         }
 
