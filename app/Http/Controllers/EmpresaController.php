@@ -232,6 +232,7 @@ class EmpresaController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+    
     public function updateEstatusEmpresa(){
         try {
            
@@ -241,6 +242,7 @@ class EmpresaController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+
     public function filtroDeBusquedaSolicitantes()
     {
         try {
@@ -252,7 +254,8 @@ class EmpresaController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
-    public function vincular(Request $request)
+
+    public function vincularPostulantes(Request $request)
     {
         try {
             $this->validate($request, [

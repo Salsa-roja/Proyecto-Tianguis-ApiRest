@@ -13,6 +13,7 @@ use App\Dto\EmpresaDTO;
 use App\Models\Estatus_empresa;
 use App\Models\Solicitante;
 use App\Models\Vacantes;
+use App\Models\UsuariosEmpresas;
 
 abstract class EmpresaService
 {
@@ -228,9 +229,9 @@ abstract class EmpresaService
    public static function vincular($params)
    {
       try {
-         // return $params;
+         // return $params;['nombre_comercial']with('rel_empresas')->
          #datos del solicitante
-
+  
          $solicitante = Solicitante::find($params['idUsuario']);
 
          #buscar vacante
@@ -249,8 +250,8 @@ abstract class EmpresaService
                $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_VACANTE_NO_VISTO'))->first()->id;
                $rel->save();
 
-               $asunto = '¡Recibimos tu solicitud!';
-               $cuerpo = "Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente";
+               $asunto = '¡Una empresa se ha interesado en ti!';
+               $cuerpo = "Una empresa te ha seleccionado para la vacante '$vacante->vacante' contacta con ellos para darle seguimiento ";
                VacanteService::NotificacionCorreo($params['request']->auth->id, $asunto, $cuerpo);
                return $rel;
             }

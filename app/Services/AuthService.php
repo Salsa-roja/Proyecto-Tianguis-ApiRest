@@ -11,8 +11,8 @@ abstract class AuthService
 {
     public static function authenticate($nombre_login, $password)
     {
-        $user = Usuarios::with(['rol', 'rol.permisos','usuario_solicitante','usuario_empresa.rel_empresas'])
-            ->where(['activo'=> 1,'nombre_login'=>$nombre_login])
+        $user = Usuarios::with(['rol', 'rol.permisos', 'usuario_solicitante', 'usuario_empresa.rel_empresas'])
+            ->where(['activo' => 1, 'nombre_login' => $nombre_login])
             ->first();
 
         // return $user;
@@ -26,7 +26,7 @@ abstract class AuthService
         }
 
         // Verify the password and generate the token
-        if (Hash::check($password, $user->contrasena)) {
+        if (Hash::check($password, $user->contrasena) && $user->usuario_empresa == true ) {
             return [
                 'status' => 200,
                 'token' => self::jwt($user),
@@ -35,7 +35,26 @@ abstract class AuthService
                 'info' => $user,
                 'message' => 'Autorizado'
             ];
+        } else {
+            return [
+                'status' => 200,
+                'token' => self::jwt($user),
+                'rol_id' => $user->rol_id,
+                'estatus' => true,
+                'info' => $user,
+                'message' => 'Autorizado'
+            ];
         }
+        // if (Hash::check($password, $user->contrasena)) {
+        //     return [
+        //         'status' => 200,
+        //         'token' => self::jwt($user),
+        //         'rol_id' => $user->rol_id,
+        //         'estatus' => $user->usuario_empresa->rel_empresas->activo,
+        //         'info' => $user,
+        //         'message' => 'Autorizado'
+        //     ];
+        // }
         // Bad Request response
         return [
             'status' => 400,
@@ -67,7 +86,7 @@ abstract class AuthService
             'iat' => time(),
             'exp' => time() + 1440 * 5000,
         ];
-        
+
         return JWT::encode($payload, env('JWT_SECRET'), 'HS256');
     }
 }
