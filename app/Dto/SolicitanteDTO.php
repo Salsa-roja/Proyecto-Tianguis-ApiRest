@@ -39,6 +39,7 @@ class SolicitanteDTO
    public $nombre_login;
    public $correo;
    public $solicitudes=[];
+   public $vinculado;
 
    public function __construct(Solicitante $obj)
    {
@@ -59,7 +60,7 @@ class SolicitanteDTO
       $this->industria_interes = $obj->industria_interes;
       $this->habilidades = $obj->habilidades;
       $this->exp_profesional = $obj->exp_profesional;
-      $this->formacion_educativa = $obj->formacion_educativa;
+      $this->formacion_educativa = $obj->tabla_nivel_educativo->titulo;
       $this->disc_lenguaje = $obj->disc_lenguaje;
       $this->disc_motriz = $obj->disc_motriz;
       $this->disc_visual = $obj->disc_visual;
@@ -91,7 +92,9 @@ class SolicitanteDTO
             array_push($this->solicitudes,$solicitud);
          }
       }
+      $this->vinculado = $obj->vinculado;
 
+      
    
    }
 }

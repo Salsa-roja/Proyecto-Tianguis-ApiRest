@@ -60,6 +60,11 @@ $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], fu
         $router->post('/filtro', 'VacanteController@filtro');
 
     });
+    $router->group(['prefix' => 'talentHunting'], function () use ($router) {
+        $router->post('/filtro', 'EmpresaController@filtroDeBusquedaSolicitantes');
+        $router->post('/vincular', 'EmpresaController@vincularPostulantes');   
+
+    });
 });
 
 # Rutas para landing

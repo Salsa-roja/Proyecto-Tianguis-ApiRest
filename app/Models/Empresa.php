@@ -27,6 +27,7 @@ class Empresa extends Model
         'contr_adultos',
         'nombre_rh',
         'correo_rh',
+        'activo',
         'id_estatus',
         'telefono_rh'
     ];
