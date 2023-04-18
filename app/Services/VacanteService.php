@@ -17,6 +17,8 @@ use Illuminate\Http\Response;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use App\Models\Usuarios;
+use App\Services\SocketService;
+
 
 
 
@@ -201,9 +203,10 @@ abstract class VacanteService
     public static function vincular($params)
     {
         try {
-            // return $params;
+
+            $id_usuario = $params['request']->auth->id;
             #datos del solicitante
-            $solicitante = SolicitanteService::searchByIdUser($params['request']->auth->id);
+            $solicitante = SolicitanteService::searchByIdUser($id_usuario);
 
             #buscar vacante
             $vacante = VacanteService::searchId($params);
@@ -223,7 +226,15 @@ abstract class VacanteService
 
                     $asunto = '¡Recibimos tu solicitud!';
                     $cuerpo = "Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente";
-                    VacanteService::NotificacionCorreo($params['request']->auth->id, $asunto, $cuerpo);
+                    VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
+
+                    # Almacenar nueva notificacion en la cola del socket
+                    SocketService::addToQueque([
+                        'id_usuario'=>$id_usuario,
+                        'sala'=>"user_$id_usuario",
+                        'titulo'=>'¡Postulación enviada!',
+                        'descripcion'=>$cuerpo
+                    ]);
                     return $rel;
                 }
             } else {

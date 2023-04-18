@@ -45,14 +45,15 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/editar','UsuarioController@editar');
     });
 
-    #correo
-    $router->group(['prefix' => 'correo'], function () use ($router) {
-        $router->get('/detalle/{correo_id}', 'CorreoController@correoById');
-        $router->post('/enviar', 'CorreoController@enviar');
-        $router->get('/gethosts', 'CorreoController@get_hosts');
-        $router->post('/broadcast', 'CorreoController@broadcast');
+    #websocket
+    $router->group(['prefix' => 'ws'], function () use ($router) {
+        $router->post('/up', 'SocketController@saveConnection'); // Da de alta la conexion del cliente al websocket
+        $router->post('/down', 'SocketController@deleteConnection'); // Da de baja la conexion del cliente al websocket
+        $router->post('/set_seen', 'SocketController@setSeen'); // Cambia el campo 'vista' de una notificación
+        $router->post('/set_sended', 'SocketController@setSended'); // Cambia el campo 'enviada' de una notificación
     });
 });
+
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->post('/detalle', 'VacanteController@searchId');
@@ -93,6 +94,13 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
         $router->get('/test', 'VacanteController@test');
 
+    });
+
+    #websocket
+    $router->group(['prefix' => 'ws'], function () use ($router) {
+        $router->post('/reset', 'SocketController@resetConnections'); // Limpia tabla de conexiones de clientes con el websocket activas
+        $router->get('/list', 'SocketController@listConnections'); // Obtiene la lista de las conexiones de clientes con el websocket activas
+        $router->post('/testAddToQueque', 'SocketController@testAddToQueque');
     });
 
 });

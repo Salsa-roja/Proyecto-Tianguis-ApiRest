@@ -12,10 +12,12 @@
         "illuminate/log": "^9.46",
         "illuminate/notifications": "^9.46",
         "illuminate/view": "^9.46",
+        "kylekatarnls/laravel-carbon-2": "^1.0.0",
         "laravel/lumen-framework": "^9.0",
         "league/flysystem": "^3.12",
         "nesbot/carbon": "2.64.0 as 1.39.0",
-        "kylekatarnls/laravel-carbon-2": "^1.0.0"
+        "ratchet/pawl": "^0.4.1",
+        "wisembly/elephant.io": "3.3.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

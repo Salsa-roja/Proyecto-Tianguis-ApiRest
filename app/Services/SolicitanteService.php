@@ -8,7 +8,7 @@ use App\Models\Solicitante;
 use App\Models\Usuarios;
 use App\Models\Rol;
 use App\Dto\ParseDTO;
-use App\Dto\SolicitanteDto;
+use App\Dto\SolicitanteDTO;
 
 
 abstract class SolicitanteService
