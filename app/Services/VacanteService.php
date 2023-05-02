@@ -228,13 +228,14 @@ abstract class VacanteService
                     $cuerpo = "Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente";
                     VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
 
-                    # Almacenar nueva notificacion en la cola del socket
+                    # Almacenar nueva notificacion en la cola del socket y enviarla
                     SocketService::addToQueque([
                         'id_usuario'=>$id_usuario,
                         'sala'=>"user_$id_usuario",
                         'titulo'=>'¡Postulación enviada!',
                         'descripcion'=>$cuerpo
-                    ]);
+                    ],
+                    $params['request']->auth);
                     return $rel;
                 }
             } else {

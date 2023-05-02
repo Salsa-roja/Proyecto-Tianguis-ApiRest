@@ -2,20 +2,13 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
+use Firebase\JWT\JWT;
 use App\Models\SocketClient;
 use App\Models\SocketQueque;
-use Ratchet\Client\Connector;
-use Ratchet\Client\WebSocket;
-use GuzzleHttp\Psr7\Request;
-use Ratchet\RFC6455\Messaging\MessageInterface;
-use React\Socket\Connector as RConnector;
-use React\EventLoop\Loop;
-
-use ElephantIO\Client;
-use ElephantIO\Engine\SocketIO\Version2X;
 
 use Illuminate\Support\Facades\Log;
+
+use ElephantIO\Client;
 
 abstract class SocketService
 {
@@ -67,22 +60,44 @@ abstract class SocketService
    /**
     * Agrega una notificacion a la cola del socket.
     *
-    * @param array $notificacion Un arreglo con información sobre la notificacion, que incluye las claves 'id_usuario', 'sala', 'titulo' y 'descripcion'.
+    * @param array $notificacion Contiene la información sobre la notificacion, que incluye las claves 'id_usuario', 'sala', 'titulo' y 'descripcion'.
+    * @param stdClassObject $authInfo Contiene la informacion del usuario cuya sesion lleva a cabo la acción que dispara la notificación. este parametro sera firmado mediante JWT para incrustarse a los encabezados de la solicitud hacia el websocket
     * @throws Exception Si ocurre algún error al intentar agregar la notificacion a la cola.
     */
-   public static function addToQueque($notificacion){
+   public static function addToQueque($notificacion,$authInfo){
       try {
-
          $item = new SocketQueque();
          $item->id_usuario    = $notificacion['id_usuario'];
          $item->sala          = $notificacion['sala'];
          $item->titulo        = $notificacion['titulo'];
          $item->descripcion   = $notificacion['descripcion'];
          $item->created_at    = date('Y-m-d H:i:s');
-         //$item->save();
+         $item->save();
+
+         $SocketQueque = [
+            'id' => $item->id,
+            'id_usuario' => $item->id_usuario,
+            'sala' => $item->sala,
+            'titulo' => $item->titulo,
+            'descripcion' => $item->descripcion,
+            'created_at' => $item->created_at,
+         ];
+         $pl=[
+            'id' => $authInfo->id,
+            'nombre' => $authInfo->nombre,
+            'correo' => $authInfo->correo,
+            'rol' => $authInfo->rol,
+            'rol_id' => $authInfo->rol_id,
+            'permisos' => $authInfo->permisos,
+            'id_empresa' => $authInfo->id_empresa,
+            'id_solicitante' => $authInfo->id_solicitante,
+            'iat' => $authInfo->iat,
+            'exp' => $authInfo->exp,
+         ];
+         $jwt = JWT::encode($pl, env('JWT_SECRET'), 'HS256');
 
          #Comunicar via websocket al cliente
-         return SocketService::notifyClient($item);
+         return SocketService::notifyClient($SocketQueque,$jwt);
 
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
@@ -92,12 +107,16 @@ abstract class SocketService
 
    public static function setSeen($idNotif){
       try {
-
-         $notif = SocketQueque::find($idNotif);
-         $notif->vista = true;
-         $notif->save();
          
-         return true;
+         $notif = SocketQueque::find($idNotif);
+
+         if($notif){
+            $notif->vista = true;
+            $notif->save();
+         }
+         
+         return $notif;
+
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }  
@@ -107,122 +126,52 @@ abstract class SocketService
       try {
 
          $notif = SocketQueque::find($idNotif);
-         $notif->enviada = true;
-         $notif->save();
-         
-         return true;
+
+         if($notif){
+            $notif->enviada = true;
+            $notif->save();
+         }
+
+         return $notif;
+
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }  
    }
-                  /* 
-                  
-                  'Accept' => '* /*',
-                  'Accept-Encoding' => 'gzip, deflate, br',
-                  'Connection' => 'keep-alive',
-                  'Host' => 'localhost:3500',
-                  'Referer' => env('APP_URL'),
 
-
-                  json_encode([
-                        "event" => "notify_client",
-                        "data" => $SocketQueque
-                     ]) */
-                                       /* $conn->send(json_encode('notify_client'));
-                  $conn->close(); 
-                  
-                  */
    /**
     * Envia un mensaje al servidor websocket con la notificación pendiente a ser enviada
     *
     * @param array $mensaje Una instancia del modelo SocketQueque.
+    * @param string $JWTtoken Una cadena que contiene la informacion del usuario firmada con JWT
     * @throws Exception Si ocurre algún error al intentar enviar la solicitud al servidor websocket
     */
-   public static function notifyClient2($SocketQueque){
+   public static function notifyClient($SocketQueque,$JWTtoken){
       try {
-         $extra = "?token=eyJ0UzI1NiJ9-2YGe7rCrZM&room=user_3&EIO=4&transport=polling&t=KTssJ1X";
-
-         $headers = [
-            'token' => 'DFGER5ERTE7',
-            'Origin' => env('APP_URL')
-         ];
-
-         $reactConnector = new RConnector([
-            'dns' => '8.8.8.8',
-            'timeout' => 10
-         ]);
-         $loop = Loop::get();
-         $connector = new Connector($loop, $reactConnector);
-
-         $connector(
-               env('WS_SERVER').$extra, 
-               [], 
-               $headers
-         )->then(
-               function(WebSocket $conn) use ($SocketQueque) {
-                  return var_dump([ 'request'=>$conn->request, 'response'=>$conn->response ]);
-
-                  $conn->on('handshake', function() use ($conn) {
-                     $data = [
-                          'request' => $conn->request,
-                          'response' => $conn->response
-                     ];
-                     $json = json_encode($data);
-                     echo $json;
-                     $conn->send('notify_client');
-                  });
-   
-                  $conn->on('error', function($e) {
-                        echo "Websocket Error: {$e->getMessage()}\n";
-                  });
-
-                  $conn->on('open', function() use($conn) {
-                        echo "Connection succesfull\n";
-                        $conn->send('notify_client');
-                        $conn->close();
-                  });
-
-                  $conn->on('close', function($code = null, $reason = null) {
-                     echo "Connection closed ({$code} - {$reason})\n";
-                  }); 
-               }, 
-               function(\Exception $e) use ($loop){
-                  echo "Error: {$e->getMessage()}\n";
-                  $loop->stop();
-               }
-             
-            )//...->then()
-            ;
-            
-      } catch (\Exception $e) {
-         throw new \Exception($e->getMessage());
-      }  
-   }
-
-   public static function notifyClient($SocketQueque){
-      try {
-         
+         $version = Client::CLIENT_4X;
          $url = env('WS_SERVER');
+         $token = $JWTtoken;
+         $event = 'notify_client';
+         //echo sprintf("Creating first socket to %s\n", $url);
+         
+         // create first instance
+         $client = new Client(Client::engine($version, $url, [
+            'headers' => [
+               "token: $token"
+            ],
+            'query' => [
+               'room'=>'user_api'
+            ],
+            'debug' => true
+         ]), Log::getLogger());//
+          $client->initialize();
 
-         $version = new Version2X($url, [
-             'headers' => [
-                 'token' => 'DFGER5ERTE7',
-                 'Origin' => env('APP_URL'),
-             ],
-             'debug' => true,
-             'version' => 4,
-             'use_b64' => true,
-             'transport' => 'polling'
-         ]);
- 
-         $client = new Client($version, Log::getLogger());
-         //var_dump($client);
-         $client->initialize();
- 
-         // Emitir un evento 'notify_client' al servidor
-         $client->emit('notify_client', ['data' => 'Mensaje desde Lumen usando Elephant.io']);
- 
+         $data = [$SocketQueque];
+         $client->emit($event, $data);
+
+         $client->wait($event);
          $client->close();
+         
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }  
