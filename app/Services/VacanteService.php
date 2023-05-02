@@ -203,6 +203,7 @@ abstract class VacanteService
     public static function vincular($params)
     {
         try {
+            // return 'hola';
 
             $id_usuario = $params['request']->auth->id;
             #datos del solicitante
@@ -221,6 +222,7 @@ abstract class VacanteService
                     $rel = new VacanteSolicitante();
                     $rel->id_vacante = $vacante->id;
                     $rel->id_solicitante = $solicitante->id;
+                    $rel->TalentHunting = 0;
                     $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_VACANTE_NO_VISTO'))->first()->id;
                     $rel->save();
 
@@ -229,12 +231,12 @@ abstract class VacanteService
                     VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
 
                     # Almacenar nueva notificacion en la cola del socket
-                    SocketService::addToQueque([
-                        'id_usuario'=>$id_usuario,
-                        'sala'=>"user_$id_usuario",
-                        'titulo'=>'¡Postulación enviada!',
-                        'descripcion'=>$cuerpo
-                    ]);
+                    // SocketService::addToQueque([
+                    //     'id_usuario'=>$id_usuario,
+                    //     'sala'=>"user_$id_usuario",
+                    //     'titulo'=>'¡Postulación enviada!',
+                    //     'descripcion'=>$cuerpo
+                    // ]);
                     return $rel;
                 }
             } else {
