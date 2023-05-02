@@ -87,6 +87,7 @@ class SolicitanteDTO
             $solicitud->fecha_solicitud = $rvs->created_at;
             $solicitud->id_solicitante = $rvs->id_solicitante;
             $solicitud->id_vacante     = $rvs->id_vacante;
+            $solicitud->TalentHunting     = $rvs->TalentHunting;
             $solicitud->status         = $rvs->tabla_estatus->estatus;
             $solicitud->vacante        = $rvs->rel_vacantes;
             array_push($this->solicitudes,$solicitud);
