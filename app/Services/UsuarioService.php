@@ -10,6 +10,8 @@ use App\Dto\UsuarioEmpresaListDTO;
 use App\Models\Usuarios;
 use App\Models\UsuariosEmpresas;
 use App\Models\Rol;
+use App\Models\SocketQueque;
+
 abstract class UsuarioService
 {
 
@@ -154,6 +156,17 @@ abstract class UsuarioService
    public static function getColonias($cpostal){
       try {
          return DB::table('cat_c_postal_colonias')->select(['id','asentamiento_nombre','ciudad'])->where('cp',$cpostal)->get();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function getLastNotifications($usuarioId){
+      try {
+         return SocketQueque::where([ 'id_usuario'=>$usuarioId, 'enviada' => true ])
+                              ->orderBy('created_at','desc')
+                              ->limit(10)
+                              ->get();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }

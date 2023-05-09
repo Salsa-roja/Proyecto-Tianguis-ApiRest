@@ -41,8 +41,10 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
+        $router->get('/getLastNotifications/{usuarioId}', 'UsuarioController@getLastNotifications');
         $router->post('/guardar','UsuarioController@guardar');
         $router->post('/editar','UsuarioController@editar');
+
     });
 
     #websocket
