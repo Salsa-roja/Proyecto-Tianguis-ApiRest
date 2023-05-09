@@ -94,7 +94,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');      
-        $router->post('/updateEstatusSolisitud', 'VacanteController@updateEstatusSolisitud');              
+        $router->post('/updateEstatusSolicitud', 'VacanteController@updateEstatusSolicitud');              
         $router->get('/getEstatusPostulacion', 'VacanteController@getEstatusPostulacion');          
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
         $router->get('/test', 'VacanteController@test');

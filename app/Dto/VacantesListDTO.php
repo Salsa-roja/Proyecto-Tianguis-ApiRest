@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Vacantes;
 
-class VacantesListDTO
+class VacantesListDto
 {
     public $id;
     public $id_empresa;
