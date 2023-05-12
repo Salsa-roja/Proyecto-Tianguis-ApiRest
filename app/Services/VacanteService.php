@@ -185,7 +185,7 @@ abstract class VacanteService
     public static function updateEstatusSolisitud(array $params)
     {
         try {
-            $solicitudes = VacanteSolicitante::find($params['idVacante']);
+            $solicitudes = VacanteSolicitante::find($params['idVacanteSolicitante']);
             $solicitudes->id_estatus = $params['idEstatus'];
             $solicitudes->save();
             $solicitudesDTO = ParseDTO::obj($solicitudes, SolicitudDto::class);
