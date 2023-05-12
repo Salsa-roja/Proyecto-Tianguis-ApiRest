@@ -41,8 +41,10 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
+        $router->get('/getLastNotifications/{usuarioId}', 'UsuarioController@getLastNotifications');
         $router->post('/guardar','UsuarioController@guardar');
         $router->post('/editar','UsuarioController@editar');
+
     });
 
     #websocket
@@ -94,7 +96,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
         $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');      
-        $router->post('/updateEstatusSolisitud', 'VacanteController@updateEstatusSolisitud');              
+        $router->post('/updateEstatusSolicitud', 'VacanteController@updateEstatusSolicitud');              
         $router->get('/getEstatusPostulacion', 'VacanteController@getEstatusPostulacion');          
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
         $router->get('/test', 'VacanteController@test');

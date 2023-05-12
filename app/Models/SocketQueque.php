@@ -12,7 +12,7 @@ class SocketQueque extends Model
     protected $primaryKey = 'id';
     
     public $timestamps = false;
-    public $incrementing = false;
+    //public $incrementing = false;
     
     protected $fillable = [
         'id_usuario',

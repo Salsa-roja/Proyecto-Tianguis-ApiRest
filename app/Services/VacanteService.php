@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Vacantes;
 use App\Dto\ParseDTO;
 use App\Dto\SolicitudDto;
-use App\Dto\VacantesListDTO;
+use App\Dto\VacantesListDto;
 use App\Dto\EstatusPostulacionDto;
 use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
@@ -33,7 +33,7 @@ abstract class VacanteService
             }
             $vacantedb = $query->where('activo', '1')->get();
 
-            $vacantes = ParseDTO::list($vacantedb, VacantesListDTO::class);
+            $vacantes = ParseDTO::list($vacantedb, VacantesListDto::class);
             return $vacantes;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
@@ -54,7 +54,7 @@ abstract class VacanteService
             }
             $vacantedb = $vacantedb->where(['activo' => true])->find($params['request']->idVacante);
             if ($vacantedb) {
-                $vacante = ParseDto::obj($vacantedb, VacantesListDTO::class);
+                $vacante = ParseDto::obj($vacantedb, VacantesListDto::class);
             } else {
                 $vacante = null;
             }
@@ -70,7 +70,7 @@ abstract class VacanteService
             if ($name != '') {
                 $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo'])
                     ->whereRaw("REPLACE(UPPER(vacante),' ','') like ?", str_replace(' ', '', strtoupper('%' . $name . '%')))->where('activo', '1')->get();
-                $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
+                $vacante = ParseDto::list($vacantedb, VacantesListDto::class);
                 return $vacante;
             }
         } catch (\Exception $ex) {
@@ -122,7 +122,7 @@ abstract class VacanteService
             }
             $vacantedb = $vacantedb->where('activo', '1')->get();
             if ($vacantedb) {
-                $vacante = ParseDto::list($vacantedb, VacantesListDTO::class);
+                $vacante = ParseDto::list($vacantedb, VacantesListDto::class);
             } else {
                 $vacante = null;
             }
@@ -182,7 +182,7 @@ abstract class VacanteService
         }
     } //...getSolicitudesVacante
 
-    public static function updateEstatusSolisitud(array $params)
+    public static function updateEstatusSolicitud(array $params)
     {
         try {
             $solicitudes = VacanteSolicitante::find($params['idVacanteSolicitante']);
@@ -191,7 +191,7 @@ abstract class VacanteService
             $solicitudesDTO = ParseDTO::obj($solicitudes, SolicitudDto::class);
             $asunto = '¡Tu potulacion se ha actualizado!';
             $cuerpo = "Tu solicitud para la vacante de ".$solicitudesDTO->vacante." se ha actualizado y se encuentra en el estatus de ".'"'.$solicitudesDTO->estatus.'"';
-            VacanteService::NotificacionCorreo($solicitudes->id_solicitante, $asunto, $cuerpo);
+            VacanteService::NotificacionCorreo($solicitudesDTO->id_usuario, $asunto, $cuerpo);
             return $solicitudes;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
@@ -230,13 +230,14 @@ abstract class VacanteService
                     $cuerpo = "Tu solicitud para la vacante '$vacante->vacante' se ha procesado correctamente";
                     VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
 
-                    # Almacenar nueva notificacion en la cola del socket
-                    // SocketService::addToQueque([
-                    //     'id_usuario'=>$id_usuario,
-                    //     'sala'=>"user_$id_usuario",
-                    //     'titulo'=>'¡Postulación enviada!',
-                    //     'descripcion'=>$cuerpo
-                    // ]);
+                    # Almacenar nueva notificacion en la cola del socket y enviarla
+                    SocketService::addToQueque([
+                        'id_usuario'=>$id_usuario,
+                        'sala'=>"user_$id_usuario",
+                        'titulo'=>'¡Postulación enviada!',
+                        'descripcion'=>$cuerpo
+                    ],
+                    $params['request']->auth);
                     return $rel;
                 }
             } else {

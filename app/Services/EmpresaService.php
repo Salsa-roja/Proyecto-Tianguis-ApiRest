@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Empresa;
 use App\Models\VacanteSolicitante;
 use App\Models\Estatus_postulacion;
-use App\Dto\SolicitanteDTO;
+use App\Dto\SolicitanteDto;
 use App\Models\Rol;
 use App\Dto\ParseDTO;
-use App\Dto\EmpresaDTO;
+use App\Dto\EmpresaDto;
 use App\Models\Estatus_empresa;
 use App\Models\Solicitante;
 use App\Models\Vacantes;
@@ -40,7 +40,7 @@ abstract class EmpresaService
       try {
          $item = Empresa::with(['usuario_empresa'])->find($id);
          if ($dto) {
-            $itemDTO = ParseDTO::obj($item, EmpresaDTO::class);
+            $itemDTO = ParseDTO::obj($item, EmpresaDto::class);
             return $itemDTO;
          } else {
             return $item;
@@ -216,7 +216,7 @@ abstract class EmpresaService
 
          // return $vacantedb;
          if ($solicitantes) {
-            $vacante = ParseDto::list($solicitantes, SolicitanteDTO::class);
+            $vacante = ParseDto::list($solicitantes, SolicitanteDto::class);
          } else {
             $vacante = null;
          }

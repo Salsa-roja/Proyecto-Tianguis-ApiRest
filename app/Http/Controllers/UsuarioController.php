@@ -102,8 +102,17 @@ class UsuarioController extends Controller
                 $this->status=false;
             }
             return $this->jsonResponse();
-        } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 500);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function getLastNotifications($usuarioId){
+        try {
+            $this->data = UsuarioService::getLastNotifications($usuarioId);
+            return $this->jsonResponse();
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500); 
         }
     }
 }

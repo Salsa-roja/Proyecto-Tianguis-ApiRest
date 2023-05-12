@@ -95,11 +95,11 @@ class VacanteController extends Controller
         }
     } //...getSolicitudesVacante
 
-    public function updateEstatusSolisitud(Request $request)
+    public function updateEstatusSolicitud(Request $request)
     {
         try {
             // $params["request"] = $request;
-            $response = VacanteService::updateEstatusSolisitud($request->all());
+            $response = VacanteService::updateEstatusSolicitud($request->all());
             return response()->json($response, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);

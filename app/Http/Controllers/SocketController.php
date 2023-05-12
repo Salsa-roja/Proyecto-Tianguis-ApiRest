@@ -74,32 +74,33 @@ class SocketController extends Controller
     public function setSeen(){
         try {
             
-            $this->validate($this->request, [
-                'id' =>'required'
-            ]);
-
             $params = $this->request->all();
 
-            $items = SocketService::setSeen($params['id']);
+            if(isset($params['id'])){
+                $items = SocketService::setSeen($params['id']);
+                return response()->json($items, 200);
+            }else{
+                return response()->json("field 'id' required", 400);
+            }
             
-            return response()->json($items, 200);
         } catch (\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 500);
+            return response()->json_encode(['error' => $ex->getMessage()], 500);
         }
     }
 
     public function setSended(){
         try {
             
-            $this->validate($this->request, [
-                'id' =>'required'
-            ]);
-
             $params = $this->request->all();
 
-            $items = SocketService::setSended($params['id']);
-            
-            return response()->json($items, 200);
+            if(isset($params['id'])){
+                $items = SocketService::setSended($params['id']);
+                return response()->json($items, 200);
+            }else{
+                return response()->json("field 'id' required", 400);
+            }
+
+
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
