@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('id_usuario');
             $table->string('sala');
             $table->string('titulo');
-            $table->string('descripcion');
+            $table->text('descripcion');
             $table->boolean('vista')->default(false);
             $table->boolean('enviada')->default(false);
             $table->timestamps();

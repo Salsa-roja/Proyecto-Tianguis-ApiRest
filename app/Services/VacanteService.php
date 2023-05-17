@@ -231,13 +231,15 @@ abstract class VacanteService
                     VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
 
                     # Almacenar nueva notificacion en la cola del socket y enviarla
-                    SocketService::addToQueque([
-                        'id_usuario'=>$id_usuario,
-                        'sala'=>"user_$id_usuario",
-                        'titulo'=>'¡Postulación enviada!',
-                        'descripcion'=>$cuerpo
-                    ],
-                    $params['request']->auth);
+                    $Ssv = new SocketService($params['request']->auth, 'notify_client');
+                    $Ssv->addToQueque([
+                            'id_usuario'=>$id_usuario,
+                            'sala'=>"user_$id_usuario",
+                            'titulo'=>'¡Postulación enviada!',
+                            'descripcion'=>$cuerpo
+                    ])
+                    ->emitQueque()
+                    ->close();
                     return $rel;
                 }
             } else {

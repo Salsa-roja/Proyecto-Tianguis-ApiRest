@@ -141,11 +141,6 @@ class RolesSeeder extends Seeder
                         'permiso' => 'VacantesList'
                     ],
                     [
-                        'nombre' => 'Redactar emails con interfaz',
-                        'permiso' => 'WriteMail'
-                    ],
-
-                    [
                         'nombre' => 'Listado de usuarios',
                         'permiso' => 'UsuariosList'
                     ],              

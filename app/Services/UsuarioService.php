@@ -163,9 +163,9 @@ abstract class UsuarioService
 
    public static function getLastNotifications($usuarioId){
       try {
-         return SocketQueque::where([ 'id_usuario'=>$usuarioId, 'enviada' => true ])
+         return SocketQueque::where([ 'id_usuario'=>$usuarioId ])//, 'enviada' => true
                               ->orderBy('created_at','desc')
-                              ->limit(10)
+                              //->limit(6)
                               ->get();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());

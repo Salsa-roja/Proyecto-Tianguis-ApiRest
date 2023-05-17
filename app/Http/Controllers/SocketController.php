@@ -16,7 +16,7 @@ class SocketController extends Controller
 
     public function listConnections(){
         try {
-
+            
             $items = SocketService::listConnections();
             
             return response()->json($items, 200);
@@ -34,7 +34,7 @@ class SocketController extends Controller
 
             $params = $this->request->all();
             $params["id_usuario"] = $this->request->auth->id;
-
+            
             $items = SocketService::saveConnection($params);
             
             return response()->json($items, 200);
@@ -62,7 +62,7 @@ class SocketController extends Controller
 
     public function resetConnections(){
         try {
-            
+
             $result = SocketService::resetConnections();
             
             return response()->json($result, 200);
@@ -94,6 +94,7 @@ class SocketController extends Controller
             $params = $this->request->all();
 
             if(isset($params['id'])){
+
                 $items = SocketService::setSended($params['id']);
                 return response()->json($items, 200);
             }else{
@@ -101,17 +102,6 @@ class SocketController extends Controller
             }
 
 
-        } catch (\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 500);
-        }
-    }
-
-    public function testAddToQueque(){
-        try {
-            $notificacion = $this->request->all();
-            $result = SocketService::addToQueque($notificacion);
-            
-            return response()->json($result, 200);
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
