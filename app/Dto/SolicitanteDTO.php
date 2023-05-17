@@ -84,6 +84,7 @@ class SolicitanteDto
          foreach ($obj->rel_vacante_solicitante as $k => $rvs) {
             $solicitud = new \stdClass();
 
+            $solicitud->id = $rvs->id;
             $solicitud->fecha_solicitud = $rvs->created_at;
             $solicitud->id_solicitante = $rvs->id_solicitante;
             $solicitud->id_vacante     = $rvs->id_vacante;
