@@ -10,8 +10,82 @@ use Illuminate\Support\Facades\Log;
 
 use ElephantIO\Client;
 
-abstract class SocketService
+/**
+ * Class SocketService
+ *
+ * Esta clase maneja las conexiones de sockets. Cuando se crea una instancia de SocketService,
+ * se abre una conexión de socket. Es importante llamar al método close() cuando hayas terminado
+ * de usar la instancia, para cerrar la conexión y liberar los recursos.
+ * 
+ * @param array $mensaje Una instancia del modelo SocketQueque.
+ * @param string $event el evento con el cual se van a emitir los mensajes hacia el servidor websocket. {@default "notify_client"}
+ * 
+ */
+class SocketService
 {
+
+   protected $version;
+   protected $url;
+   protected $token;
+   protected $event;
+   protected $queque;
+   protected $client;
+
+   public function __construct($authInfo, $event='notify_client'){
+      try {
+
+         if(isset($authInfo->id)){
+
+            $this->version = Client::CLIENT_4X;
+            $this->url = env('WS_SERVER');
+            $this->event = $event;
+            $this->token = self::tokenizeAuthInfo($authInfo);
+            $this->queque = [];
+            # create instance
+            $this->client = new Client(Client::engine($this->version, $this->url, [
+               'headers' => [
+                  "token:  ".$this->token
+               ],
+               'query' => [
+                  'room'=>'user_api'
+               ],
+               'debug' => true
+            ]), Log::getLogger());
+
+            $this->client->initialize();
+
+         }else{
+            throw new \Exception('Invalid authInfo');
+         }
+
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }  
+
+   }
+
+   /**
+    * Crea un json web token
+    * @param string $JWTtoken Una cadena que contiene la informacion del usuario firmada con JWT
+    */
+   private static function tokenizeAuthInfo($authInfo){
+      
+      return   JWT::encode(
+                  [
+                     'id' => $authInfo->id,
+                     'nombre' => $authInfo->nombre,
+                     'correo' => $authInfo->correo,
+                     'rol' => $authInfo->rol,
+                     'rol_id' => $authInfo->rol_id,
+                     'permisos' => $authInfo->permisos,
+                     'id_empresa' => $authInfo->id_empresa,
+                     'id_solicitante' => $authInfo->id_solicitante,
+                     'iat' => $authInfo->iat,
+                     'exp' => $authInfo->exp,
+                  ], 
+                  env('JWT_SECRET'), 'HS256'
+               );
+   }
 
    public static function listConnections(){
       try {
@@ -57,53 +131,6 @@ abstract class SocketService
          throw new \Exception($e->getMessage());
       }
    }
-   /**
-    * Agrega una notificacion a la cola del socket.
-    *
-    * @param array $notificacion Contiene la información sobre la notificacion, que incluye las claves 'id_usuario', 'sala', 'titulo' y 'descripcion'.
-    * @param stdClassObject $authInfo Contiene la informacion del usuario cuya sesion lleva a cabo la acción que dispara la notificación. este parametro sera firmado mediante JWT para incrustarse a los encabezados de la solicitud hacia el websocket
-    * @throws Exception Si ocurre algún error al intentar agregar la notificacion a la cola.
-    */
-   public static function addToQueque($notificacion,$authInfo){
-      try {
-         $item = new SocketQueque();
-         $item->id_usuario    = $notificacion['id_usuario'];
-         $item->sala          = $notificacion['sala'];
-         $item->titulo        = $notificacion['titulo'];
-         $item->descripcion   = $notificacion['descripcion'];
-         $item->created_at    = date('Y-m-d H:i:s');
-         $item->save();
-
-         $SocketQueque = [
-            'id' => $item->id,
-            'id_usuario' => $item->id_usuario,
-            'sala' => $item->sala,
-            'titulo' => $item->titulo,
-            'descripcion' => $item->descripcion,
-            'created_at' => $item->created_at,
-         ];
-         $pl=[
-            'id' => $authInfo->id,
-            'nombre' => $authInfo->nombre,
-            'correo' => $authInfo->correo,
-            'rol' => $authInfo->rol,
-            'rol_id' => $authInfo->rol_id,
-            'permisos' => $authInfo->permisos,
-            'id_empresa' => $authInfo->id_empresa,
-            'id_solicitante' => $authInfo->id_solicitante,
-            'iat' => $authInfo->iat,
-            'exp' => $authInfo->exp,
-         ];
-         $jwt = JWT::encode($pl, env('JWT_SECRET'), 'HS256');
-
-         #Comunicar via websocket al cliente
-         return SocketService::notifyClient($SocketQueque,$jwt);
-
-      } catch (\Exception $e) {
-         throw new \Exception($e->getMessage());
-      }  
-   }
-
 
    public static function setSeen($idNotif){
       try {
@@ -112,6 +139,7 @@ abstract class SocketService
 
          if($notif){
             $notif->vista = true;
+            $notif->enviada = true;// Si por alguna razon el socket no confirmo la recepcion, se establece la notificacion como enviada
             $notif->save();
          }
          
@@ -140,41 +168,69 @@ abstract class SocketService
    }
 
    /**
-    * Envia un mensaje al servidor websocket con la notificación pendiente a ser enviada
+    * Agrega UNA notificacion a la cola del socket y comunica al servidor websocket con el metodo notifyClient()
     *
-    * @param array $mensaje Una instancia del modelo SocketQueque.
-    * @param string $JWTtoken Una cadena que contiene la informacion del usuario firmada con JWT
-    * @throws Exception Si ocurre algún error al intentar enviar la solicitud al servidor websocket
+    * @param array $notificacion Contiene la información sobre la notificacion, que incluye las claves 'id_usuario', 'sala', 'titulo' y 'descripcion'.
+    *
+    * @throws Exception Si ocurre algún error al intentar agregar la notificacion a la cola.
     */
-   public static function notifyClient($SocketQueque,$JWTtoken){
+   public function addToQueque($notificacion){
       try {
-         $version = Client::CLIENT_4X;
-         $url = env('WS_SERVER');
-         $token = $JWTtoken;
-         $event = 'notify_client';
-         //echo sprintf("Creating first socket to %s\n", $url);
-         
-         // create first instance
-         $client = new Client(Client::engine($version, $url, [
-            'headers' => [
-               "token: $token"
-            ],
-            'query' => [
-               'room'=>'user_api'
-            ],
-            'debug' => true
-         ]), Log::getLogger());//
-          $client->initialize();
 
-         $data = [$SocketQueque];
-         $client->emit($event, $data);
+         $item = new SocketQueque();
+         $item->id_usuario    = $notificacion['id_usuario'];
+         $item->sala          = $notificacion['sala'];
+         $item->titulo        = $notificacion['titulo'];
+         $item->descripcion   = $notificacion['descripcion'];
+         $item->created_at    = date('Y-m-d H:i:s');
+         $item->save();
 
-         $client->wait($event);
-         $client->close();
-         
+         array_push($this->queque, [
+            'id' => $item->id,
+            'id_usuario' => $item->id_usuario,
+            'sala' => $item->sala,
+            'titulo' => $item->titulo,
+            'descripcion' => $item->descripcion,
+            'created_at' => $item->created_at,
+         ]);
+
+         return $this;
+
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }  
    }
 
+   /**
+    * Envia un mensaje al servidor websocket con la notificación pendiente a ser enviada usando el evento 'notify_client'
+    *
+    * @param array $mensaje Una instancia del modelo SocketQueque.
+    *
+    * @throws Exception Si ocurre algún error al intentar enviar la solicitud al servidor websocket
+    */
+   public function emitQueque(){
+      try {
+
+         $this->client->emit($this->event, $this->queque);
+
+         //$this->client->wait($this->event);
+         # SocketService queda esperando una emision del servidor del evento 'queque_emmited' para finalizar la lectura del stream
+         $this->client->wait('queque_emmited');
+         
+         return $this;
+
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }  
+   }
+
+   /**
+    * Cierra la conexión de socket. Debes llamar a este método cuando hayas terminado de usar
+    * la instancia de SocketService.
+    */
+   public function close(){
+      $this->queque = [];
+      $this->client->close();
+      return $this;
+   }
 }

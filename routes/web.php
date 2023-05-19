@@ -41,10 +41,10 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
-        $router->get('/getLastNotifications/{usuarioId}', 'UsuarioController@getLastNotifications');
         $router->post('/guardar','UsuarioController@guardar');
         $router->post('/editar','UsuarioController@editar');
-
+        $router->get('/getLastNotifications/{usuarioId}', 'UsuarioController@getLastNotifications');
+        $router->get('/setNotificationSeen/{notifId}', 'UsuarioController@setNotificationSeen');
     });
 
     #websocket
@@ -54,6 +54,11 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/set_seen', 'SocketController@setSeen'); // Cambia el campo 'vista' de una notificación
         $router->post('/set_sended', 'SocketController@setSended'); // Cambia el campo 'enviada' de una notificación
     });
+
+    $router->group(['prefix' => 'correo'], function () use ($router) {
+        $router->post('/broadcast', 'CorreoController@broadcast');
+    });
+
 });
 
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
