@@ -187,12 +187,22 @@ abstract class VacanteService
         try {
             $solicitudes = VacanteSolicitante::find($params['idVacanteSolicitante']);
             $solicitudes->id_estatus = $params['idEstatus'];
-            $solicitudes->save();
+
             $solicitudesDTO = ParseDTO::obj($solicitudes, SolicitudDto::class);
             $asunto = '¡Tu potulacion se ha actualizado!';
-            $cuerpo = "Tu solicitud para la vacante de ".$solicitudesDTO->vacante." se ha actualizado y se encuentra en el estatus de ".'"'.$solicitudesDTO->estatus.'"';
-            VacanteService::NotificacionCorreo($solicitudesDTO->id_usuario, $asunto, $cuerpo);
-            return $solicitudes;
+            if ($solicitudes->TalentHunting == true) {
+                $cuerpo = "Tu ofrecimiento de la vacante " . $solicitudesDTO->vacante . " se ha actualizado y se encuentra en el estatus de " . '"' . $solicitudesDTO->estatus . '"' . " del postulado llamado " . $solicitudesDTO->nombre_completo_solicitante;
+                VacanteService::NotificacionCorreo($solicitudesDTO->id_Usuario_de_Empresa[0], $asunto, $cuerpo);
+            } else {
+                $cuerpo = "Tu solicitud para la vacante de " . $solicitudesDTO->vacante . " se ha actualizado y se encuentra en el estatus de " . '"' . $solicitudesDTO->estatus . '"';
+                VacanteService::NotificacionCorreo($solicitudesDTO->id_usuario, $asunto, $cuerpo);
+            }
+            if($params['idEstatus']!=2){
+                  $solicitudes->TalentHunting = false;
+            }
+          
+            $solicitudes->save();
+            return $solicitudesDTO;
         } catch (\Exception $ex) {
             return response()->json(['mensaje' => 'Hubo un error al obtener las solicitudes', $ex->getMessage()], 400);
         }
@@ -231,13 +241,15 @@ abstract class VacanteService
                     VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
 
                     # Almacenar nueva notificacion en la cola del socket y enviarla
-                    SocketService::addToQueque([
-                        'id_usuario'=>$id_usuario,
-                        'sala'=>"user_$id_usuario",
-                        'titulo'=>'¡Postulación enviada!',
-                        'descripcion'=>$cuerpo
-                    ],
-                    $params['request']->auth);
+                    SocketService::addToQueque(
+                        [
+                            'id_usuario' => $id_usuario,
+                            'sala' => "user_$id_usuario",
+                            'titulo' => '¡Postulación enviada!',
+                            'descripcion' => $cuerpo
+                        ],
+                        $params['request']->auth
+                    );
                     return $rel;
                 }
             } else {

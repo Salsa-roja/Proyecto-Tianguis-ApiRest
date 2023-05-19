@@ -90,6 +90,7 @@ class SolicitanteDto
             $solicitud->id_vacante     = $rvs->id_vacante;
             $solicitud->TalentHunting     = $rvs->TalentHunting;
             $solicitud->status         = $rvs->tabla_estatus->estatus;
+            $solicitud->id_estatus        = $rvs->tabla_estatus->id;
             $solicitud->vacante        = $rvs->rel_vacantes;
             array_push($this->solicitudes,$solicitud);
          }

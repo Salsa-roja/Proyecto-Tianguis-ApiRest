@@ -38,7 +38,7 @@ class SolicitudDto
    public $curriculum;
    public $status_solicitud;
    public $fecha_solicitud;
-   public $nombre_completo;
+   public $nombre_completo_solicitante;
    public $correo;
    public $file;
    public $file64;
@@ -95,7 +95,7 @@ class SolicitudDto
 
 
          if (isset($obj->rel_solicitante->rel_usuarios)) {
-            $this->nombre_completo = $obj->rel_solicitante->rel_usuarios->nombre_completo;
+            $this->nombre_completo_solicitante = $obj->rel_solicitante->rel_usuarios->nombre_completo;
             $this->correo = $obj->rel_solicitante->rel_usuarios->correo;
          }
       }
