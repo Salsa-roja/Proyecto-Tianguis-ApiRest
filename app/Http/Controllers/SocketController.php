@@ -111,6 +111,7 @@ class SocketController extends Controller
     public function getLastNotifications($usuarioId){
         try {
             $this->data = SocketService::getLastNotifications($usuarioId);
+            $this->status = true;
             return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500); 
@@ -134,6 +135,17 @@ class SocketController extends Controller
             
         } catch (\Exception $ex) {
             return response()->json_encode(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function deleteNotification($notifId){
+        try {
+
+            $this->data = SocketService::deleteNotification($notifId);
+            return $this->jsonResponse();
+
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
 

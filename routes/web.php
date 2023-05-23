@@ -55,6 +55,7 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->get('/getLastNotifications/{usuarioId}', 'SocketController@getLastNotifications');
         $router->get('/getAllNotifications/{usuarioId}', 'SocketController@getAllNotifications');
         $router->get('/setNotificationSeen/{notifId}', 'SocketController@setNotificationSeen');
+        $router->delete('/deleteNotification/{notifId}', 'SocketController@deleteNotification');
     });
 
     $router->group(['prefix' => 'correo'], function () use ($router) {

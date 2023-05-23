@@ -133,10 +133,10 @@ class SocketService
       }
    }
 
-   public static function setSeen($idNotif){
+   public static function setSeen($notifId){
       try {
          
-         $notif = SocketQueque::find($idNotif);
+         $notif = SocketQueque::find($notifId);
 
          if($notif){
             $notif->vista = true;
@@ -151,16 +151,31 @@ class SocketService
       }  
    }
 
-   public static function setSended($idNotif){
+   public static function setSended($notifId){
       try {
 
-         $notif = SocketQueque::find($idNotif);
+         $notif = SocketQueque::find($notifId);
 
          if($notif){
             $notif->enviada = true;
             $notif->save();
          }
 
+         return $notif;
+
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }  
+   }
+
+   public static function deleteNotification($notifId){
+      try {
+         
+         $notif = SocketQueque::find($notifId);
+ 
+         $notif->activo = false;
+         $notif->save();
+         
          return $notif;
 
       } catch (\Exception $e) {
@@ -241,7 +256,7 @@ class SocketService
 
    public static function getLastNotifications($usuarioId){
       try {
-         return SocketQueque::where([ 'id_usuario'=>$usuarioId ])//, 'enviada' => true
+         return SocketQueque::where([ 'id_usuario'=>$usuarioId, 'activo'=>true ])//, 'enviada' => true
                               ->orderBy('created_at','desc')
                               //->limit(6)
                               ->get();
@@ -252,7 +267,7 @@ class SocketService
 
    public static function getAllNotifications($usuarioId){
       try {
-         return SocketQueque::where([ 'id_usuario'=>$usuarioId ])
+         return SocketQueque::where([ 'id_usuario'=>$usuarioId, 'activo'=>true ])
                               ->orderBy('created_at','desc')
                               ->get();
       } catch (\Exception $e) {
