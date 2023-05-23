@@ -24,8 +24,8 @@ class CorreoController extends Controller
 
     public function correoById($correo_id){
         try {
-            $item =  CorreosService::correoById($correo_id);
-            return response()->json($item, 200);
+            $this->data =  CorreosService::correoById($correo_id);
+            return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
@@ -108,17 +108,25 @@ class CorreoController extends Controller
                     $mail['to_name'] = $d->nombres;
                     CorreosService::guardarYEnviar($mail);
                 }
-                # Almacenar nueva notificacion en la cola del socket
-                $Ssv->addToQueque([
-                    'id_usuario'=>$d->id,
-                    'sala'=>"user_$d->id",
-                    'titulo'=>$mail['asunto'],
-                    'descripcion'=>$mail['cuerpo']
-                ]);
+                if($Ssv->getClientStatus()){
+                    # Almacenar nueva notificacion en la cola del socket
+                    $Ssv->addToQueque([
+                        'id_usuario'=>$d->id,
+                        'sala'=>"user_$d->id",
+                        'titulo'=>$mail['asunto'],
+                        'descripcion'=>$mail['cuerpo']
+                    ]);
+                }
             }
+            # Enviar la cola de mensajes socket, y cerrar la conexion
             $Ssv->emitQueque()->close();
 
-            return $params;
+            $this->data = [
+                $params,
+                $Ssv->getClientStatus()
+            ];
+            
+            return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json([   'error' => $ex->getMessage(),
                                         'funcion' => 'CorreoController->broadcast()'

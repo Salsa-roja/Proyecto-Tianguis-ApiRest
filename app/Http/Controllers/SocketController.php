@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\SocketService;
+use App\Services\UsuarioService;
 
 class SocketController extends Controller
 {
@@ -104,6 +105,35 @@ class SocketController extends Controller
 
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function getLastNotifications($usuarioId){
+        try {
+            $this->data = SocketService::getLastNotifications($usuarioId);
+            return $this->jsonResponse();
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500); 
+        }
+    }
+
+    public function getAllNotifications($usuarioId){
+        try {
+            $this->data = SocketService::getAllNotifications($usuarioId);
+            return $this->jsonResponse();
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500); 
+        }
+    }
+
+    public function setNotificationSeen($notifId){
+        try {
+
+            $this->data = SocketService::setSeen($notifId);
+            return $this->jsonResponse();
+            
+        } catch (\Exception $ex) {
+            return response()->json_encode(['error' => $ex->getMessage()], 500);
         }
     }
 

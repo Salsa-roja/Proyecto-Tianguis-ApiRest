@@ -22,7 +22,8 @@ class SocketQueque extends Model
         'vista',
         'enviada',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'activo'
 	];
 
 }

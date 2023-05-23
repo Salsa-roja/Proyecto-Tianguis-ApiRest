@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('descripcion');
             $table->boolean('vista')->default(false);
             $table->boolean('enviada')->default(false);
+            $table->boolean('activo')->default(true);
             $table->timestamps();
 
             $table->foreign('id_usuario')->references('id')->on('usuarios')
