@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Vacantes;
-use App\Dto\ParseDTO;
+use App\Dto\ParseDto;
 use App\Dto\SolicitudDto;
 use App\Dto\VacantesListDto;
 use App\Dto\EstatusPostulacionDto;
@@ -18,9 +18,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use App\Models\Usuarios;
 use App\Services\SocketService;
-
-
-
+use ElephantIO\Payload;
+use stdClass;
 
 abstract class VacanteService
 {
@@ -33,7 +32,7 @@ abstract class VacanteService
             }
             $vacantedb = $query->where('activo', '1')->get();
 
-            $vacantes = ParseDTO::list($vacantedb, VacantesListDto::class);
+            $vacantes = ParseDto::list($vacantedb, VacantesListDto::class);
             return $vacantes;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
@@ -170,7 +169,7 @@ abstract class VacanteService
         try {
             #obtiene lista de relVacanteSolicitante con relacion solicitantes.usuarios y vacantes
             $solicitudes = VacanteSolicitante::with(['rel_solicitante.rel_usuarios'])->where('id_vacante', $idVacante)->get();
-            $solicitudesDTO = ParseDTO::list($solicitudes, SolicitudDto::class);
+            $solicitudesDTO = ParseDto::list($solicitudes, SolicitudDto::class);
 
             /* $solicitudes = Solicitante::with(['rel_usuarios','rel_vacante_solicitante'=>function($query) use ($idVacante){
                 $query->where('id_vacante',$idVacante);
@@ -188,7 +187,7 @@ abstract class VacanteService
             $solicitudes = VacanteSolicitante::find($params['idVacanteSolicitante']);
             $solicitudes->id_estatus = $params['idEstatus'];
 
-            $solicitudesDTO = ParseDTO::obj($solicitudes, SolicitudDto::class);
+            $solicitudesDTO = ParseDto::obj($solicitudes, SolicitudDto::class);
             $asunto = '¡Tu potulacion se ha actualizado!';
             if ($solicitudes->TalentHunting == true) {
                 $cuerpo = "Tu ofrecimiento de la vacante " . $solicitudesDTO->vacante . " se ha actualizado y se encuentra en el estatus de " . '"' . $solicitudesDTO->estatus . '"' . " del postulado llamado " . $solicitudesDTO->nombre_completo_solicitante;
@@ -197,10 +196,10 @@ abstract class VacanteService
                 $cuerpo = "Tu solicitud para la vacante de " . $solicitudesDTO->vacante . " se ha actualizado y se encuentra en el estatus de " . '"' . $solicitudesDTO->estatus . '"';
                 VacanteService::NotificacionCorreo($solicitudesDTO->id_usuario, $asunto, $cuerpo);
             }
-            if($params['idEstatus']!=2){
-                  $solicitudes->TalentHunting = false;
+            if ($params['idEstatus'] != 2) {
+                $solicitudes->TalentHunting = false;
             }
-          
+
             $solicitudes->save();
             return $solicitudesDTO;
         } catch (\Exception $ex) {
@@ -243,13 +242,13 @@ abstract class VacanteService
                     # Almacenar nueva notificacion en la cola del socket y enviarla
                     $Ssv = new SocketService($params['request']->auth, 'notify_client');
                     $Ssv->addToQueque([
-                            'id_usuario'=>$id_usuario,
-                            'sala'=>"user_$id_usuario",
-                            'titulo'=>'¡Postulación enviada!',
-                            'descripcion'=>$cuerpo
+                        'id_usuario' => $id_usuario,
+                        'sala' => "user_$id_usuario",
+                        'titulo' => '¡Postulación enviada!',
+                        'descripcion' => $cuerpo
                     ])
-                    ->emitQueque()
-                    ->close();
+                        ->emitQueque()
+                        ->close();
                     return $rel;
                 }
             } else {
@@ -353,24 +352,49 @@ abstract class VacanteService
         try {
             $ESTATUS_VACANTE_VISTO = Config('constants.ESTATUS_VACANTE_VISTO');
             $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
-
             $vacanteSoli = VacanteSolicitante::all();
             $Dia_de_hoy = Carbon::now();
-            $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDto::class);
-
+            $solicitudesDTO = ParseDto::list($vacanteSoli, SolicitudDto::class);
+            $user = Usuarios::with('rol', 'rol.permisos')->whereHas('rol', function ($query) {
+                $query->where('nombre', 'Administrador');
+            })->first();
+           
+            $payload = new \stdClass;
+            $payload->id = $user->id;
+            $payload->nombre = $user->nombre_completo;
+            $payload->correo = $user->correo;
+            $payload->rol = $user->rol->nombre;
+            $payload->rol_id = $user->rol_id;
+            $payload->permisos = $user->rol->permisos->map(function ($rolePermission) {
+                return $rolePermission->permiso;
+            });
+            $payload->id_empresa = !is_null($user->usuario_empresa) ? $user->usuario_empresa->rel_empresas['id'] : null;
+            $payload->id_solicitante = !is_null($user->usuario_solicitante) ? $user->usuario_solicitante['id'] : null;
+            $payload->iat = time();
+            $payload->exp = time() + 1440 * 5000;;
+            $Ssv = new SocketService($payload, 'notify_client');
             foreach ($solicitudesDTO as $solicitud) {
                 if ($solicitud->Fecha_actualizacion != null) {
                     $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
-                    if (($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_VACANTE_VISTO) || ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_VACANTE_EN_PROCESO)) {
+                    if (($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_VACANTE_VISTO) ||
+                        ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_VACANTE_EN_PROCESO)
+                    ) {
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
-                        foreach ($solicitud->id_Usuario_de_Empresa as $id_empresa) {
+                        foreach ($solicitud->id_Usuario_de_Empresa as $id_usuario) {
                             $asunto = '¡Actualiza tus postulaciones!';
-                            $cuerpo = "Tienes una postulacion con estatus ''" .  $solicitud->estatus . "'' sin actualizar desde hace mas de " . $dias_diferencia_a_hoy . " dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo;
-                            VacanteService::NotificacionCorreo($id_empresa, $asunto, $cuerpo);
+                            $cuerpo = "Tienes una postulacion con estatus ''" .  $solicitud->estatus . "'' sin actualizar desde hace mas de " . $dias_diferencia_a_hoy . " dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo_solicitante;
+                            VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
+                            $Ssv->addToQueque([
+                                'id_usuario' => $id_usuario,
+                                'sala' => "user_$id_usuario",
+                                'titulo' => $asunto,
+                                'descripcion' => $cuerpo
+                            ]);
                         }
                     }
                 }
             }
+            $Ssv->emitQueque()->close();
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
         }
@@ -381,7 +405,7 @@ abstract class VacanteService
     {
         try {
             $niveEduldb = Estatus_postulacion::all();
-            $nivelEdu = ParseDTO::list($niveEduldb, EstatusPostulacionDto::class);
+            $nivelEdu = ParseDto::list($niveEduldb, EstatusPostulacionDto::class);
             return $nivelEdu;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);

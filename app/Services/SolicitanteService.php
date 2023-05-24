@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Solicitante;
 use App\Models\Usuarios;
 use App\Models\Rol;
-use App\Dto\ParseDTO;
+use App\Dto\ParseDto;
 use App\Dto\SolicitanteDto;
 
 
@@ -30,7 +30,7 @@ abstract class SolicitanteService
 
          $item = Solicitante::with(['rel_usuarios','rel_vacante_solicitante.rel_vacantes.empresa','rel_vacante_solicitante.tabla_estatus'])->find($id);
          
-         return ($dto)? ParseDTO::obj($item, SolicitanteDto::class) : $item;
+         return ($dto)? ParseDto::obj($item, SolicitanteDto::class) : $item;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }

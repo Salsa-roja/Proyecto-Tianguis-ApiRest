@@ -8,7 +8,7 @@ use App\Models\VacanteSolicitante;
 use App\Models\Estatus_postulacion;
 use App\Dto\SolicitanteDto;
 use App\Models\Rol;
-use App\Dto\ParseDTO;
+use App\Dto\ParseDto;
 use App\Dto\EmpresaDto;
 use App\Models\Estatus_empresa;
 use App\Models\Solicitante;
@@ -22,7 +22,7 @@ abstract class EmpresaService
    {
       try {
          $empresasList = Empresa::where('activo', '1')->get();
-         $itemDTO = ParseDTO::list($empresasList, EmpresaDto::class);
+         $itemDTO = ParseDto::list($empresasList, EmpresaDto::class);
          return $itemDTO;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
@@ -40,7 +40,7 @@ abstract class EmpresaService
       try {
          $item = Empresa::with(['usuario_empresa'])->find($id);
          if ($dto) {
-            $itemDTO = ParseDTO::obj($item, EmpresaDto::class);
+            $itemDTO = ParseDto::obj($item, EmpresaDto::class);
             return $itemDTO;
          } else {
             return $item;

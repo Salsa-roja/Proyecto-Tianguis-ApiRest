@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Turnos_laborales;
 use App\Models\Nivel_educativo;
-use App\Dto\ParseDTO;
+use App\Dto\ParseDto;
 use App\Dto\TurnosListDto;
 use App\Dto\NivelEduListDto;
 
@@ -15,7 +15,7 @@ abstract class TurnosTitulosService
     {
         try {
             $turnosdb = Turnos_laborales::all();
-            $turnos = ParseDTO::list($turnosdb, TurnosListDto::class);
+            $turnos = ParseDto::list($turnosdb, TurnosListDto::class);
             return $turnos;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
@@ -26,7 +26,7 @@ abstract class TurnosTitulosService
     {
         try {
             $niveEduldb = Nivel_educativo::all();
-            $nivelEdu = ParseDTO::list($niveEduldb, NivelEduListDto::class);
+            $nivelEdu = ParseDto::list($niveEduldb, NivelEduListDto::class);
             return $nivelEdu;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
