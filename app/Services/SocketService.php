@@ -17,7 +17,7 @@ use ElephantIO\Client;
  * se abre una conexión de socket. Es importante llamar al método close() cuando hayas terminado
  * de usar la instancia, para cerrar la conexión y liberar los recursos.
  * 
- * @param array $mensaje Una instancia del modelo SocketQueque.
+ * @param array $authInfo Un arreglo con la informacion decodificada del inicio de sesión, obtenida del objeto Request en los controladores.
  * @param string $event el evento con el cual se van a emitir los mensajes hacia el servidor websocket. {@default "notify_client"}
  * 
  */
@@ -29,7 +29,7 @@ class SocketService
    protected $token;
    protected $event;
    protected $queque;
-   protected $client;
+   protected $client = false;
 
    public function __construct($authInfo, $event='notify_client'){
       try {
@@ -59,7 +59,8 @@ class SocketService
          }
 
       } catch (\Exception $e) {
-         throw new \Exception($e->getMessage());
+         //throw new \Exception($e->getMessage());
+         throw new \Exception('No fue posible conectar al servidor websocket');
       }  
 
    }
@@ -132,10 +133,10 @@ class SocketService
       }
    }
 
-   public static function setSeen($idNotif){
+   public static function setSeen($notifId){
       try {
          
-         $notif = SocketQueque::find($idNotif);
+         $notif = SocketQueque::find($notifId);
 
          if($notif){
             $notif->vista = true;
@@ -150,16 +151,31 @@ class SocketService
       }  
    }
 
-   public static function setSended($idNotif){
+   public static function setSended($notifId){
       try {
 
-         $notif = SocketQueque::find($idNotif);
+         $notif = SocketQueque::find($notifId);
 
          if($notif){
             $notif->enviada = true;
             $notif->save();
          }
 
+         return $notif;
+
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }  
+   }
+
+   public static function deleteNotification($notifId){
+      try {
+         
+         $notif = SocketQueque::find($notifId);
+ 
+         $notif->activo = false;
+         $notif->save();
+         
          return $notif;
 
       } catch (\Exception $e) {
@@ -232,5 +248,30 @@ class SocketService
       $this->queque = [];
       $this->client->close();
       return $this;
+   }
+
+   public function getClientStatus(){
+      return $this->client;
+   }
+
+   public static function getLastNotifications($usuarioId){
+      try {
+         return SocketQueque::where([ 'id_usuario'=>$usuarioId, 'activo'=>true ])//, 'enviada' => true
+                              ->orderBy('created_at','desc')
+                              //->limit(6)
+                              ->get();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function getAllNotifications($usuarioId){
+      try {
+         return SocketQueque::where([ 'id_usuario'=>$usuarioId, 'activo'=>true ])
+                              ->orderBy('created_at','desc')
+                              ->get();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
    }
 }

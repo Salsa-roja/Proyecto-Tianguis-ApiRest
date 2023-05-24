@@ -43,8 +43,7 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
         $router->post('/guardar','UsuarioController@guardar');
         $router->post('/editar','UsuarioController@editar');
-        $router->get('/getLastNotifications/{usuarioId}', 'UsuarioController@getLastNotifications');
-        $router->get('/setNotificationSeen/{notifId}', 'UsuarioController@setNotificationSeen');
+
     });
 
     #websocket
@@ -53,6 +52,10 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/down', 'SocketController@deleteConnection'); // Da de baja la conexion del cliente al websocket
         $router->post('/set_seen', 'SocketController@setSeen'); // Cambia el campo 'vista' de una notificación
         $router->post('/set_sended', 'SocketController@setSended'); // Cambia el campo 'enviada' de una notificación
+        $router->get('/getLastNotifications/{usuarioId}', 'SocketController@getLastNotifications');
+        $router->get('/getAllNotifications/{usuarioId}', 'SocketController@getAllNotifications');
+        $router->get('/setNotificationSeen/{notifId}', 'SocketController@setNotificationSeen');
+        $router->delete('/deleteNotification/{notifId}', 'SocketController@deleteNotification');
     });
 
     $router->group(['prefix' => 'correo'], function () use ($router) {

@@ -108,23 +108,4 @@ class UsuarioController extends Controller
         }
     }
 
-    public function getLastNotifications($usuarioId){
-        try {
-            $this->data = UsuarioService::getLastNotifications($usuarioId);
-            return $this->jsonResponse();
-        } catch (\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 500); 
-        }
-    }
-
-    public function setNotificationSeen($notifId){
-        try {
-
-            $this->data = SocketService::setSeen($notifId);
-            return $this->jsonResponse();
-            
-        } catch (\Exception $ex) {
-            return response()->json_encode(['error' => $ex->getMessage()], 500);
-        }
-    }
 }
