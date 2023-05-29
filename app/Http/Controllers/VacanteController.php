@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\VacanteSolicitante;
 use App\Dto\ParseDTO;
 use App\Dto\SolicitudDTO;
+use Database\Seeders\VacantesSeeder;
 use DateTime;
 
 class VacanteController extends Controller
@@ -130,7 +131,7 @@ class VacanteController extends Controller
         }
     }
 
-    
+
     public function save(Request $request)
     {
         try {
@@ -140,5 +141,12 @@ class VacanteController extends Controller
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage(), 'msg' => 'Algo salió mal.'], 500);
         }
+    }
+    public function test()
+    {
+       
+
+        $dato = VacanteService::NotificacionEstatusVacantesDesactualizado();
+        return $dato;
     }
 }
