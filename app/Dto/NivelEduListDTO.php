@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Nivel_educativo;
 
-class NivelEduListDto
+class NivelEduListDTO
 {
     public $id;
     public $titulo;

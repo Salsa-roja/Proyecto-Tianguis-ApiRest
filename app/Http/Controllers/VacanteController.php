@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 //use PDF;
 use App\Models\VacanteSolicitante;
 use App\Dto\ParseDTO;
-use App\Dto\SolicitudDto;
+use App\Dto\SolicitudDTO;
 use DateTime;
 
 class VacanteController extends Controller

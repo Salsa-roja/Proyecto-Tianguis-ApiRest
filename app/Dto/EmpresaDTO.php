@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Empresa;
 
-class EmpresaDto
+class EmpresaDTO
 {
 
 

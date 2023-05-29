@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Permiso;
 
-class PermisoListDto
+class PermisoListDTO
 {
         public $id;
         public $nombre;
