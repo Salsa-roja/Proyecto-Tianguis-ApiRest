@@ -26,35 +26,19 @@ abstract class AuthService
         }
 
         // Verify the password and generate the token
-        if (Hash::check($password, $user->contrasena) && $user->usuario_empresa == true ) {
+        if (Hash::check($password, $user->contrasena) ) {
+
             return [
                 'status' => 200,
                 'token' => self::jwt($user),
                 'rol_id' => $user->rol_id,
-                'estatus' => $user->usuario_empresa->rel_empresas->activo,
+                // validacion del login que muestra si la empresa ha tenido demasiadas alertas
+                'estatus' => isset($user->usuario_empresa) ? $user->usuario_empresa->rel_empresas->activo : true,
                 'info' => $user,
                 'message' => 'Autorizado'
             ];
-        } else {
-            return [
-                'status' => 200,
-                'token' => self::jwt($user),
-                'rol_id' => $user->rol_id,
-                'estatus' => true,
-                'info' => $user,
-                'message' => 'Autorizado'
-            ];
-        }
-        // if (Hash::check($password, $user->contrasena)) {
-        //     return [
-        //         'status' => 200,
-        //         'token' => self::jwt($user),
-        //         'rol_id' => $user->rol_id,
-        //         'estatus' => $user->usuario_empresa->rel_empresas->activo,
-        //         'info' => $user,
-        //         'message' => 'Autorizado'
-        //     ];
-        // }
+        } 
+
         // Bad Request response
         return [
             'status' => 400,
