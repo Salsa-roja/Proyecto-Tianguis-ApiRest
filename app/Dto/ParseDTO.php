@@ -2,7 +2,7 @@
 
 namespace App\Dto;
 
-abstract class ParseDto
+abstract class ParseDTO
 {
     public static function list($objlist, $clsdto)
     {

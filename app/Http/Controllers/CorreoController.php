@@ -7,7 +7,7 @@ use App\Services\CorreosService;
 use App\Services\SocketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Dto\ParseDto;
+use App\Dto\ParseDTO;
 use App\Models\Usuarios;
 use App\Models\Solicitante;
 use App\Models\Empresa;
