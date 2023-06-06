@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Empresa;
 use App\Models\VacanteSolicitante;
 use App\Models\Estatus_postulacion;
-use App\Dto\SolicitanteDto;
+use App\Dto\SolicitanteDTO;
 use App\Models\Rol;
-use App\Dto\ParseDto;
-use App\Dto\EmpresaDto;
+use App\Dto\ParseDTO;
+use App\Dto\EmpresaDTO;
 use App\Models\Estatus_empresa;
 use App\Models\Solicitante;
 use App\Models\Vacantes;
@@ -22,7 +22,7 @@ abstract class EmpresaService
    {
       try {
          $empresasList = Empresa::where('activo', '1')->get();
-         $itemDTO = ParseDto::list($empresasList, EmpresaDto::class);
+         $itemDTO = ParseDTO::list($empresasList, EmpresaDTO::class);
          return $itemDTO;
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
@@ -40,7 +40,7 @@ abstract class EmpresaService
       try {
          $item = Empresa::with(['usuario_empresa'])->find($id);
          if ($dto) {
-            $itemDTO = ParseDto::obj($item, EmpresaDto::class);
+            $itemDTO = ParseDTO::obj($item, EmpresaDTO::class);
             return $itemDTO;
          } else {
             return $item;
@@ -216,7 +216,7 @@ abstract class EmpresaService
 
          // return $vacantedb;
          if ($solicitantes) {
-            $vacante = ParseDto::list($solicitantes, SolicitanteDto::class);
+            $vacante = ParseDTO::list($solicitantes, SolicitanteDTO::class);
          } else {
             $vacante = null;
          }

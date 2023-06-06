@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use App\Dto\ParseDto;
+use App\Dto\ParseDTO;
 use App\Dto\UsuarioListDTO;
 use App\Dto\UsuarioEmpresaListDTO;
 use App\Models\Usuarios;
@@ -20,10 +20,10 @@ abstract class UsuarioService
 
          if($auth->rol == 'Administrador'){         
             $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->get();
-            $usuarios = ParseDto::list($usuariosdb, UsuarioListDTO::class);
+            $usuarios = ParseDTO::list($usuariosdb, UsuarioListDTO::class);
          }else{
             $usuariosdb = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
-            $usuarios = ParseDto::list($usuariosdb, UsuarioEmpresaListDTO::class);
+            $usuarios = ParseDTO::list($usuariosdb, UsuarioEmpresaListDTO::class);
             //$usuarios = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
 
          }
@@ -40,7 +40,7 @@ abstract class UsuarioService
       try {
          $item = Usuarios::with('usuario_empresa')->find($id);
          if($dto){
-            $itemDTO = ParseDto::obj($item, UsuarioListDTO::class);
+            $itemDTO = ParseDTO::obj($item, UsuarioListDTO::class);
             return $itemDTO;
          }else{
             return $item;

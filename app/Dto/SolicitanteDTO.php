@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Solicitante;
 
-class SolicitanteDto
+class SolicitanteDTO
 {
    public $id_solicitante;
    public $id_usuario;

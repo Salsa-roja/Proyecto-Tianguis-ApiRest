@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Models\Vacantes;
-use App\Dto\ParseDto;
-use App\Dto\SolicitudDto;
-use App\Dto\VacantesListDto;
-use App\Dto\EstatusPostulacionDto;
+use App\Dto\ParseDTO;
+use App\Dto\SolicitudDTO;
+use App\Dto\VacantesListDTO;
+use App\Dto\EstatusPostulacionDTO;
 use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
 use App\Models\UsuariosEmpresas;
@@ -32,7 +32,7 @@ abstract class VacanteService
             }
             $vacantedb = $query->where('activo', '1')->get();
 
-            $vacantes = ParseDto::list($vacantedb, VacantesListDto::class);
+            $vacantes = ParseDTO::list($vacantedb, VacantesListDTO::class);
             return $vacantes;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);
@@ -53,7 +53,7 @@ abstract class VacanteService
             }
             $vacantedb = $vacantedb->where(['activo' => true])->find($params['request']->idVacante);
             if ($vacantedb) {
-                $vacante = ParseDto::obj($vacantedb, VacantesListDto::class);
+                $vacante = ParseDTO::obj($vacantedb, VacantesListDTO::class);
             } else {
                 $vacante = null;
             }
@@ -69,7 +69,7 @@ abstract class VacanteService
             if ($name != '') {
                 $vacantedb = Vacantes::with(['empresa', 'tabla_turnos_laborales', 'tabla_nivel_educativo'])
                     ->whereRaw("REPLACE(UPPER(vacante),' ','') like ?", str_replace(' ', '', strtoupper('%' . $name . '%')))->where('activo', '1')->get();
-                $vacante = ParseDto::list($vacantedb, VacantesListDto::class);
+                $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
                 return $vacante;
             }
         } catch (\Exception $ex) {
@@ -121,7 +121,7 @@ abstract class VacanteService
             }
             $vacantedb = $vacantedb->where('activo', '1')->get();
             if ($vacantedb) {
-                $vacante = ParseDto::list($vacantedb, VacantesListDto::class);
+                $vacante = ParseDTO::list($vacantedb, VacantesListDTO::class);
             } else {
                 $vacante = null;
             }
@@ -169,7 +169,7 @@ abstract class VacanteService
         try {
             #obtiene lista de relVacanteSolicitante con relacion solicitantes.usuarios y vacantes
             $solicitudes = VacanteSolicitante::with(['rel_solicitante.rel_usuarios'])->where('id_vacante', $idVacante)->get();
-            $solicitudesDTO = ParseDto::list($solicitudes, SolicitudDto::class);
+            $solicitudesDTO = ParseDTO::list($solicitudes, SolicitudDTO::class);
 
             /* $solicitudes = Solicitante::with(['rel_usuarios','rel_vacante_solicitante'=>function($query) use ($idVacante){
                 $query->where('id_vacante',$idVacante);
@@ -187,7 +187,7 @@ abstract class VacanteService
             $solicitudes = VacanteSolicitante::find($params['idVacanteSolicitante']);
             $solicitudes->id_estatus = $params['idEstatus'];
 
-            $solicitudesDTO = ParseDto::obj($solicitudes, SolicitudDto::class);
+            $solicitudesDTO = ParseDTO::obj($solicitudes, SolicitudDTO::class);
             $asunto = '¡Tu potulacion se ha actualizado!';
             if ($solicitudes->TalentHunting == true) {
                 $cuerpo = "Tu ofrecimiento de la vacante " . $solicitudesDTO->vacante . " se ha actualizado y se encuentra en el estatus de " . '"' . $solicitudesDTO->estatus . '"' . " del postulado llamado " . $solicitudesDTO->nombre_completo_solicitante;
@@ -357,7 +357,8 @@ abstract class VacanteService
             $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
             $vacanteSoli = VacanteSolicitante::all();
             $Dia_de_hoy = Carbon::now();
-            $solicitudesDTO = ParseDto::list($vacanteSoli, SolicitudDto::class);
+            $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDTO::class);
+
             $user = Usuarios::with('rol', 'rol.permisos')->whereHas('rol', function ($query) {
                 $query->where('nombre', 'Administrador');
             })->first();
@@ -408,7 +409,7 @@ abstract class VacanteService
     {
         try {
             $niveEduldb = Estatus_postulacion::all();
-            $nivelEdu = ParseDto::list($niveEduldb, EstatusPostulacionDto::class);
+            $nivelEdu = ParseDTO::list($niveEduldb, EstatusPostulacionDTO::class);
             return $nivelEdu;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage(), 500);

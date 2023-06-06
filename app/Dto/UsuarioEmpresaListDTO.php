@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\UsuariosEmpresas;
 
-class UsuarioEmpresaListDto
+class UsuarioEmpresaListDTO
 {
     public $id;
     public $id_empresa;

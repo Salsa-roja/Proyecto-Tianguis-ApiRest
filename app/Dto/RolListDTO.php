@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Rol;
 
-class RolListDto
+class RolListDTO
 {
     public $id;
     public $nombre;

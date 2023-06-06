@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\VacanteSolicitante;
 
-class SolicitudDto
+class SolicitudDTO
 {
    public $id;
    public $id_Usuario_de_Empresa= [];

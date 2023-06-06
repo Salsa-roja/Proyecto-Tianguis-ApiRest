@@ -7,8 +7,8 @@ use App\Services\VacanteService;
 use Illuminate\Http\Request;
 //use PDF;
 use App\Models\VacanteSolicitante;
-use App\Dto\ParseDto;
-use App\Dto\SolicitudDto;
+use App\Dto\ParseDTO;
+use App\Dto\SolicitudDTO;
 use Database\Seeders\VacantesSeeder;
 use DateTime;
 

@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Turnos_laborales;
 
-class TurnosListDto
+class TurnosListDTO
 {
     public $id;
     public $turnos;

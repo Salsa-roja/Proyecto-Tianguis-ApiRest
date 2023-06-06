@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Estatus_Postulacion;
 
-class EstatusPostulacionDto
+class EstatusPostulacionDTO
 {
     public $id;
     public $estatus;

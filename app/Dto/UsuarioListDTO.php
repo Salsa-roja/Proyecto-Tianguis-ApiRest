@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Models\Usuarios;
 
-class UsuarioListDto
+class UsuarioListDTO
 {
     public $id;
     public $nombreCompleto;
