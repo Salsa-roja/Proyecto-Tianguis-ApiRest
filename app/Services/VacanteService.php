@@ -352,6 +352,7 @@ abstract class VacanteService
     public static function NotificacionEstatusVacantesDesactualizado()
     {
         try {
+           
             $ESTATUS_VACANTE_VISTO = Config('constants.ESTATUS_VACANTE_VISTO');
             $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
             $vacanteSoli = VacanteSolicitante::all();

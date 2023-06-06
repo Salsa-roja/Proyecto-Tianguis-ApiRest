@@ -25,6 +25,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('notificacion:vacantes_revisadas')->everyMinute();
+        $schedule->command('notificacion_vacantes_revisadas')->everyMinute();
     }
 }
