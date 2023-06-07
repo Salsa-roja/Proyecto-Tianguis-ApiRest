@@ -352,8 +352,14 @@ abstract class VacanteService
     public static function NotificacionEstatusVacantesDesactualizado()
     {
         try {
+<<<<<<< HEAD
             $ESTATUS_POSTULACION_VISTO = Config('constants.ESTATUS_POSTULACION_VISTO');
             $ESTATUS_POSTULACION_EN_PROCESO = Config('constants.ESTATUS_POSTULACION_EN_PROCESO');
+=======
+           
+            $ESTATUS_VACANTE_VISTO = Config('constants.ESTATUS_VACANTE_VISTO');
+            $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
+>>>>>>> 2e89794d3fee6f2d2faf8d94363cfc232ce52a5d
             $vacanteSoli = VacanteSolicitante::all();
             $Dia_de_hoy = Carbon::now();
             $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDTO::class);

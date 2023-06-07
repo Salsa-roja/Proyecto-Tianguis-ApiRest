@@ -14,7 +14,7 @@ class notificacion_vacantes_revisadas extends Command
      *
      * @var string
      */
-    protected $signature = 'notificacion:vacantes_revisadas';
+    protected $signature = 'notificacion_vacantes_revisadas';
 
     /**
      * The console command description.
