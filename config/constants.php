@@ -3,7 +3,7 @@
 return [
     'ROL_ADMIN' => 'Administrador',
     'ROL_EMPRESA' => 'Empresa',
-    'ROL_SOLICATANTE' => 'Solicitante',
+    'ROL_SOLICITANTE' => 'Solicitante',
 
 
     'ESTATUS_POSTULACION_NO_VISTO' =>  'No visto',
