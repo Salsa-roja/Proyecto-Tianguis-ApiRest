@@ -62,7 +62,12 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/broadcast', 'CorreoController@broadcast');
     });
 
-});
+    $router->group(['prefix' => 'reportes'], function () use ($router) {
+        $router->get('/generales', 'ReportesController@generales');
+    });
+
+
+});//...rutas admin
 
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {

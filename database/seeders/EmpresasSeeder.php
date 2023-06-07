@@ -27,7 +27,7 @@ class EmpresasSeeder extends Seeder
          $Usuario->nombre_login = "empresa1";
          $Usuario->correo = "empresa@quierochamba.com";
          $Usuario->contrasena = password_hash("123456789", PASSWORD_BCRYPT);
-         $Usuario->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
+         $Usuario->rol_id = Rol::where('nombre', Config('constants.ROL_EMPRESA'))->first()->id;
          $Usuario->save();
 
          # guardar empresa

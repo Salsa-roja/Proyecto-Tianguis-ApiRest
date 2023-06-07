@@ -93,7 +93,7 @@ class SolicitantesSeeder extends Seeder
             $Usuario->correo = $v['correo'];
             $Usuario->nombre_login = $v['nombre_login'];
             $Usuario->contrasena = password_hash('123456789', PASSWORD_BCRYPT);
-            $Usuario->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
+            $Usuario->rol_id = Rol::where('nombre', Config('constants.ROL_SOLICITANTE'))->first()->id;
             $Usuario->save();
    
             # guardar solicitante

@@ -14,7 +14,7 @@ class VacanteSolicitante extends Model
         'id_vacante',
         'id_solicitante',
         'id_estatus',
-        'TalentHunting',
+        'talent_hunting',
         'activo',
         'created_at',
         'updated_at'

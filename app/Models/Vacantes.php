@@ -31,7 +31,8 @@ class Vacantes extends Model
         'tipo_de_puesto',
         'habilidades_requeridas',
         'lat',
-        'lng'
+        'lng',
+        'activo'
     ];
     public function tabla_turnos_laborales()
     {

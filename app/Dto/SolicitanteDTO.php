@@ -88,7 +88,7 @@ class SolicitanteDTO
             $solicitud->fecha_solicitud = $rvs->created_at;
             $solicitud->id_solicitante = $rvs->id_solicitante;
             $solicitud->id_vacante     = $rvs->id_vacante;
-            $solicitud->TalentHunting     = $rvs->TalentHunting;
+            $solicitud->talent_hunting     = $rvs->talent_hunting;
             $solicitud->status         = $rvs->tabla_estatus->estatus;
             $solicitud->id_estatus        = $rvs->tabla_estatus->id;
             $solicitud->vacante        = $rvs->rel_vacantes;

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('id_solicitante')->references('id')->on('solicitantes')
                 ->onDelete('cascade')->onUpdate('cascade');
 
-             $table->boolean('TalentHunting')->default(0);
+             $table->boolean('talent_hunting')->default(0);
 
             $table->integer("id_estatus");
             $table->foreign('id_estatus')->references('id')->on('estatus_postulacion');

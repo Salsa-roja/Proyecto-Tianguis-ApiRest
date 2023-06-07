@@ -18,7 +18,7 @@ abstract class UsuarioService
    public static function listado($auth){
       try {
 
-         if($auth->rol == 'Administrador'){         
+         if($auth->rol == Config('constants.ROL_ADMIN')){         
             $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->get();
             $usuarios = ParseDTO::list($usuariosdb, UsuarioListDTO::class);
          }else{
@@ -53,7 +53,7 @@ abstract class UsuarioService
    public static function guardar($params){
       try {
          if(isset($params['request']->auth))
-            if($params['request']->auth->rol=="Empresa")
+            if($params['request']->auth->rol==Config('constants.ROL_EMPRESA'))
                return UsuarioService::guardarUsuarioEmpresa($params);
          $itemUs = new Usuarios();
          $itemUs->nombres = $params['nombres'];
@@ -63,7 +63,7 @@ abstract class UsuarioService
          $itemUs->nombre_login = $params['nombre_login'];
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
 
-         $itemUs->rol_id = Rol::where('nombre', 'Administrador')->first()->id;
+         $itemUs->rol_id = Rol::where('nombre', Config('constants.ROL_ADMIN'))->first()->id;
          $itemUs->save();
 
          return $itemUs;
@@ -82,7 +82,7 @@ abstract class UsuarioService
          $itemUs->nombre_login = $params['nombre_login'];
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
 
-         $itemUs->rol_id = Rol::where('nombre', 'Empresa')->first()->id;
+         $itemUs->rol_id = Rol::where('nombre', Config('constants.ROL_EMPRESA'))->first()->id;
          $itemUs->save();
          # guardar relacion
          $UsrEmp = new UsuariosEmpresas();
@@ -105,7 +105,7 @@ abstract class UsuarioService
          $itemUs->correo = $params['correo'];
          $itemUs->nombre_login = $params['nombre_login'];
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
-         $itemUs->rol_id = Rol::where('nombre', 'Solicitante')->first()->id;
+         $itemUs->rol_id = Rol::where('nombre', Config('constants.ROL_SOLICITANTE'))->first()->id;
          $itemUs->save();
 
          return $itemUs;

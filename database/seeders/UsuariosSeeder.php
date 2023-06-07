@@ -23,14 +23,14 @@ class UsuariosSeeder extends Seeder
                 'nombre_login' => 'admin1',
                 'correo' => 'admin@admin.com',
                 'contrasena' => password_hash('123456789', PASSWORD_BCRYPT),
-                'rol_id' => Rol::where('nombre', 'Administrador')->first()->id
+                'rol_id' => Rol::where('nombre', Config('constants.ROL_ADMIN'))->first()->id
             ]
 
         ];
         foreach ($usuarios as $key => $obj) {
             $z = new Usuarios();
             $z->nombres = $obj['nombres'];
-            $z->rol_id = $obj['rol_id'];//Rol::where('nombre', 'Administrador')->first()->id;
+            $z->rol_id = $obj['rol_id'];
             $z->ape_paterno = $obj['ape_paterno'];
             $z->ape_materno = $obj['ape_materno'];
             $z->nombre_login = $obj['nombre_login'];

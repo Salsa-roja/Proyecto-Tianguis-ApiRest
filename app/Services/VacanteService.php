@@ -189,7 +189,7 @@ abstract class VacanteService
 
             $solicitudesDTO = ParseDTO::obj($solicitudes, SolicitudDTO::class);
             $asunto = '¡Tu potulacion se ha actualizado!';
-            if ($solicitudes->TalentHunting == true) {
+            if ($solicitudes->talent_hunting == true) {
                 $cuerpo = "Tu ofrecimiento de la vacante " . $solicitudesDTO->vacante . " se ha actualizado y se encuentra en el estatus de " . '"' . $solicitudesDTO->estatus . '"' . " del postulado llamado " . $solicitudesDTO->nombre_completo_solicitante;
                 VacanteService::NotificacionCorreo($solicitudesDTO->id_Usuario_de_Empresa[0], $asunto, $cuerpo);
             } else {
@@ -197,7 +197,7 @@ abstract class VacanteService
                 VacanteService::NotificacionCorreo($solicitudesDTO->id_usuario, $asunto, $cuerpo);
             }
             if ($params['idEstatus'] != 2) {
-                $solicitudes->TalentHunting = false;
+                $solicitudes->talent_hunting = false;
             }
 
             $solicitudes->save();
@@ -231,8 +231,8 @@ abstract class VacanteService
                     $rel = new VacanteSolicitante();
                     $rel->id_vacante = $vacante->id;
                     $rel->id_solicitante = $solicitante->id;
-                    $rel->TalentHunting = 0;
-                    $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_VACANTE_NO_VISTO'))->first()->id;
+                    $rel->talent_hunting = 0;
+                    $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_POSTULACION_NO_VISTO'))->first()->id;
                     $rel->save();
 
                     $asunto = '¡Recibimos tu solicitud!';
@@ -321,9 +321,9 @@ abstract class VacanteService
     public static function desactivarEmpresas($id)
     {
         $empresaSoliId = Empresa::find($id);
-        $alertas = $empresaSoliId->No_de_alertas;
-        $empresaSoliId->No_de_alertas = $alertas + 1;
-        if ($empresaSoliId->No_de_alertas <= 10) {
+        $alertas = $empresaSoliId->no_de_alertas;
+        $empresaSoliId->no_de_alertas = $alertas + 1;
+        if ($empresaSoliId->no_de_alertas <= 10) {
             $empresaSoliId->activo = 0;
         }
         $empresaSoliId->save();
@@ -352,14 +352,14 @@ abstract class VacanteService
     public static function NotificacionEstatusVacantesDesactualizado()
     {
         try {
-            $ESTATUS_VACANTE_VISTO = Config('constants.ESTATUS_VACANTE_VISTO');
-            $ESTATUS_VACANTE_EN_PROCESO = Config('constants.ESTATUS_VACANTE_EN_PROCESO');
+            $ESTATUS_POSTULACION_VISTO = Config('constants.ESTATUS_POSTULACION_VISTO');
+            $ESTATUS_POSTULACION_EN_PROCESO = Config('constants.ESTATUS_POSTULACION_EN_PROCESO');
             $vacanteSoli = VacanteSolicitante::all();
             $Dia_de_hoy = Carbon::now();
             $solicitudesDTO = ParseDTO::list($vacanteSoli, SolicitudDTO::class);
 
             $user = Usuarios::with('rol', 'rol.permisos')->whereHas('rol', function ($query) {
-                $query->where('nombre', 'Administrador');
+                $query->where('nombre', Config('constants.ROL_ADMIN'));
             })->first();
            
             $payload = new \stdClass;
@@ -379,8 +379,8 @@ abstract class VacanteService
             foreach ($solicitudesDTO as $solicitud) {
                 if ($solicitud->Fecha_actualizacion != null) {
                     $dias_diferencia_a_hoy = $Dia_de_hoy->diffInDays($solicitud->Fecha_actualizacion);
-                    if (($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_VACANTE_VISTO) ||
-                        ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_VACANTE_EN_PROCESO)
+                    if (($dias_diferencia_a_hoy >= 3  && $solicitud->estatus == $ESTATUS_POSTULACION_VISTO) ||
+                        ($dias_diferencia_a_hoy >= 7 && $solicitud->estatus == $ESTATUS_POSTULACION_EN_PROCESO)
                     ) {
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
                         foreach ($solicitud->id_Usuario_de_Empresa as $id_usuario) {

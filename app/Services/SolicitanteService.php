@@ -68,7 +68,7 @@ abstract class SolicitanteService
             'correo' => $params['correo'],
             'nombre_login' => $params['nombre_login'],
             'contrasena' => $params['contrasena'],
-            'rol_id' => Rol::where('nombre', 'Solicitante')->first()->id,
+            'rol_id' => Rol::where('nombre', Config('constants.ROL_SOLICITANTE'))->first()->id,
             'request' => $params['request']
          ];
          
