@@ -4,9 +4,9 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use App\Dto\ParseDTO;
-use App\Dto\UsuarioListDTO;
-use App\Dto\UsuarioEmpresaListDTO;
+use App\DTO\ParseDTO;
+use App\DTO\UsuarioListDTO;
+use App\DTO\UsuarioEmpresaListDTO;
 use App\Models\Usuarios;
 use App\Models\UsuariosEmpresas;
 use App\Models\Rol;

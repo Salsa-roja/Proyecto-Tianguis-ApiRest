@@ -71,7 +71,11 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Modulo de Reportes',
                         'permiso' => 'ReportsModule'
-                    ]   
+                    ],
+                    [
+                        'nombre' => 'Modulo de Comentarios',
+                        'permiso' => 'ContactoList'
+                    ]  
                 ]
             ],
             [

@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Models\Vacantes;
-use App\Dto\ParseDTO;
-use App\Dto\SolicitudDTO;
-use App\Dto\VacantesListDTO;
-use App\Dto\EstatusPostulacionDTO;
+use App\DTO\ParseDTO;
+use App\DTO\SolicitudDTO;
+use App\DTO\VacantesListDTO;
+use App\DTO\EstatusPostulacionDTO;
 use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
 use App\Models\UsuariosEmpresas;

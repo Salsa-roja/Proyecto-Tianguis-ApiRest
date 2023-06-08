@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Models\Turnos_laborales;
 use App\Models\Nivel_educativo;
-use App\Dto\ParseDTO;
-use App\Dto\TurnosListDTO;
-use App\Dto\NivelEduListDTO;
+use App\DTO\ParseDTO;
+use App\DTO\TurnosListDTO;
+use App\DTO\NivelEduListDTO;
 
 
 abstract class TurnosTitulosService

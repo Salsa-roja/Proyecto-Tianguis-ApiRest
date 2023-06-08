@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Solicitante;
 use App\Models\Usuarios;
 use App\Models\Rol;
-use App\Dto\ParseDTO;
-use App\Dto\SolicitanteDTO;
+use App\DTO\ParseDTO;
+use App\DTO\SolicitanteDTO;
 
 
 abstract class SolicitanteService
