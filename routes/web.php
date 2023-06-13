@@ -43,6 +43,7 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
         $router->post('/guardar','UsuarioController@guardar');
         $router->post('/editar','UsuarioController@editar');
+        $router->delete('/eliminar/{id}', 'UsuarioController@inhabilitar');
 
     });
 
