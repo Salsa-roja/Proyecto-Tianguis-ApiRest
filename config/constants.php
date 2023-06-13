@@ -1,11 +1,16 @@
 <?php
 
 return [
-    'ESTATUS_VACANTE_NO_VISTO' =>  'No visto',
-    'ESTATUS_VACANTE_VISTO' => 'Revisado',
-    'ESTATUS_VACANTE_EN_PROCESO' => 'En proceso',
-    'ESTATUS_VACANTE_ACEPTADO' => 'Aceptado',
-    'ESTATUS_VACANTE_RECHAZADO' => 'Rechazado',
+    'ROL_ADMIN' => 'Administrador',
+    'ROL_EMPRESA' => 'Empresa',
+    'ROL_SOLICITANTE' => 'Solicitante',
+
+
+    'ESTATUS_POSTULACION_NO_VISTO' =>  'No visto',
+    'ESTATUS_POSTULACION_VISTO' => 'Revisado',
+    'ESTATUS_POSTULACION_EN_PROCESO' => 'En proceso',
+    'ESTATUS_POSTULACION_ACEPTADO' => 'Aceptado',
+    'ESTATUS_POSTULACION_RECHAZADO' => 'Rechazado',
 
     'ESTATUS_EMPRESA_ACTIVO' => 'Activo',
     'ESTATUS_EMPRESA_INHABILITADO' => 'Inhabilitado',

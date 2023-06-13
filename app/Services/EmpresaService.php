@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Empresa;
 use App\Models\VacanteSolicitante;
 use App\Models\Estatus_postulacion;
-use App\Dto\SolicitanteDTO;
+use App\DTO\SolicitanteDTO;
 use App\Models\Rol;
-use App\Dto\ParseDTO;
-use App\Dto\EmpresaDTO;
+use App\DTO\ParseDTO;
+use App\DTO\EmpresaDTO;
 use App\Models\Estatus_empresa;
 use App\Models\Solicitante;
 use App\Models\Vacantes;
@@ -84,7 +84,7 @@ abstract class EmpresaService
             'correo' => $params['correo_rh'],
             'nombre_login' => $params['nombre_login'],
             'contrasena' => $params['contrasena'],
-            'rol_id' => Rol::where('nombre', 'Empresa')->first()->id,
+            'rol_id' => Rol::where('nombre', Config('constants.ROL_EMPRESA'))->first()->id,
             'request' => $params['request'],
             'empresa_id' => $Empresa->id
          ];
@@ -247,8 +247,8 @@ abstract class EmpresaService
                $rel = new VacanteSolicitante();
                $rel->id_vacante = $vacante->id;
                $rel->id_solicitante = $solicitante->id;
-               $rel->TalentHunting=1;
-               $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_VACANTE_NO_VISTO'))->first()->id;
+               $rel->talent_hunting=1;
+               $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_POSTULACION_NO_VISTO'))->first()->id;
                $rel->save();
 
                $asunto = '¡Una empresa se ha interesado en ti!';

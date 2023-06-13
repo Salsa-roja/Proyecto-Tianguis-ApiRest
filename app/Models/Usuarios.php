@@ -35,7 +35,7 @@ class Usuarios extends Model{
 
     public function rol()
     {
-        return $this->belongsTo(Rol::class);
+        return $this->belongsTo(Rol::class, 'rol_id');
     }
 
     /**

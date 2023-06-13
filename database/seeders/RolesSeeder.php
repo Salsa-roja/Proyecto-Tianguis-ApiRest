@@ -18,7 +18,7 @@ class RolesSeeder extends Seeder
         $roles = [
             [
                 'id' => 1,
-                'nombre' => 'Administrador',
+                'nombre' => Config('constants.ROL_ADMIN'),
                 'permisos' => [
                     [
                         'nombre' => 'Modulo de Empresas',
@@ -67,12 +67,20 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Redactar emails con interfaz',
                         'permiso' => 'WriteMail'
-                    ],       
+                    ],
+                    [
+                        'nombre' => 'Modulo de Reportes',
+                        'permiso' => 'ReportsModule'
+                    ],
+                    [
+                        'nombre' => 'Modulo de Comentarios',
+                        'permiso' => 'ContactoList'
+                    ]  
                 ]
             ],
             [
                 'id' => 2,
-                'nombre' => 'Solicitante',
+                'nombre' => Config('constants.ROL_SOLICITANTE'),
                 'permisos' => [
                     [
                         'nombre' => 'Modulo de Solicitantes',
@@ -94,7 +102,7 @@ class RolesSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'nombre' => 'Empresa',
+                'nombre' => Config('constants.ROL_EMPRESA'),
                 'permisos' => [
                     [
                         'nombre' => 'Ocion de menu empresas',

@@ -63,7 +63,18 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->post('/broadcast', 'CorreoController@broadcast');
     });
 
-});
+    $router->group(['prefix' => 'reportes'], function () use ($router) {
+        $router->get('/generales', 'ReportesController@generales');
+        $router->get('/conversion', 'ReportesController@graficaConversion');
+    });
+
+    $router->group(['prefix' => 'contacto'], function () use ($router) {
+        $router->get('/listado', 'ContactoController@listado');
+        $router->delete('/eliminar/{id}', 'ContactoController@eliminar');
+
+    });
+
+});//...rutas admin
 
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
@@ -118,5 +129,10 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/list', 'SocketController@listConnections'); // Obtiene la lista de las conexiones de clientes con el websocket activas
         $router->post('/testAddToQueque', 'SocketController@testAddToQueque');
     });
+
+    $router->group(['prefix' => 'contacto'], function () use ($router) {
+        $router->post('/guardar', 'ContactoController@guardar'); // Obtiene la lista de las conexiones de clientes con el websocket activas
+    });
+
 
 });

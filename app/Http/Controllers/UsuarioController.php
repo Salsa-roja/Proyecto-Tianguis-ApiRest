@@ -95,7 +95,7 @@ class UsuarioController extends Controller
             $this->data=[$Usuario,$this->request->auth];
 
             # Solo admins o usuarios que pertenezcan a la misma empresa que el usuario solicitado pueden ver el detalle
-            if($this->request->auth->rol=='Administrador' || $Usuario->idEmpresa == $this->request->auth->id_empresa){
+            if($this->request->auth->rol==Config('constants.ROL_ADMIN') || $Usuario->idEmpresa == $this->request->auth->id_empresa){
                 $this->data=$Usuario;
             } else{
                 $this->msg='No tienes permisos suficientes para ver la informacion del usuario';

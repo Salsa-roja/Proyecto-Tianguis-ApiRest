@@ -16,7 +16,7 @@ class Empresa extends Model
         'nombre_comercial',
         'razon_social',
         'rfc',
-        'No_de_alertas',
+        'no_de_alertas',
         'descripcion',
         'numero_empleados',
         'constancia_sit_fiscal',

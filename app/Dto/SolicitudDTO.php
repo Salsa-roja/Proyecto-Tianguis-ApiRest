@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\DTO;
 
 use App\Models\VacanteSolicitante;
 
@@ -55,7 +55,7 @@ class SolicitudDTO
       $this->id_vacante = $obj->id_vacante;
       $this->vacante = $obj->rel_vacantes->vacante;
       $this->id_empresa = $obj->rel_vacantes->empresa->id;
-      $this->alertas_en_empresa = $obj->rel_vacantes->empresa->No_de_alertas;
+      $this->alertas_en_empresa = $obj->rel_vacantes->empresa->no_de_alertas;
       $this->status_solicitud = $obj->activo;
       $this->fecha_solicitud = $obj->created_at;
       $this->Fecha_actualizacion = $obj->updated_at;

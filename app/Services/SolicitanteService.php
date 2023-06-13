@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Solicitante;
 use App\Models\Usuarios;
 use App\Models\Rol;
-use App\Dto\ParseDTO;
-use App\Dto\SolicitanteDTO;
+use App\DTO\ParseDTO;
+use App\DTO\SolicitanteDTO;
 
 
 abstract class SolicitanteService
@@ -68,7 +68,7 @@ abstract class SolicitanteService
             'correo' => $params['correo'],
             'nombre_login' => $params['nombre_login'],
             'contrasena' => $params['contrasena'],
-            'rol_id' => Rol::where('nombre', 'Solicitante')->first()->id,
+            'rol_id' => Rol::where('nombre', Config('constants.ROL_SOLICITANTE'))->first()->id,
             'request' => $params['request']
          ];
          
