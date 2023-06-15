@@ -324,7 +324,7 @@ abstract class VacanteService
         $alertas = $empresaSoliId->no_de_alertas;
         $empresaSoliId->no_de_alertas = $alertas + 1;
         if ($empresaSoliId->no_de_alertas <= 10) {
-            $empresaSoliId->activo = 0;
+            $empresaSoliId->id_estatus = 2;
         }
         $empresaSoliId->save();
     }

@@ -19,10 +19,10 @@ abstract class UsuarioService
       try {
 
          if($auth->rol == Config('constants.ROL_ADMIN')){         
-            $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->get();
+            $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->where('activo',true)->get();
             $usuarios = ParseDTO::list($usuariosdb, UsuarioListDTO::class);
          }else{
-            $usuariosdb = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
+            $usuariosdb = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->where('activo',true)->get();
             $usuarios = ParseDTO::list($usuariosdb, UsuarioEmpresaListDTO::class);
             //$usuarios = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
 
@@ -159,5 +159,22 @@ abstract class UsuarioService
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
+   }
+   public static function inhabilitar($id)
+   {
+       try {
+           if ($id > 0) {
+               $usuario = Usuarios::where('id', $id)->first();
+               if ($usuario) {
+                   $usuario->activo = 0;
+                   $usuario->save();
+               }
+           } else {
+               $usuario = [];
+           }
+           return $usuario;
+       } catch (\Exception $ex) {
+           return response()->json(['mensaje' => 'Hubo un error al eliminar el usuario', $ex->getMessage()], 400);
+       }
    }
 }

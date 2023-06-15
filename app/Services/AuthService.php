@@ -33,7 +33,7 @@ abstract class AuthService
                 'token' => self::jwt($user),
                 'rol_id' => $user->rol_id,
                 // validacion del login que muestra si la empresa ha tenido demasiadas alertas
-                'estatus' => isset($user->usuario_empresa) ? $user->usuario_empresa->rel_empresas->activo : true,
+                'estatus' => isset($user->usuario_empresa) ? $user->usuario_empresa->rel_empresas->id_estatus : true,
                 'info' => $user,
                 'message' => 'Autorizado'
             ];

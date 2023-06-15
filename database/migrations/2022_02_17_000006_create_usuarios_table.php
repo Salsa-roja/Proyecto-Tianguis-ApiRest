@@ -19,7 +19,7 @@ class CreateUsuariosTable extends Migration
             $table->string("correo", 155);
             $table->string("contrasena", 255);
             $table->boolean("activo")->default(1);
-            $table->integer("no_de_alertas")->default(0);
+        
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();

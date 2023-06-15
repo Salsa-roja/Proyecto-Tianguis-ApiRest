@@ -107,5 +107,15 @@ class UsuarioController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
+    
+    public function inhabilitar($id)
+    {
+        try {
+            $datos = UsuarioService::inhabilitar($id);
+            return response()->json($datos, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage(), 'msg' => 'Algo salió mal.'], 500);
+        }
+    }
 
 }
