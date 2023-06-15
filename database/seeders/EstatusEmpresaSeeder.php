@@ -28,7 +28,7 @@ class EstatusEmpresaSeeder extends Seeder
                 'estatus' => Config('constants.ESTATUS_EMPRESA_ALERTA')
             ],
             [
-                'estatus' => Config('constants.ESTATUS_EMPRESA_EN_REVICION')
+                'estatus' => Config('constants.ESTATUS_EMPRESA_EN_REVISION')
             ]
         ]);
     }

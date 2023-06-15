@@ -16,5 +16,5 @@ return [
     'ESTATUS_EMPRESA_INHABILITADO' => 'Inhabilitado',
     'ESTATUS_EMPRESA_RECHAZADO' => 'Rechazado',
     'ESTATUS_EMPRESA_ALERTA' => 'Alerta',
-    'ESTATUS_EMPRESA_EN_REVICION' => 'En revicion',
+    'ESTATUS_EMPRESA_EN_REVISION' => 'En revisión',
 ];

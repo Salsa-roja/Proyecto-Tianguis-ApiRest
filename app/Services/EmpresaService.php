@@ -73,7 +73,7 @@ abstract class EmpresaService
          $Empresa->nombre_rh = $params['nombre_rh'];
          $Empresa->correo_rh = $params['correo_rh'];
          $Empresa->telefono_rh = $params['telefono_rh'];
-         $Empresa->d_estatus = Estatus_empresa::where('estatus', Config('constants.ESTATUS_EMPRESA_EN_REVICION'))->first()->id;
+         $Empresa->id_estatus = Estatus_empresa::where('estatus', Config('constants.ESTATUS_EMPRESA_EN_REVISION'))->first()->id;
          $Empresa->save();
 
          # guardar usuario
