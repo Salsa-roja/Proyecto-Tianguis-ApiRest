@@ -22,7 +22,12 @@ abstract class UsuarioService
             $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->where('activo',true)->get();
             $usuarios = ParseDTO::list($usuariosdb, UsuarioListDTO::class);
          }else{
-            $usuariosdb = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->where('activo',true)->get();
+            $usuariosdb = UsuariosEmpresas::where('id_empresa', $auth->id_empresa)
+                                          ->whereHas('rel_usuarios', function ($query) {
+                                             $query->where('activo', true);
+                                          })
+                                          ->get();
+
             $usuarios = ParseDTO::list($usuariosdb, UsuarioEmpresaListDTO::class);
             //$usuarios = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
 
