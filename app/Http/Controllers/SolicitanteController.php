@@ -65,7 +65,7 @@ class SolicitanteController extends Controller
                 'industria_interes',
                 'habilidades',
                 'exp_profesional',
-                'formacion_educativa',
+                'id_nivel_educativo',
                 'disc_lenguaje',
                 'disc_motriz',
                 'disc_visual',
@@ -133,7 +133,7 @@ class SolicitanteController extends Controller
                 'industria_interes',
                 'habilidades',
                 'exp_profesional',
-                'formacion_educativa',
+                'id_nivel_educativo'=> 'required',
                 'disc_lenguaje',
                 'disc_motriz',
                 'disc_visual',
@@ -145,6 +145,12 @@ class SolicitanteController extends Controller
             $params = $this->request->all();
             $params["request"] = $this->request;
             
+            #valida si el usuario ya existe
+            if( UsuarioService::existeByUsername($params['nombre_login'],SolicitanteService::getIdUsuario($params['id'])) ){
+                $this->msg='El nombre de usuario ya está en uso, utiliza otro';
+                return $this->jsonResponse();
+            }
+
             $this->data = SolicitanteService::editar($params);
             $this->status=true;
 
@@ -229,6 +235,14 @@ class SolicitanteController extends Controller
         }
     }
 
+    public function getNivelesEducativos(){
+        try {
+            $items = SolicitanteService::getNivelesEducativos();
+            return response()->json($items, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
     /**
      * descargar archivo cv
      */

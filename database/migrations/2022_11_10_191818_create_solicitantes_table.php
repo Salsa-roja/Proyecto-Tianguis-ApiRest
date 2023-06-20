@@ -30,7 +30,6 @@ return new class extends Migration
             $table->string("industria_interes", 255);
             $table->string("habilidades", 255);
             $table->string("exp_profesional", 255);
-            $table->string("formacion_educativa", 255);
             $table->boolean("disc_lenguaje")->default(0);
             $table->boolean("disc_motriz")->default(0);
             $table->boolean("disc_visual")->default(0);
@@ -38,7 +37,7 @@ return new class extends Migration
             $table->boolean("disc_auditiva")->default(0);
             $table->enum('lugar_atencion',["Web","Dependencia","Feria"]);
             $table->string("curriculum", 255)->default('');
-            $table->integer("id_nivel_educativo");
+            $table->unsignedBigInteger("id_nivel_educativo");
 
             $table->foreign('id_nivel_educativo')->references('id')->on('nivel_educativo');
             $table->foreign('id_usuario')->references('id')->on('usuarios')->onUpdate('cascade')->onDelete('cascade');

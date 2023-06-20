@@ -99,6 +99,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     $router->group(['prefix' => 'solicitantes'], function () use ($router) {
         $router->get('/c_postales', 'SolicitanteController@getCPs');
         $router->get('/colonias/{cpostal}', 'SolicitanteController@getColonias');
+        $router->get('/nivelesEduc', 'SolicitanteController@getNivelesEducativos');
         $router->get('/detalle/{idSolicitante}', 'SolicitanteController@searchById');
     });
     $router->group(['prefix' => 'registro-solicitante'], function () use ($router) {

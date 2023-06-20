@@ -136,9 +136,17 @@ abstract class UsuarioService
       }
    }
 
-   public static function existeByUsername($nombre_login){
+   public static function existeByUsername($nombre_login,$idUsuario=null){
       try {
-         return Usuarios::where('nombre_login',trim( strtolower($nombre_login) ) )->exists();
+         //si se proporciona un id de usuario, se buscara un registro que coincida con $nombre_login pero que tenga un id de usuario diferente
+         $query = Usuarios::where('nombre_login', '=', trim(strtolower($nombre_login)));
+         if (!is_null($idUsuario)) {
+            $query->where('id', '<>', $idUsuario);
+         }
+         return $query->exists();
+         /* $where=['nombre_login'=>trim( strtolower($nombre_login) ) ];
+         if(!is_null($idUsuario)) $where['id <>']=$idUsuario;
+         return Usuarios::where($where)->exists(); */
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
