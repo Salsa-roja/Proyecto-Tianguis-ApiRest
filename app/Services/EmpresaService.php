@@ -195,23 +195,24 @@ abstract class EmpresaService
    public static function filtroDeBusquedaSolicitantes($request, $params)
    {
       try {
-
+        
          $idVacante = $request['idVacante'];
          $solicitantes = Solicitante::select('solicitantes.*')
             ->with(['rel_vacante_solicitante' => function ($query) use ($idVacante) {
                $query->where('id_vacante', $idVacante);
-            }])
-            ->when($request['idTitulo'] != 'null', function ($query) use ($request) {
-               return $query->where('id_nivel_educativo', $request['idTitulo']);
-            })
-            ->when($request['Search'] != 'null', function ($query) use ($request) {
-               return $query->whereRaw("REPLACE(UPPER(formacion_educativa),' ','') like ?", str_replace(' ', '', strtoupper('%' . $request['Search'] . '%')));
-            })
-            ->get()
-            ->map(function ($solicitante) {
+            }]);
+            if ($request['idTitulo'] != 'null') {
+               $solicitantes = $solicitantes->where('id_nivel_educativo', $request['idTitulo']);
+           }
+     
+            if ($request['Search'] != 'null') {
+               $solicitantes = $solicitantes->whereRaw("REPLACE(UPPER(area_desempeno),' ','') like ?", str_replace(' ', '', strtoupper('%' . $request['Search'] . '%')));
+           }
+           $solicitantes = $solicitantes->get()->map(function ($solicitante) {
                $solicitante->vinculado = $solicitante->rel_vacante_solicitante->isNotEmpty();
                return $solicitante;
             });
+        
          // $vacantedb = $solicitantes;
 
          // return $vacantedb;
