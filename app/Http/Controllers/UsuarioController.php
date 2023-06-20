@@ -71,7 +71,7 @@ class UsuarioController extends Controller
             $Usuario = UsuarioService::searchById($params['id'],false);
 
             #si cambia el nombre de usuario
-            if($Usuario->nombre_login != $params['nombre_login']){
+            if($Usuario->nombre_login != trim( strtolower($params['nombre_login']) ) ){
                 #valida si el usuario ya existe
                 if( UsuarioService::existeByUsername($params['nombre_login']) ){
                     $this->msg = 'El nombre de usuario ya está en uso, utiliza otro';

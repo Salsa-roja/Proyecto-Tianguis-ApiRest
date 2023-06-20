@@ -22,7 +22,12 @@ abstract class UsuarioService
             $usuariosdb = Usuarios::with(['rol','usuario_empresa','usuario_solicitante','rel_usuario_solicitante_vacante'])->where('activo',true)->get();
             $usuarios = ParseDTO::list($usuariosdb, UsuarioListDTO::class);
          }else{
-            $usuariosdb = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->where('activo',true)->get();
+            $usuariosdb = UsuariosEmpresas::where('id_empresa', $auth->id_empresa)
+                                          ->whereHas('rel_usuarios', function ($query) {
+                                             $query->where('activo', true);
+                                          })
+                                          ->get();
+
             $usuarios = ParseDTO::list($usuariosdb, UsuarioEmpresaListDTO::class);
             //$usuarios = UsuariosEmpresas::with(['rel_usuarios'])->where('id_empresa',$auth->id_empresa)->get();
 
@@ -60,7 +65,7 @@ abstract class UsuarioService
          $itemUs->ape_paterno = $params['ape_paterno'];
          $itemUs->ape_materno = $params['ape_materno'];
          $itemUs->correo = $params['correo'];
-         $itemUs->nombre_login = $params['nombre_login'];
+         $itemUs->nombre_login = trim( strtolower($params['nombre_login'] ) );
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
 
          $itemUs->rol_id = Rol::where('nombre', Config('constants.ROL_ADMIN'))->first()->id;
@@ -75,11 +80,11 @@ abstract class UsuarioService
    public static function guardarUsuarioEmpresa($params){
       try {
          $itemUs = new Usuarios();
-         $itemUs->nombres = $params['nombres'];
-         $itemUs->ape_paterno = $params['ape_paterno'];
-         $itemUs->ape_materno = $params['ape_materno'];
-         $itemUs->correo = $params['correo'];
-         $itemUs->nombre_login = $params['nombre_login'];
+         $itemUs->nombres = trim($params['nombres']);
+         $itemUs->ape_paterno = trim($params['ape_paterno']);
+         $itemUs->ape_materno = trim($params['ape_materno']);
+         $itemUs->correo = trim($params['correo']);
+         $itemUs->nombre_login = trim( strtolower($params['nombre_login'] ) );
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
 
          $itemUs->rol_id = Rol::where('nombre', Config('constants.ROL_EMPRESA'))->first()->id;
@@ -99,11 +104,11 @@ abstract class UsuarioService
    public static function guardarUsuarioSolicitante($params){
       try {
          $itemUs = new Usuarios();
-         $itemUs->nombres = $params['nombres'];
-         $itemUs->ape_paterno = $params['ape_paterno'];
-         $itemUs->ape_materno = $params['ape_materno'];
-         $itemUs->correo = $params['correo'];
-         $itemUs->nombre_login = $params['nombre_login'];
+         $itemUs->nombres = trim($params['nombres']);
+         $itemUs->ape_paterno = trim($params['ape_paterno']);
+         $itemUs->ape_materno = trim($params['ape_materno']);
+         $itemUs->correo = trim($params['correo']);
+         $itemUs->nombre_login = trim( strtolower($params['nombre_login'] ) );
          $itemUs->contrasena = password_hash($params['contrasena'], PASSWORD_BCRYPT);
          $itemUs->rol_id = Rol::where('nombre', Config('constants.ROL_SOLICITANTE'))->first()->id;
          $itemUs->save();
@@ -118,11 +123,11 @@ abstract class UsuarioService
       try {
 
          $Usuario = UsuarioService::searchById($params['id'],false);
-         $Usuario->nombres = $params['nombres'];
-         $Usuario->ape_paterno = $params['ape_paterno'];
-         $Usuario->ape_materno = $params['ape_materno'];
-         $Usuario->correo = $params['correo'];
-         $Usuario->nombre_login = $params['nombre_login'];
+         $Usuario->nombres = trim($params['nombres']);
+         $Usuario->ape_paterno = trim($params['ape_paterno']);
+         $Usuario->ape_materno = trim($params['ape_materno']);
+         $Usuario->correo = trim($params['correo']);
+         $Usuario->nombre_login = trim( strtolower($params['nombre_login']) );
          $Usuario->save();
 
          return $Usuario;
@@ -133,7 +138,7 @@ abstract class UsuarioService
 
    public static function existeByUsername($nombre_login){
       try {
-         return Usuarios::where('nombre_login',$nombre_login)->exists();
+         return Usuarios::where('nombre_login',trim( strtolower($nombre_login) ) )->exists();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
