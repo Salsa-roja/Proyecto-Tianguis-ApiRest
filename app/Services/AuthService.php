@@ -12,7 +12,7 @@ abstract class AuthService
     public static function authenticate($nombre_login, $password)
     {
         $user = Usuarios::with(['rol', 'rol.permisos', 'usuario_solicitante', 'usuario_empresa.rel_empresas'])
-            ->where(['activo' => 1, 'nombre_login' => $nombre_login])
+            ->where(['activo' => 1, 'nombre_login' => trim( strtolower($nombre_login ) )])
             ->first();
 
         // return $user;

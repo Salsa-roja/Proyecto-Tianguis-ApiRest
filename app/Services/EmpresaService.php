@@ -56,9 +56,9 @@ abstract class EmpresaService
 
          # guardar empresa
          $Empresa = new Empresa();
-         $Empresa->nombre_comercial = $params['nombre_comercial'];
-         $Empresa->razon_social = $params['razon_social'];
-         $Empresa->rfc = $params['rfc'];
+         $Empresa->nombre_comercial = trim($params['nombre_comercial']);
+         $Empresa->razon_social = trim($params['razon_social']);
+         $Empresa->rfc = trim($params['rfc']);
          $Empresa->descripcion = $params['descripcion'];
          $Empresa->numero_empleados = $params['numero_empleados'];
 
@@ -70,8 +70,8 @@ abstract class EmpresaService
          $Empresa->contr_antecedentes = $params['contr_antecedentes'];
          $Empresa->contr_adultos = $params['contr_adultos'];
 
-         $Empresa->nombre_rh = $params['nombre_rh'];
-         $Empresa->correo_rh = $params['correo_rh'];
+         $Empresa->nombre_rh = trim($params['nombre_rh']);
+         $Empresa->correo_rh = trim($params['correo_rh']);
          $Empresa->telefono_rh = $params['telefono_rh'];
          $Empresa->id_estatus = Estatus_empresa::where('estatus', Config('constants.ESTATUS_EMPRESA_EN_REVISION'))->first()->id;
          $Empresa->save();
@@ -104,16 +104,16 @@ abstract class EmpresaService
          $Empresa = EmpresaService::searchById($params['id'], false);
 
          # guardar empresa
-         $Empresa->nombre_comercial = $params['nombre_comercial'];
-         $Empresa->razon_social = $params['razon_social'];
-         $Empresa->rfc = $params['rfc'];
+         $Empresa->nombre_comercial = trim($params['nombre_comercial']);
+         $Empresa->razon_social = trim($params['razon_social']);
+         $Empresa->rfc = trim($params['rfc']);
          $Empresa->descripcion = $params['descripcion'];
          $Empresa->numero_empleados = $params['numero_empleados'];
          $Empresa->contr_discapacitados = $params['contr_discapacitados'];
          $Empresa->contr_antecedentes = $params['contr_antecedentes'];
          $Empresa->contr_adultos = $params['contr_adultos'];
-         $Empresa->nombre_rh = $params['nombre_rh'];
-         $Empresa->correo_rh = $params['correo_rh'];
+         $Empresa->nombre_rh = trim($params['nombre_rh']);
+         $Empresa->correo_rh = trim($params['correo_rh']);
          $Empresa->telefono_rh = $params['telefono_rh'];
          $Empresa->save();
 
@@ -166,7 +166,7 @@ abstract class EmpresaService
    public static function existeByRFC($rfc)
    {
       try {
-         return Empresa::where('rfc', $rfc)->exists();
+         return Empresa::where('rfc', trim($rfc))->exists();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
