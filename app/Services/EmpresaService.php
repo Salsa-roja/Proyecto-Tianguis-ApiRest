@@ -13,7 +13,7 @@ use App\DTO\EmpresaDTO;
 use App\Models\Estatus_empresa;
 use App\Models\Solicitante;
 use App\Models\Vacantes;
-use App\Models\UsuariosEmpresas;
+use App\Services\SocketService;
 
 abstract class EmpresaService
 {
@@ -200,18 +200,19 @@ abstract class EmpresaService
          $solicitantes = Solicitante::select('solicitantes.*')
             ->with(['rel_vacante_solicitante' => function ($query) use ($idVacante) {
                $query->where('id_vacante', $idVacante);
-            }])
-            ->when($request['idTitulo'] != 'null', function ($query) use ($request) {
-               return $query->where('id_nivel_educativo', $request['idTitulo']);
-            })
-            ->when($request['Search'] != 'null', function ($query) use ($request) {
-               return $query->whereRaw("REPLACE(UPPER(formacion_educativa),' ','') like ?", str_replace(' ', '', strtoupper('%' . $request['Search'] . '%')));
-            })
-            ->get()
-            ->map(function ($solicitante) {
-               $solicitante->vinculado = $solicitante->rel_vacante_solicitante->isNotEmpty();
-               return $solicitante;
-            });
+            }]);
+         if ($request['idTitulo'] != 'null') {
+            $solicitantes = $solicitantes->where('id_nivel_educativo', $request['idTitulo']);
+         }
+
+         if ($request['Search'] != 'null') {
+            $solicitantes = $solicitantes->whereRaw("REPLACE(UPPER(area_desempeno),' ','') like ?", str_replace(' ', '', strtoupper('%' . $request['Search'] . '%')));
+         }
+         $solicitantes = $solicitantes->get()->map(function ($solicitante) {
+            $solicitante->vinculado = $solicitante->rel_vacante_solicitante->isNotEmpty();
+            return $solicitante;
+         });
+
          // $vacantedb = $solicitantes;
 
          // return $vacantedb;
@@ -229,17 +230,14 @@ abstract class EmpresaService
    public static function vincular($params)
    {
       try {
-         // return $params;['nombre_comercial']with('rel_empresas')->
-         #datos del solicitante
-  
-         $solicitante = Solicitante::find($params['idUsuario']);
-
+         $solicitante = Solicitante::where('id_usuario',$params['idUsuario'])->first();
+         // return $solicitante;
          #buscar vacante
+         $idUsuario=$params['idUsuario'];
          $vacante = Vacantes::find($params['idVacante']);
          if (isset($vacante->id)) {
             #buscar vinculacion previa
             $yaVinculado = VacanteService::yaVinculado($vacante->id, $solicitante->id);
-
             if ($yaVinculado) {
                throw new \Exception('Ya vinculado!');
             } else {
@@ -247,13 +245,25 @@ abstract class EmpresaService
                $rel = new VacanteSolicitante();
                $rel->id_vacante = $vacante->id;
                $rel->id_solicitante = $solicitante->id;
-               $rel->talent_hunting=1;
+               $rel->talent_hunting = 1;
                $rel->id_estatus = Estatus_postulacion::where('estatus', Config('constants.ESTATUS_POSTULACION_NO_VISTO'))->first()->id;
                $rel->save();
 
                $asunto = '¡Una empresa se ha interesado en ti!';
                $cuerpo = "Una empresa te ha seleccionado para la vacante '$vacante->vacante' contacta con ellos para darle seguimiento ";
-               VacanteService::NotificacionCorreo($params['request']->auth->id, $asunto, $cuerpo);
+               VacanteService::NotificacionCorreo($idUsuario, $asunto, $cuerpo);
+
+               $Ssv = new SocketService($params['request']->auth, 'notify_client');
+               if ($Ssv) {
+                   $Ssv->addToQueque([
+                       'id_usuario' => $idUsuario,
+                       'sala' => "user_$idUsuario",
+                       'titulo' => '¡Te han ofrecido una nueva vacante!',
+                       'descripcion' => $cuerpo
+                   ])
+                       ->emitQueque()
+                       ->close();
+               }
                return $rel;
             }
          } else {

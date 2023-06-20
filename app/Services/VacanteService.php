@@ -241,15 +241,15 @@ abstract class VacanteService
 
                     # Almacenar nueva notificacion en la cola del socket y enviarla
                     $Ssv = new SocketService($params['request']->auth, 'notify_client');
-                    if($Ssv){
+                    if ($Ssv) {
                         $Ssv->addToQueque([
-                                'id_usuario'=>$id_usuario,
-                                'sala'=>"user_$id_usuario",
-                                'titulo'=>'¡Postulación enviada!',
-                                'descripcion'=>$cuerpo
+                            'id_usuario' => $id_usuario,
+                            'sala' => "user_$id_usuario",
+                            'titulo' => '¡Postulación enviada!',
+                            'descripcion' => $cuerpo
                         ])
-                        ->emitQueque()
-                        ->close();
+                            ->emitQueque()
+                            ->close();
                     }
                     return $rel;
                 }
@@ -294,8 +294,8 @@ abstract class VacanteService
                 'industria' => $request['industria'],
                 'tipo_de_puesto' => $request['tipo_de_puesto'],
                 'habilidades_requeridas' => $request['habilidades_requeridas'],
-                'lat' => $request['lat'],
-                'lng' => $request['lng']
+                // 'lat' => $request['lat'],
+                // 'lng' => $request['lng']
             ];
             if ($request['id'] > 0) {
                 $datos = $datos + [
@@ -314,7 +314,7 @@ abstract class VacanteService
             }
             return response()->json($Vacantes, Response::HTTP_CREATED);
         } catch (\Exception $ex) {
-            return response()->json(['mensaje' => 'Hubo un error al registrar el usuario', $ex->getMessage()], 400);
+            return response()->json(['mensaje' => 'Hubo un error al registrar la vacante', $ex->getMessage()], 400);
         }
     }
 
@@ -361,7 +361,7 @@ abstract class VacanteService
             $user = Usuarios::with('rol', 'rol.permisos')->whereHas('rol', function ($query) {
                 $query->where('nombre', Config('constants.ROL_ADMIN'));
             })->first();
-           
+
             $payload = new \stdClass;
             $payload->id = $user->id;
             $payload->nombre = $user->nombre_completo;
