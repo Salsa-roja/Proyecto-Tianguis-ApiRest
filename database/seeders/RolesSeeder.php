@@ -83,7 +83,19 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Modulo de Comentarios',
                         'permiso' => 'ContactoList'
-                    ]  
+                    ],
+                    [
+                        'nombre' => 'Modulo de Noticias',
+                        'permiso' => 'NoticiasModule'
+                    ],
+                    [
+                        'nombre' => 'Formulario de Noticias',
+                        'permiso' => 'NoticiasForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de Noticias',
+                        'permiso' => 'NoticiasList'
+                    ],
                 ]
             ],
             [
@@ -105,7 +117,11 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Listado de vacantes',
                         'permiso' => 'VacantesList'
-                    ]
+                    ],
+                    [
+                        'nombre' => 'Listado de Noticias',
+                        'permiso' => 'NoticiasList'
+                    ],
                 ]
             ],
             [
@@ -163,7 +179,11 @@ class RolesSeeder extends Seeder
                     [
                         'nombre' => 'Listado de usuarios',
                         'permiso' => 'UsuariosList'
-                    ],              
+                    ],
+                    [
+                        'nombre' => 'Listado de Noticias',
+                        'permiso' => 'NoticiasList'
+                    ],
                 ]
             ]
         ];

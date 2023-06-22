@@ -74,13 +74,18 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
     });
 
+    $router->group(['prefix' => 'noticias'], function () use ($router) {
+        $router->get('/listado', 'NoticiasController@listado');
+        $router->post('/guardar', 'NoticiasController@guardar');
+        $router->post('/editar', 'NoticiasController@editar');
+        $router->delete('/eliminar/{id}', 'NoticiasController@eliminar');
+    });
 });//...rutas admin
 
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
         $router->post('/detalle', 'VacanteController@searchId');
         $router->post('/filtro', 'VacanteController@filtro');
-
     });
     $router->group(['prefix' => 'talentHunting'], function () use ($router) {
         $router->post('/filtro', 'EmpresaController@filtroDeBusquedaSolicitantes');
@@ -135,5 +140,8 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->post('/guardar', 'ContactoController@guardar'); // Obtiene la lista de las conexiones de clientes con el websocket activas
     });
 
+    $router->group(['prefix' => 'noticias'], function () use ($router) {
+        $router->get('/publicas', 'NoticiasController@listadoPublicas');
+    });
 
 });

@@ -26,12 +26,14 @@ class ArchivosService
             $filename = $storageName."_".date("YmdHis"). '.' . $ext;
 
             if($returnMode=="id"){
+                // Se guarda en tabla archivos
                 $archivo = new Archivo();
                 $archivo->nombre = isset($customName) ? $customName: $filename;
                 $archivo->path = $filename;
                 $archivo->save();
                 $ret = $archivo->id;
             }else{
+                // solo devuelve el path donde fue almacenada la imagen
                 $ret = $filename;   
             }
 
