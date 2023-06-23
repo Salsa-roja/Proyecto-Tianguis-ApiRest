@@ -84,5 +84,17 @@ abstract class NoticiaService
       }
    }
 
-
+   public static function eliminar($id)
+   {
+       try {
+            $noticia = Noticia::find($id);
+            if ($noticia) {
+                  $noticia->activo = 0;
+                  $noticia->save();
+            }
+           return $noticia;
+       } catch (\Exception $ex) {
+           return response()->json(['mensaje' => 'Hubo un error al eliminar el vacante', $ex->getMessage()], 400);
+       }
+   }
 }

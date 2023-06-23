@@ -124,4 +124,13 @@ class NoticiasController extends Controller
         }
     }
     
+    public function eliminar($id)
+    {
+        try {
+            $this->data = NoticiaService::eliminar($id);
+            return $this->jsonResponse();
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage(), 'msg' => 'Algo salió mal.'], 500);
+        }
+    }
 }
