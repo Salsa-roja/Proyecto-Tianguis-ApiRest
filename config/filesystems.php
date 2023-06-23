@@ -56,6 +56,11 @@ return [
          'root' => storage_path('app/empresas'),
          'throw' => false,
       ],
+      'noticias' => [
+         'driver' => 'local',
+         'root' => storage_path('app/noticias'),
+         'throw' => false,
+      ],
       's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

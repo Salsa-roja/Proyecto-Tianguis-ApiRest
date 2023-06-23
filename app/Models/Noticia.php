@@ -10,9 +10,6 @@ class Noticia extends Model
 
     protected $primaryKey = 'id';
     
-    public $timestamps = false;
-    //public $incrementing = false;
-    
     protected $fillable = [
         'titulo',
         'imagen',
@@ -23,12 +20,12 @@ class Noticia extends Model
         'updated_at'
 	];
 
-    protected $appends = ['ruta_archivo'];
+    protected $appends = ['ruta_imagen'];
 
-    public function getrutaArchivoAttribute()
+    public function getrutaImagenAttribute()
     {
-        if (isset($this->archivo) && $this->archivo != '')
-            return env('APP_URL') . 'noticias/';
+        if (isset($this->imagen) && $this->imagen != '')
+            return env('APP_URL') . '/dwl/noticias/'.$this->id;
         return null;
     }
 }

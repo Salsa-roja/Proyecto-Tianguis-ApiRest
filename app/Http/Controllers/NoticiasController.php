@@ -31,8 +31,17 @@ class NoticiasController extends Controller
 
     public function listadoPublicas(){
         try {
-            $items = NoticiaService::listadoPublicadas();
+            $items = NoticiaService::listadoPublicas();
             return response()->json($items, 200);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function searchById($id){
+        try {
+            $this->data = NoticiaService::searchById($id);
+            return $this->jsonResponse();
         } catch (\Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
         }
@@ -57,7 +66,7 @@ class NoticiasController extends Controller
 
                 $pathImagen =   ArchivosService::subirArchivo($this->request->file('imagen'),
                                                                 'noticias',
-                                                                'ntc_'.date('Ymd_his'),
+                                                                'ntc',
                                                                 'path'
                                                             );
             }
@@ -71,7 +80,6 @@ class NoticiasController extends Controller
             return response()->json(['error' => $ex->getMessage()], 500);
         }
     }
-
 
      public function editar(){
         try{
@@ -104,5 +112,16 @@ class NoticiasController extends Controller
         }
     }
 
+    /**
+     * descargar imagen 
+     */
+    public function descarga_imagen($idNoticia){
+        try {
+            $itemDB = NoticiaService::searchById($idNoticia);
+            return ArchivosService::descargaStorage($this->storage,$itemDB->imagen);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
     
 }

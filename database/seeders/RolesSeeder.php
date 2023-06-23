@@ -41,6 +41,10 @@ class RolesSeeder extends Seeder
                         'permiso' => 'VacantesMenu'
                     ],
                     [
+                        'nombre' => 'Opcion de menu Noticias',
+                        'permiso' => 'NoticiasMenu'
+                    ],
+                    [
                         'nombre' => 'Opcion de menu Usuarios',
                         'permiso' => 'UsuariosMenu'
                     ],
