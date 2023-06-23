@@ -144,6 +144,7 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
 
     $router->group(['prefix' => 'noticias'], function () use ($router) {
         $router->get('/publicas', 'NoticiasController@listadoPublicas');
+        $router->get('/detalle/{id}', 'NoticiasController@searchById');
     });
 
 });

@@ -11,15 +11,11 @@ use App\Models\Estatus_postulacion;
 use App\Models\VacanteSolicitante;
 use App\Models\UsuariosEmpresas;
 use App\Models\Empresa;
-use App\Models\Solicitante;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
 use App\Models\Usuarios;
 use App\Services\SocketService;
-use ElephantIO\Payload;
-use stdClass;
 
 abstract class VacanteService
 {
@@ -323,7 +319,7 @@ abstract class VacanteService
         $empresaSoliId = Empresa::find($id);
         $alertas = $empresaSoliId->no_de_alertas;
         $empresaSoliId->no_de_alertas = $alertas + 1;
-        if ($empresaSoliId->no_de_alertas <= 10) {
+        if ($empresaSoliId->no_de_alertas === 10) {
             $empresaSoliId->id_estatus = 2;
         }
         $empresaSoliId->save();
@@ -331,7 +327,6 @@ abstract class VacanteService
 
     public static function NotificacionCorreo($id_usuario, $asunto, $cuerpo)
     {
-
         #obtener datos del usuario
         $usuario = Usuarios::find($id_usuario);
 
@@ -385,7 +380,7 @@ abstract class VacanteService
                         VacanteService::desactivarEmpresas($solicitud->id_empresa);
                         foreach ($solicitud->id_Usuario_de_Empresa as $id_usuario) {
                             $asunto = '¡Actualiza tus postulaciones!';
-                            $cuerpo = "Tienes una postulacion con estatus ''" .  $solicitud->estatus . "'' sin actualizar desde hace mas de " . $dias_diferencia_a_hoy . " dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo_solicitante;
+                            $cuerpo = "Tienes una postulacion con estatus ''" .  $solicitud->estatus . "'' sin actualizar desde hace mas de " . $dias_diferencia_a_hoy . " dias en la vacante " . $solicitud->vacante . " en la que se ha postulado el solicitante " . $solicitud->nombre_completo_solicitante .". Si llegas a 10 alertas tu cuenta sera desactivada  ";
                             VacanteService::NotificacionCorreo($id_usuario, $asunto, $cuerpo);
                             $Ssv->addToQueque([
                                 'id_usuario' => $id_usuario,
