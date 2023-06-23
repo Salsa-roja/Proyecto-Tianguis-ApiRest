@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('descripcion');
             $table->date('fecha_publicacion');
             $table->boolean('activo')->default(true);
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

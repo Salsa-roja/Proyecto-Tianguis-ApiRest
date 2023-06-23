@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string("correo", 155);
             $table->text('comentario');
             $table->boolean('activo')->default(true);
-
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

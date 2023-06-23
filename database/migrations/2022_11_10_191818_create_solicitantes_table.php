@@ -37,6 +37,8 @@ return new class extends Migration
             $table->boolean("disc_auditiva")->default(0);
             $table->enum('lugar_atencion',["Web","Dependencia","Feria"]);
             $table->string("curriculum", 255)->default('');
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->unsignedBigInteger("id_nivel_educativo");
 
             $table->foreign('id_nivel_educativo')->references('id')->on('nivel_educativo');
