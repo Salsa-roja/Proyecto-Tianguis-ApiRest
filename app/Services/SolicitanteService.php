@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Solicitante;
 use App\Models\Usuarios;
 use App\Models\Rol;
+use App\Models\Nivel_educativo;
 use App\DTO\ParseDTO;
 use App\DTO\SolicitanteDTO;
 
@@ -39,9 +40,9 @@ abstract class SolicitanteService
    /**
     * Buscar solicitante por id usuario
     **/
-   public static function searchByIdUser($id){
+   public static function searchByIdUser($id_usuario){
       try {
-         $itemDB = Solicitante::where('id_usuario', $id)->first();
+         $itemDB = Solicitante::where('id_usuario', $id_usuario)->first();
          
          return $itemDB;
       } catch (\Exception $e) {
@@ -52,6 +53,15 @@ abstract class SolicitanteService
    public static function existeByCurp($curp){
       try {
          return Solicitante::where('curp',trim($curp))->exists();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function getIdUsuario($id_solicitante){
+      try {
+        return self::searchById($id_solicitante,true)->id_usuario;
+
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }
@@ -91,7 +101,7 @@ abstract class SolicitanteService
          $Solicitante->industria_interes = trim($params['industria_interes']);
          $Solicitante->habilidades = $params['habilidades'];
          $Solicitante->exp_profesional = $params['exp_profesional'];
-         $Solicitante->formacion_educativa = $params['formacion_educativa'];
+         $Solicitante->id_nivel_educativo = $params['id_nivel_educativo'];
          $Solicitante->disc_lenguaje = $params['disc_lenguaje'];
          $Solicitante->disc_motriz = $params['disc_motriz'];
          $Solicitante->disc_visual = $params['disc_visual'];
@@ -115,7 +125,7 @@ abstract class SolicitanteService
 
          # editar usuario
          $paramsUs=[
-            'id' => $params['id'],
+            'id' => self::getIdUsuario($params['id']),
             'nombres' => $params['nombres'],
             'ape_paterno' => $params['ape_paterno'],
             'ape_materno' => $params['ape_materno'],
@@ -140,7 +150,7 @@ abstract class SolicitanteService
          $Solicitante->industria_interes = trim($params['industria_interes']);
          $Solicitante->habilidades = $params['habilidades'];
          $Solicitante->exp_profesional = $params['exp_profesional'];
-         $Solicitante->formacion_educativa = $params['formacion_educativa'];
+         $Solicitante->id_nivel_educativo = $params['id_nivel_educativo'];
          $Solicitante->disc_lenguaje = $params['disc_lenguaje'];
          $Solicitante->disc_motriz = $params['disc_motriz'];
          $Solicitante->disc_visual = $params['disc_visual'];
@@ -186,6 +196,14 @@ abstract class SolicitanteService
    public static function getColonias($cpostal){
       try {
          return DB::table('cat_c_postal_colonias')->select(['id','asentamiento_nombre','ciudad'])->where('cp',$cpostal)->get();
+      } catch (\Exception $e) {
+         throw new \Exception($e->getMessage());
+      }
+   }
+
+   public static function getNivelesEducativos(){
+      try {
+         return Nivel_educativo::all();
       } catch (\Exception $e) {
          throw new \Exception($e->getMessage());
       }

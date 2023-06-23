@@ -41,7 +41,6 @@ class SolicitantesSeeder extends Seeder
                 'industria_interes' => 'Alimentos',
                 'habilidades' => 'Cocina',
                 'exp_profesional' => '2 años',
-                'formacion_educativa' => 'Licenciatura',
                 'disc_lenguaje' => 0,
                 'disc_motriz' => 0,
                 'disc_visual' => 0,
@@ -71,7 +70,6 @@ class SolicitantesSeeder extends Seeder
                 'industria_interes' => 'Tecnología',
                 'habilidades' => 'Angular, Php, JQuery',
                 'exp_profesional' => '2 años',
-                'formacion_educativa' => 'Licenciatura',
                 'disc_lenguaje' => 0,
                 'disc_motriz' => 0,
                 'disc_visual' => 0,
@@ -113,7 +111,6 @@ class SolicitantesSeeder extends Seeder
             $Solicitante->industria_interes = $v['industria_interes'];
             $Solicitante->habilidades = $v['habilidades'];
             $Solicitante->exp_profesional = $v['exp_profesional'];
-            $Solicitante->formacion_educativa = $v['formacion_educativa'];
             $Solicitante->disc_lenguaje = $v['disc_lenguaje'];
             $Solicitante->disc_motriz = $v['disc_motriz'];
             $Solicitante->disc_visual = $v['disc_visual'];

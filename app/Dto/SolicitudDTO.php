@@ -29,6 +29,7 @@ class SolicitudDTO
    public $habilidades;
    public $exp_profesional;
    public $formacion_educativa;
+   public $id_nivel_educativo;
    public $disc_lenguaje;
    public $disc_motriz;
    public $disc_visual;
@@ -81,7 +82,6 @@ class SolicitudDTO
          $this->industria_interes = $obj->rel_solicitante->industria_interes;
          $this->habilidades = $obj->rel_solicitante->habilidades;
          $this->exp_profesional = $obj->rel_solicitante->exp_profesional;
-         $this->formacion_educativa = $obj->rel_solicitante->formacion_educativa;
          $this->disc_lenguaje = $obj->rel_solicitante->disc_lenguaje;
          $this->disc_motriz = $obj->rel_solicitante->disc_motriz;
          $this->disc_visual = $obj->rel_solicitante->disc_visual;
@@ -91,13 +91,17 @@ class SolicitudDTO
          $this->curriculum = $obj->rel_solicitante->curriculum;
          $this->file = $obj->rel_solicitante->file;
          $this->file64 = $obj->rel_solicitante->file64;
-
-
+         $this->id_nivel_educativo = $obj->rel_solicitante->id_nivel_educativo;
 
          if (isset($obj->rel_solicitante->rel_usuarios)) {
             $this->nombre_completo_solicitante = $obj->rel_solicitante->rel_usuarios->nombre_completo;
             $this->correo = $obj->rel_solicitante->rel_usuarios->correo;
+
          }
+         if(isset($obj->rel_solicitante->tabla_nivel_educativo)){
+            $this->formacion_educativa = $obj->rel_solicitante->tabla_nivel_educativo->titulo;
+         }
+
       }
    }
 }

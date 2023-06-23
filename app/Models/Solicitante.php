@@ -35,15 +35,14 @@ class Solicitante extends Model
         'industria_interes',
         'habilidades',
         'experiencia_profesional',
-        'formacion_educativa',
+        'id_nivel_educativo',
         'disc_lenguaje',
         'disc_motriz',
         'disc_visual',
         'disc_mental',
         'disc_auditiva',
         'lugar_atencion',
-        'curriculum',
-        'id_nivel_educativo'
+        'curriculum'
     ];
 
     protected $appends = ['file', 'file64'];

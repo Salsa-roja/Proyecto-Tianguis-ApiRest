@@ -23,6 +23,7 @@ class SolicitanteDTO
    public $habilidades;
    public $exp_profesional;
    public $formacion_educativa;
+   public $id_nivel_educativo;
    public $disc_lenguaje;
    public $disc_motriz;
    public $disc_visual;
@@ -60,7 +61,7 @@ class SolicitanteDTO
       $this->industria_interes = $obj->industria_interes;
       $this->habilidades = $obj->habilidades;
       $this->exp_profesional = $obj->exp_profesional;
-      $this->formacion_educativa = $obj->tabla_nivel_educativo->titulo;
+      $this->id_nivel_educativo = $obj->id_nivel_educativo;
       $this->disc_lenguaje = $obj->disc_lenguaje;
       $this->disc_motriz = $obj->disc_motriz;
       $this->disc_visual = $obj->disc_visual;
@@ -88,15 +89,18 @@ class SolicitanteDTO
             $solicitud->fecha_solicitud = $rvs->created_at;
             $solicitud->id_solicitante = $rvs->id_solicitante;
             $solicitud->id_vacante     = $rvs->id_vacante;
-            $solicitud->talent_hunting     = $rvs->talent_hunting;
+            $solicitud->talent_hunting = $rvs->talent_hunting;
             $solicitud->status         = $rvs->tabla_estatus->estatus;
-            $solicitud->id_estatus        = $rvs->tabla_estatus->id;
+            $solicitud->id_estatus     = $rvs->tabla_estatus->id;
             $solicitud->vacante        = $rvs->rel_vacantes;
             array_push($this->solicitudes,$solicitud);
          }
       }
       $this->vinculado = $obj->vinculado;
 
+      if(isset($obj->tabla_nivel_educativo)){
+         $this->formacion_educativa = $obj->tabla_nivel_educativo->titulo;
+      }
       
    
    }
