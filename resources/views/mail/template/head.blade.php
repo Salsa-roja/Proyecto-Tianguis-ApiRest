@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
         <style>
-            .body {
+            body {
                 font-family:'Open Sans',Helvetica,Arial,sans-serif!important;
                 font-size: 13px;
             }
@@ -36,6 +36,18 @@
                 line-height:1.6;
                 text-align:center;
             }
+            #footer{
+               background: url('{{env("APP_URL")}}/assets/img/mail/pleca_gris_final.svg') no-repeat 0 0;
+               background-position: center;
+               height: 250px;
+               margin-top: 15px;
+               padding-top: 10px;
+               padding-bottom: 0px;
+            }
+            #footer_img{
+               width: 150px;
+               margin-top: 15px;
+            }
         </style>
     </head>
     <body>
@@ -52,10 +64,10 @@
                                             <td align="center">
                                                 <p class="body-p" style="text-align:center">
                                                     <a style="font-size:inherit;color:#ffa200;text-decoration:none;margin:16px 0;display:block"
-                                                        href="https://quierochamba.com"
+                                                        href="{{env('APP_PROD_URL')}}"
                                                         rel="noopener nofollow" target="_blank"
-                                                        data-saferedirecturl="https://www.google.com/url?q=https://quierochamba.com&amp;source=gmail">
-                                                        <img  src="logo.png"
+                                                        data-saferedirecturl="https://www.google.com/url?q={{env('APP_PROD_URL')}}&amp;source=mail">
+                                                        <img  src="{{env('APP_URL')}}/assets/img/mail/desarrollo_economico.png"
                                                                 style="max-width:100%;border:0;width:150px" alt="Logo.png">
                                                     </a>
                                                 </p>
@@ -65,4 +77,4 @@
                                             <td>
                                                 <div class="b-box w-100 p-0">
                                                 <div class="b-box w-100" style="padding:16px 32px;background:#fff;border-radius:8px">
-                                                    <h3>{{isset($titulo)? $titulo : 'Notificación Quiero Chamba'}}</h3>
+                                                    <h3>{{isset($titulo)? $titulo : 'Notificación Automática'}}</h3>

@@ -14,17 +14,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(Empleador::class);
-        $this->call(Nivel_educativo::class);
-        $this->call(Turnos_laborales::class);
         $this->call(RolesSeeder::class);
+        $this->call(EstatusEmpresaSeeder::class);
+        $this->call(UsuariosSeeder::class);
         $this->call(EntidadesSeeder::class);
         $this->call(MunicipiosSeeder::class);
-        $this->call(CPostalColoniasSeeder::class);
-        $this->call(Solicitante::class);
-        $this->call(UsuariosSeeder::class);
-        $this->call(Vacante::class);
-        $this->call(Rel_vacante_solicitantes::class);
+        $this->call(cpostalColoniasSeeder::class);
+        $this->call(EmpresasSeeder::class);
+        $this->call(NivelEducativoSeeder::class);
+        $this->call(TurnosLaboralesSeeder::class);
+        $this->call(EstatusPostulacionSeeder::class);
+        $this->call(SolicitantesSeeder::class);
+        $this->call(VacantesSeeder::class);
+        $this->call(RelVacanteSolicitantesSeeder::class);
        
 
       

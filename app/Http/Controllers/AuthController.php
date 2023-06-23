@@ -21,6 +21,6 @@ class AuthController extends Controller
             'password'  => 'required'
         ]);
         $auth = AuthService::authenticate($this->request->user, $this->request->password);
-        return response()->json(['token' => $auth['data'],'message'=>$auth['message']], $auth['status']);
+        return response()->json($auth, $auth['status']);
     }
 }

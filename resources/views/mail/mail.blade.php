@@ -1,7 +1,7 @@
 @include('mail.template.head',['titulo'=>$data['params']['titulo']])
 
 <p class="body-p">
-   Hola {{$data['destinatario']->nombres}}
+   Hola {{$data['params']['to_name']}}
 </p>
 <p class="body-p">
    {{$data['params']['cuerpo']}}

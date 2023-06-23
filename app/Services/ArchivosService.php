@@ -26,12 +26,14 @@ class ArchivosService
             $filename = $storageName."_".date("YmdHis"). '.' . $ext;
 
             if($returnMode=="id"){
+                // Se guarda en tabla archivos
                 $archivo = new Archivo();
                 $archivo->nombre = isset($customName) ? $customName: $filename;
                 $archivo->path = $filename;
                 $archivo->save();
                 $ret = $archivo->id;
             }else{
+                // solo devuelve el path donde fue almacenada la imagen
                 $ret = $filename;   
             }
 
@@ -53,6 +55,33 @@ class ArchivosService
         }
     }
 
+    /**
+     * @param storageName string
+     * @param fileName string
+     */
+    public static function descargaStorage($storageName,$fileName)
+    {
+        try {
+            return Storage::disk($storageName)->download($fileName);
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * @param storageName string
+     * @param fileName string
+     */
+    public static function base64File($storageName,$fileName)
+    {
+        try {
+            $path = Storage::disk($storageName)->path($fileName);
+            return base64_encode(file_get_contents($path));
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
     /* public static function mostrarArchivo()
     {
 
@@ -66,7 +95,12 @@ class ArchivosService
             throw new \Exception($e->getMessage());
         }
     } */
-
+    /**
+     * Modificar un archivo de la tabla archivos cuando el archivo es parte de una relacion `tabla` - archivos
+     * 
+     * @param request - formulario [nombre,ruta]
+     * @param id - id del archivo a modificar
+     */
     public static function modificarArchivo(Request $request, $id)
     {
         try {
@@ -90,18 +124,30 @@ class ArchivosService
         }
     }
 
-    public static function borrarArchivo($id)//borrar de db
+    /**
+     * Borrar un archivo de la tabla archivos cuando el archivo es parte de una relacion `tabla` - archivos
+     * 
+     * @param id - id del registro en la tabla archivos
+     * @param storage - el alias de almacenamiento
+     */
+    public static function borrarArchivo($id,$storage)//borrar de db
     {
         try {
-            DB::table('archivos')->where('id', $id)->update([
-                'activo' => false
-            ]);
+            $file = Archivo::find($id);
+            ArchivosService::borrarArchivoStorage($file->path,$storage);
+            $file->delete();
             return response()->json('Ok');
         } catch (\Exception $e) {
             throw new Exception($e->getMessage());
         }
     }
 
+    /**
+     * Borrar archivo del almacenamiento
+     * 
+     * @param path - nombre de archivo
+     * @param storage - el alias de almacenamiento
+     */
     public static function borrarArchivoStorage($path,$storage){
         if(Storage::disk($storage)->exists($path))
             return Storage::disk($storage)->delete($path);

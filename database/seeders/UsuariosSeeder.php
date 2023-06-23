@@ -17,26 +17,23 @@ class UsuariosSeeder extends Seeder
     {
         $usuarios = [
             [
-                'nombres' => 'Administrador',
+                'nombres' => 'Administrador General',
                 'ape_paterno' => '',
                 'ape_materno' => '',
+                'nombre_login' => 'admin1',
                 'correo' => 'admin@admin.com',
-                "contrasena" => password_hash('123456789', PASSWORD_BCRYPT)
-            ],
-            [
-                'nombres' => 'Administrador2',
-                'ape_paterno' => '',
-                'ape_materno' => '',
-                'correo' => 'admin2@admin.com',
-                "contrasena" => password_hash('123456789', PASSWORD_BCRYPT)
+                'contrasena' => password_hash('123456789', PASSWORD_BCRYPT),
+                'rol_id' => Rol::where('nombre', Config('constants.ROL_ADMIN'))->first()->id
             ]
+
         ];
         foreach ($usuarios as $key => $obj) {
             $z = new Usuarios();
             $z->nombres = $obj['nombres'];
-            $z->rol_id = Rol::where('nombre', 'Administrador')->first()->id;
+            $z->rol_id = $obj['rol_id'];
             $z->ape_paterno = $obj['ape_paterno'];
             $z->ape_materno = $obj['ape_materno'];
+            $z->nombre_login = $obj['nombre_login'];
             $z->correo = $obj['correo'];
             $z->contrasena = $obj['contrasena'];
             $z->save();

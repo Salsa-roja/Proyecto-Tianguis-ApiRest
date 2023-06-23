@@ -17,34 +17,184 @@ class RolesSeeder extends Seeder
     {
         $roles = [
             [
-                'nombre' => 'Administrador',
+                'id' => 1,
+                'nombre' => Config('constants.ROL_ADMIN'),
                 'permisos' => [
                     [
-                        'nombre' => 'Configuración de horarios ',
-                        'permiso' => 'HorariosList'
+                        'nombre' => 'Modulo de Empresas',
+                        'permiso' => 'EmpresasModule'
                     ],
                     [
-                        'nombre' => 'Listado de citas',
-                        'permiso' => 'CitasList'
+                        'nombre' => 'Modulo de vacantes',
+                        'permiso' => 'VacantesModule'
                     ],
                     [
-                        'nombre' => 'Listado de trámites',
-                        'permiso' => 'TrámitesList'
+                        'nombre' => 'Modulo de Usuarios',
+                        'permiso' => 'UsuariosModule'
+                    ],
+                    [
+                        'nombre' => 'Opcion de menu Empresas',
+                        'permiso' => 'EmpresasMenu'
+                    ],
+                    [
+                        'nombre' => 'Ocion de menu vacantes',
+                        'permiso' => 'VacantesMenu'
+                    ],
+                    [
+                        'nombre' => 'Opcion de menu Noticias',
+                        'permiso' => 'NoticiasMenu'
+                    ],
+                    [
+                        'nombre' => 'Opcion de menu Usuarios',
+                        'permiso' => 'UsuariosMenu'
+                    ],
+                    [
+                        'nombre' => 'Formulario de Usuarios',
+                        'permiso' => 'UsuariosForm'
+                    ],
+                    [
+                        'nombre' => 'Formulario de empresa',
+                        'permiso' => 'EmpresasForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de empresas',
+                        'permiso' => 'EmpresasList'
+                    ],
+                    [
+                        'nombre' => 'Perfil de Empresa',
+                        'permiso' => 'EmpresasPerfil'
+                    ],
+                    [
+                        'nombre' => 'Editar perfil empresa',
+                        'permiso' => 'EmpresasPerfilForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'VacantesList'
                     ],
                     [
                         'nombre' => 'Listado de usuarios',
                         'permiso' => 'UsuariosList'
                     ],
                     [
-                        'nombre' => 'Listado de roles',
-                        'permiso' => 'RolesList'
-                    ]
+                        'nombre' => 'Redactar emails con interfaz',
+                        'permiso' => 'WriteMail'
+                    ],
+                    [
+                        'nombre' => 'Modulo de Reportes',
+                        'permiso' => 'ReportsModule'
+                    ],
+                    [
+                        'nombre' => 'Modulo de Comentarios',
+                        'permiso' => 'ContactoList'
+                    ],
+                    [
+                        'nombre' => 'Modulo de Noticias',
+                        'permiso' => 'NoticiasModule'
+                    ],
+                    [
+                        'nombre' => 'Formulario de Noticias',
+                        'permiso' => 'NoticiasForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de Noticias',
+                        'permiso' => 'NoticiasList'
+                    ],
+                ]
+            ],
+            [
+                'id' => 2,
+                'nombre' => Config('constants.ROL_SOLICITANTE'),
+                'permisos' => [
+                    [
+                        'nombre' => 'Modulo de Solicitantes',
+                        'permiso' => 'SolicitantesModule'
+                    ],
+                    [
+                        'nombre' => 'Perfil de Solicitante',
+                        'permiso' => 'SolicitantesPerfil'
+                    ],
+                    [
+                        'nombre' => 'Editar perfil solicitante',
+                        'permiso' => 'SolicitantesPerfilForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'VacantesList'
+                    ],
+                    [
+                        'nombre' => 'Listado de Noticias',
+                        'permiso' => 'NoticiasList'
+                    ],
+                ]
+            ],
+            [
+                'id' => 3,
+                'nombre' => Config('constants.ROL_EMPRESA'),
+                'permisos' => [
+                    [
+                        'nombre' => 'Ocion de menu empresas',
+                        'permiso' => 'EmpresasModule'
+                    ],
+                    [
+                        'nombre' => 'Formulario de empresa',
+                        'permiso' => 'EmpresasForm'
+                    ],
+                    [
+                        'nombre' => 'Modulo de vacantes',
+                        'permiso' => 'VacantesModule'
+                    ],
+                    [
+                        'nombre' => 'Modulo de Usuarios',
+                        'permiso' => 'UsuariosModule'
+                    ],
+                    [
+                        'nombre' => 'Ocion de menu vacantes',
+                        'permiso' => 'VacantesMenu'
+                    ],
+                    [
+                        'nombre' => 'Opcion de menu Usuarios',
+                        'permiso' => 'UsuariosMenu'
+                    ],
+                    [
+                        'nombre' => 'Formulario de Usuarios',
+                        'permiso' => 'UsuariosForm'
+                    ],
+                    [
+                        'nombre' => 'Perfil de Empresa',
+                        'permiso' => 'EmpresasPerfil'
+                    ],
+                    [
+                        'nombre' => 'Opcion de menu Perfil de Empresa',
+                        'permiso' => 'EmpresasPerfilMenu'
+                    ],
+                    [
+                        'nombre' => 'Editar perfil empresa',
+                        'permiso' => 'EmpresasPerfilForm'
+                    ],
+                    [
+                        'nombre' => 'Formulario de vacantes',
+                        'permiso' => 'VacantesForm'
+                    ],
+                    [
+                        'nombre' => 'Listado de vacantes',
+                        'permiso' => 'VacantesList'
+                    ],
+                    [
+                        'nombre' => 'Listado de usuarios',
+                        'permiso' => 'UsuariosList'
+                    ],
+                    [
+                        'nombre' => 'Listado de Noticias',
+                        'permiso' => 'NoticiasList'
+                    ],
                 ]
             ]
         ];
 
         foreach ($roles as $key => $role) {
             $r = new Rol();
+            $r->id = $role['id'];
             $r->nombre = $role['nombre'];
             $r->save();
             $permisosSaved = [];
