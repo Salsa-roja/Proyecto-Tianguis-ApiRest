@@ -13,6 +13,11 @@ $router->group(['prefix' => 'dwl'], function () use ($router) {
     $router->get('/noticias/{idNoticia}', 'NoticiasController@descarga_imagen');
 });
 
+$router->group(['prefix' => 'noticias'], function () use ($router) {
+    $router->get('/listado', 'NoticiasController@listado');
+    $router->get('/detalle/{id}', 'NoticiasController@searchById');
+});
+
 # Rutas para sistema admin (valida autenticacion de usuario)
 $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
 
@@ -38,14 +43,13 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
         $router->get('/borrarDocto/{idEmpresa}/{archivo}', 'EmpresaController@borrarDocto');
         $router->post('/editar', 'EmpresaController@editar');
     });
-    
+
     $router->group(['prefix' => 'usuarios'], function () use ($router) {
         $router->get('/listado', 'UsuarioController@listado');
         $router->get('/detalle/{usuarioId}', 'UsuarioController@detalle');
-        $router->post('/guardar','UsuarioController@guardar');
-        $router->post('/editar','UsuarioController@editar');
+        $router->post('/guardar', 'UsuarioController@guardar');
+        $router->post('/editar', 'UsuarioController@editar');
         $router->delete('/eliminar/{id}', 'UsuarioController@inhabilitar');
-
     });
 
     #websocket
@@ -72,17 +76,15 @@ $router->group(['middleware' => array('jwt.auth', 'cors')], function ($router) {
     $router->group(['prefix' => 'contacto'], function () use ($router) {
         $router->get('/listado', 'ContactoController@listado');
         $router->delete('/eliminar/{id}', 'ContactoController@eliminar');
-
     });
 
     $router->group(['prefix' => 'noticias'], function () use ($router) {
-        $router->get('/listado', 'NoticiasController@listado');
-        $router->get('/detalle/{id}', 'NoticiasController@searchById');
+
         $router->post('/guardar', 'NoticiasController@guardar');
         $router->post('/editar', 'NoticiasController@editar');
         $router->delete('/eliminar/{id}', 'NoticiasController@eliminar');
     });
-});//...rutas admin
+}); //...rutas admin
 
 $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], function ($router) {
     $router->group(['prefix' => 'vacantes'], function () use ($router) {
@@ -91,8 +93,7 @@ $router->group(['middleware' => array('JwtTokenOpcionalMiddleware', 'cors')], fu
     });
     $router->group(['prefix' => 'talentHunting'], function () use ($router) {
         $router->post('/filtro', 'EmpresaController@filtroDeBusquedaSolicitantes');
-        $router->post('/vincular', 'EmpresaController@vincularPostulantes');   
-
+        $router->post('/vincular', 'EmpresaController@vincularPostulantes');
     });
 });
 
@@ -123,12 +124,11 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
         $router->get('/listadoSolicitudes/{idVacante}', 'VacanteController@getSolicitudesVacante');
         $router->get('/buscar/{name}', 'VacanteController@searchName');
         $router->get('/getTurnos', 'TurnosTitulosController@getTurnos');
-        $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');      
-        $router->post('/updateEstatusSolicitud', 'VacanteController@updateEstatusSolicitud');              
-        $router->get('/getEstatusPostulacion', 'VacanteController@getEstatusPostulacion');          
+        $router->get('/getTitulos', 'TurnosTitulosController@getTitulos');
+        $router->post('/updateEstatusSolicitud', 'VacanteController@updateEstatusSolicitud');
+        $router->get('/getEstatusPostulacion', 'VacanteController@getEstatusPostulacion');
         $router->post('/vacanteMasLejana', 'VacanteController@vacanteMasLejana');
         $router->get('/test', 'VacanteController@test');
-
     });
 
     #websocket
@@ -145,5 +145,4 @@ $router->group(['middleware' => array('cors')], function () use ($router) {
     $router->group(['prefix' => 'noticias'], function () use ($router) {
         $router->get('/publicas', 'NoticiasController@listadoPublicas');
     });
-
 });
